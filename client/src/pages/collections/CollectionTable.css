@@ -1,0 +1,166 @@
+/* ==========================================
+   Collection Table
+========================================== */
+
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+    background:#ffffff;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    margin-top:20px;
+}
+
+.table-wrapper table{
+    width:100%;
+    border-collapse:collapse;
+    table-layout:fixed;
+}
+
+/* ==========================================
+   Header
+========================================== */
+
+.table-wrapper thead tr{
+    background:#2563eb;
+}
+
+.table-wrapper thead th{
+    height:60px;
+    padding:0 20px;
+    color:#ffffff;
+    font-size:15px;
+    font-weight:600;
+    text-align:center;
+    vertical-align:middle;
+    white-space:nowrap;
+}
+
+.table-wrapper thead th:first-child{
+    border-top-left-radius:16px;
+}
+
+.table-wrapper thead th:last-child{
+    border-top-right-radius:16px;
+}
+
+/* ==========================================
+   Body
+========================================== */
+
+.table-wrapper tbody tr{
+    height:65px;
+    transition:.25s;
+    border-bottom:1px solid #edf2f7;
+}
+
+.table-wrapper tbody tr:last-child{
+    border-bottom:none;
+}
+
+.table-wrapper tbody tr:hover{
+    background:#f8fbff;
+}
+
+.table-wrapper tbody td{
+    padding:0 20px;
+    height:65px;
+    text-align:center;
+    vertical-align:middle;
+    font-size:15px;
+    color:#374151;
+}
+
+/* Customer Name */
+
+.table-wrapper tbody td:nth-child(2){
+    color:#2563eb;
+    font-weight:600;
+}
+
+/* Amount */
+
+.table-wrapper tbody td:last-child{
+    font-weight:700;
+    color:#111827;
+}
+
+/* ==========================================
+   Action Buttons
+========================================== */
+
+.action-buttons{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+}
+
+.view-btn,
+.edit-btn,
+.delete-btn{
+    width:38px;
+    height:38px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    color:#fff;
+    transition:.25s;
+}
+
+.view-btn{
+    background:#0ea5e9;
+}
+
+.edit-btn{
+    background:#10b981;
+}
+
+.delete-btn{
+    background:#ef4444;
+}
+
+.view-btn:hover{
+    background:#0284c7;
+}
+
+.edit-btn:hover{
+    background:#059669;
+}
+
+.delete-btn:hover{
+    background:#dc2626;
+}
+
+/* ==========================================
+   No Data
+========================================== */
+
+.table-wrapper tbody td[colspan]{
+    height:80px;
+    text-align:center;
+    font-size:16px;
+    color:#6b7280;
+    font-weight:500;
+}
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width:768px){
+
+    .table-wrapper table{
+        min-width:650px;
+    }
+
+    .table-wrapper thead th,
+    .table-wrapper tbody td{
+        font-size:14px;
+        padding:0 12px;
+    }
+
+}

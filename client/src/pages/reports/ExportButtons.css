@@ -1,0 +1,38 @@
+.export-buttons{
+    display:flex;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.excel-btn,
+.pdf-btn{
+
+    border:none;
+
+    padding:12px 20px;
+
+    color:#fff;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+}
+
+.excel-btn{
+    background:#16a34a;
+}
+
+.pdf-btn{
+    background:#dc2626;
+}
+
+.excel-btn:hover{
+    background:#15803d;
+}
+
+.pdf-btn:hover{
+    background:#b91c1c;
+}

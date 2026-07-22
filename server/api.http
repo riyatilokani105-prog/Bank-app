@@ -1,0 +1,212 @@
+@baseUrl = http://localhost:5000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNTkwODRlMWZiYWEzNzRkYTZkZTE1NSIsImlhdCI6MTc4NDI3MzIyMywiZXhwIjoxNzg0ODc4MDIzfQ.PSI9lLUMwAD8LnryosldX54QIj8wnB8Lzn2z_BW5bPQ
+
+### Register Admin (Only First Time)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Admin",
+  "email": "admin@gmail.com",
+  "password": "123456"
+}
+
+###
+
+### Login Admin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@gmail.com",
+  "password": "123456"
+}
+
+
+### Add Customer
+POST {{baseUrl}}/api/customers
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "accountNumber": "1001",
+  "fullName": "Rahul Sharma",
+  "mobile": "9876543210",
+  "address": "Mumbai",
+  "balance": 1000
+}
+
+###
+
+### Add Customer 2
+POST {{baseUrl}}/api/customers
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "accountNumber": "1002",
+  "fullName": "Aman Verma",
+  "mobile": "9988776655",
+  "address": "Pune",
+  "balance": 500
+}
+
+###
+
+### Get All Customers
+GET {{baseUrl}}/api/customers
+Authorization: Bearer {{token}}
+
+###
+
+### Get Customer By ID
+GET {{baseUrl}}/api/customers/6a59d97888de613ce4868c99
+Authorization: Bearer {{token}}
+
+###
+
+### Update Customer
+PUT {{baseUrl}}/api/customers/6a59d97888de613ce4868c99
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "fullName": "Rahul Sharma Updated",
+  "mobile": "9999999999",
+  "address": "Nagpur"
+}
+
+###
+
+### Delete Customer
+DELETE {{baseUrl}}/api/customers/6a59d97888de613ce4868c99
+Authorization: Bearer {{token}}
+
+### add collections
+POST {{baseUrl}}/api/collections
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "customerId":"6a59d97488de613ce4868c98",
+    "amount":500
+}
+
+### get customer
+GET {{baseUrl}}/api/collections
+Authorization: Bearer {{token}}
+
+### delete collection
+DELETE  {{baseUrl}}/api/collections/6a59dc433f9e71950e44f8b6
+Authorization: Bearer {{token}}
+
+### dashboard
+GET {{baseUrl}}/api/dashboard
+Authorization: Bearer {{token}}
+
+### recent collections
+GET {{baseUrl}}/api/dashboard/recentCollections
+Authorization: Bearer {{token}}
+
+### top customers
+GET {{baseUrl}}/api/dashboard/topCustomers
+Authorization: Bearer {{token}}
+
+### get backup
+GET {{baseUrl}}/api/backup/check
+Authorization: Bearer {{token}}
+
+### create backup
+POST {{baseUrl}}/api/backup/create
+Authorization: Bearer {{token}}
+
+### delete backup
+DELETE {{baseUrl}}/api/backup/delete
+Authorization: Bearer {{token}}
+
+###  backup history
+GET {{baseUrl}}/api/backup/history
+Authorization: Bearer {{token}}
+
+### get ledger
+GET {{baseUrl}}/api/ledger
+Authorization: Bearer {{token}}
+
+### customer ledger
+GET {{baseUrl}}/api/ledger/customer/6a59d97488de613ce4868c98
+Authorization: Bearer {{token}}
+
+### delete ledger
+DELETE {{baseUrl}}/api/ledger/
+Authorization: Bearer {{token}}
+
+###todays report
+GET {{baseUrl}}/api/reports/today
+Authorization: Bearer {{token}}
+
+###monthly report
+GET {{baseUrl}}/api/reports/month
+Authorization: Bearer {{token}}
+
+### yearly report
+GET {{baseUrl}}/api/reports/year
+Authorization: Bearer {{token}}
+
+### customer repot
+GET {{baseUrl}}/api/reports/customer/6a59d97488de613ce4868c98
+Authorization: Bearer {{token}}
+
+### date range report
+GET {{baseUrl}}/api/reports/range?from=2026-07-01&to=2026-07-31
+Authorization: Bearer {{token}}
+
+###bulk collections
+POST {{baseUrl}}/api/collections/bulk
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+[
+  {
+    "customerId": "",
+    "amount": 500
+  },
+  {
+    "customerId": "",
+    "amount": 300
+  },
+  {
+    "customerId": "",
+    "amount": 700
+  }
+]
+### search customer
+GET {{baseUrl}}/api/customers/search?query=rahul
+Authorization: Bearer {{token}}
+
+###
+GET {{baseUrl}}/api/customers/search?query=1001
+Authorization: Bearer {{token}}
+
+###
+GET {{baseUrl}}/api/customers/search?query=9876543210
+Authorization: Bearer {{token}}
+
+### dashboard statics
+GET {{baseUrl}}/api/stats
+Authorization: Bearer {{token}}
+
+### export customer
+GET {{baseUrl}}/api/excel/export
+Authorization: Bearer {{token}}
+
+### dowload receipt
+GET {{baseUrl}}/api/receipt/
+Authorization: Bearer {{token}}
+
+###
+GET {{baseUrl}}/api/audit
+Authorization: Bearer {{token}}
+
+###
+DELETE {{baseUrl}}/api/audit
+Authorization: Bearer {{token}}

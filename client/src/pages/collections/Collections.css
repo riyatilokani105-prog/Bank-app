@@ -1,0 +1,44 @@
+.collections-page{
+    padding:25px;
+}
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.page-header h1{
+    font-size:30px;
+    color:#222;
+}
+
+.page-header p{
+    color:#666;
+    margin-top:5px;
+}
+
+.add-btn{
+    background:#2563eb;
+    color:#fff;
+    border:none;
+    padding:12px 22px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.add-btn:hover{
+    background:#1d4ed8;
+}
+
+.loading-box{
+    background:#fff;
+    padding:80px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}

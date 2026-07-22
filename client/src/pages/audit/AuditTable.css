@@ -1,0 +1,120 @@
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 16px;
+  margin-top: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.table-wrapper thead {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+}
+
+.table-wrapper thead th {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 16px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table-wrapper tbody tr {
+  transition: 0.3s;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.table-wrapper tbody tr:hover {
+  background: #f8fbff;
+}
+
+.table-wrapper tbody td {
+  padding: 15px;
+  font-size: 14px;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.table-wrapper tbody tr:last-child {
+  border-bottom: none;
+}
+
+.table-wrapper tbody td:first-child {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.table-wrapper tbody td:nth-child(2) {
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.table-wrapper tbody td:nth-child(3) {
+  max-width: 380px;
+  white-space: normal;
+  word-break: break-word;
+  color: #475569;
+}
+
+.table-wrapper tbody td:last-child {
+  color: #64748b;
+  font-family: monospace;
+}
+
+.table-wrapper tbody tr td[colspan] {
+  text-align: center;
+  padding: 40px;
+  color: #94a3b8;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #3b82f6;
+  border-radius: 20px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #2563eb;
+}
+
+@media (max-width: 992px) {
+  .table-wrapper table {
+    min-width: 750px;
+  }
+
+  .table-wrapper thead th,
+  .table-wrapper tbody td {
+    padding: 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-wrapper {
+    border-radius: 12px;
+  }
+
+  .table-wrapper table {
+    min-width: 650px;
+  }
+
+  .table-wrapper tbody td[colspan] {
+    padding: 30px;
+  }
+}
