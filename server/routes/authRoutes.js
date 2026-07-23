@@ -12,7 +12,7 @@ const {
   changePassword,
 } = require("../controllers/authController");
 
-router.post("/register", registerAdmin);
+// router.post("/register", registerAdmin);
 
 router.post("/login", loginAdmin);
 
