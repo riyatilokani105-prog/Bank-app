@@ -210,3 +210,13 @@ Authorization: Bearer {{token}}
 ###
 DELETE {{baseUrl}}/api/audit
 Authorization: Bearer {{token}}
+
+### Create First Admin
+POST https://bank-app-6l8z.onrender.com/api/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Admin",
+  "email": "admin@gmail.com",
+  "password": "123456"
+}
