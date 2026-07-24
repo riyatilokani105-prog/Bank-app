@@ -1,0 +1,24 @@
+.ledger-search{
+    width:100%;
+    margin:25px 0;
+    position:relative;
+}
+
+.ledger-search input{
+    width:100%;
+    padding:14px 18px 14px 50px;
+    border:none;
+    outline:none;
+    border-radius:12px;
+    background:#fff;
+    font-size:15px;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+.search-icon{
+    position:absolute;
+    top:16px;
+    left:18px;
+    color:#666;
+    font-size:17px;
+}

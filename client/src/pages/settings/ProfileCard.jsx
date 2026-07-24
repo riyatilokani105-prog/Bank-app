@@ -77,9 +77,10 @@ const ProfileCard = () => {
 
       <h2>Profile</h2>
 
-      <form onSubmit={submitHandler}>
+      <form className="settings-form" onSubmit={submitHandler}>
 
         <input
+          className="settings-input"
           name="name"
           placeholder="Name"
           value={formData.name}
@@ -87,6 +88,7 @@ const ProfileCard = () => {
         />
 
         <input
+          className="settings-input"
           name="email"
           placeholder="Email"
           value={formData.email}
@@ -94,16 +96,18 @@ const ProfileCard = () => {
         />
 
         <input
+          className="settings-input"
           name="phone"
           placeholder="Phone"
           value={formData.phone}
           onChange={changeHandler}
         />
 
-        <button className="save-btn">
-
+        <button
+          type="submit"
+          className="settings-btn"
+        >
           {loading ? "Saving..." : "Update Profile"}
-
         </button>
 
       </form>

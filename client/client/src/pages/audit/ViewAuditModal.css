@@ -1,0 +1,86 @@
+.audit-modal-overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.45);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+.audit-modal{
+width:500px;
+max-width:95%;
+background:white;
+border-radius:16px;
+padding:25px;
+box-shadow:0 20px 50px rgba(0,0,0,.2);
+animation:popup .25s ease;
+}
+
+@keyframes popup{
+from{
+opacity:0;
+transform:scale(.9);
+}
+to{
+opacity:1;
+transform:scale(1);
+}
+}
+
+.audit-modal-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.audit-modal-header h2{
+margin:0;
+font-size:24px;
+}
+
+.audit-modal-header button{
+background:none;
+border:none;
+font-size:22px;
+cursor:pointer;
+}
+
+.audit-item{
+margin-bottom:18px;
+display:flex;
+flex-direction:column;
+}
+
+.audit-item label{
+font-size:13px;
+color:#64748b;
+margin-bottom:4px;
+}
+
+.audit-item span{
+font-size:15px;
+font-weight:500;
+color:#1e293b;
+word-break:break-word;
+}
+
+.close-btn{
+margin-top:15px;
+width:100%;
+padding:12px;
+border:none;
+background:#2563eb;
+color:white;
+border-radius:10px;
+cursor:pointer;
+font-size:15px;
+font-weight:600;
+transition:.3s;
+}
+
+.close-btn:hover{
+background:#1d4ed8;
+}

@@ -1,0 +1,243 @@
+.dashboard {
+    width: 100%;
+    animation: fadeIn .4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page-title {
+    margin-bottom: 30px;
+}
+
+.page-title h1 {
+    font-size: 30px;
+    color: #1f2937;
+    font-weight: 700;
+}
+
+.page-title p {
+    margin-top: 6px;
+    color: #6b7280;
+    font-size: 15px;
+}
+
+/*======================
+    STATISTICS CARDS
+======================*/
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .08);
+    transition: .3s;
+    border: 1px solid #edf2f7;
+}
+
+.stat-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 35px rgba(0, 0, 0, .12);
+}
+
+.stat-card h4 {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.stat-card h2 {
+    font-size: 32px;
+    color: #2563eb;
+    font-weight: 700;
+}
+
+/*======================
+    TABLE SECTION
+======================*/
+
+.dashboard-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 25px;
+}
+
+.dashboard-card {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .08);
+    border: 1px solid #edf2f7;
+}
+
+.dashboard-card h3 {
+    margin-bottom: 20px;
+    color: #1e293b;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/*======================
+    TABLE
+======================*/
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #eff6ff;
+}
+
+th {
+    padding: 14px;
+    text-align: left;
+    color: #1e3a8a;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+td {
+    padding: 14px;
+    border-bottom: 1px solid #eef2f7;
+    color: #374151;
+    font-size: 14px;
+}
+
+tbody tr {
+    transition: .25s;
+}
+
+tbody tr:hover {
+    background: #f8fafc;
+}
+
+/*======================
+    BADGES
+======================*/
+
+.badge-success {
+    background: #dcfce7;
+    color: #15803d;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-danger {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-warning {
+    background: #fef3c7;
+    color: #ca8a04;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/*======================
+    SCROLL TABLE
+======================*/
+
+.dashboard-card {
+    overflow-x: auto;
+}
+
+.dashboard-card::-webkit-scrollbar {
+    height: 8px;
+}
+
+.dashboard-card::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+/*======================
+    RESPONSIVE
+======================*/
+
+@media (max-width:1200px) {
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width:992px) {
+
+    .dashboard-row {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width:768px) {
+
+    .page-title h1 {
+        font-size: 24px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-card {
+        padding: 18px;
+    }
+
+    table {
+        min-width: 600px;
+    }
+
+}
+
+@media (max-width:480px) {
+
+    .dashboard {
+        padding: 5px;
+    }
+
+    .page-title h1 {
+        font-size: 22px;
+    }
+
+    .page-title p {
+        font-size: 13px;
+    }
+
+    .stat-card {
+        padding: 18px;
+    }
+
+    .stat-card h2 {
+        font-size: 24px;
+    }
+
+}

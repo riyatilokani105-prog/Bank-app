@@ -40,7 +40,7 @@ const ThemeSettings = () => {
 
       <div className="theme-options">
 
-        <label>
+        <label className="theme-option">
 
           <input
             type="radio"
@@ -48,11 +48,11 @@ const ThemeSettings = () => {
             onChange={() => setTheme("light")}
           />
 
-          Light
+          <span>Light</span>
 
         </label>
 
-        <label>
+        <label className="theme-option">
 
           <input
             type="radio"
@@ -60,11 +60,11 @@ const ThemeSettings = () => {
             onChange={() => setTheme("dark")}
           />
 
-          Dark
+          <span>Dark</span>
 
         </label>
 
-        <label>
+        <label className="theme-option">
 
           <input
             type="radio"
@@ -72,14 +72,14 @@ const ThemeSettings = () => {
             onChange={() => setTheme("blue")}
           />
 
-          Blue
+          <span>Blue</span>
 
         </label>
 
       </div>
 
       <button
-        className="save-btn"
+        className="settings-btn"
         onClick={saveTheme}
       >
         Save Theme

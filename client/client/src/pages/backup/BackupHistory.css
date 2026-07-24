@@ -1,0 +1,53 @@
+.backup-history{
+
+background:#fff;
+
+padding:25px;
+
+border-radius:15px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.backup-history h2{
+
+margin-bottom:20px;
+
+color:#1e293b;
+
+}
+
+.backup-history table{
+
+width:100%;
+
+border-collapse:collapse;
+
+}
+
+.backup-history th{
+
+background:#2563eb;
+
+color:#fff;
+
+padding:14px;
+
+}
+
+.backup-history td{
+
+padding:14px;
+
+text-align:center;
+
+border-bottom:1px solid #e2e8f0;
+
+}
+
+.backup-history tr:hover{
+
+background:#f8fafc;
+
+}

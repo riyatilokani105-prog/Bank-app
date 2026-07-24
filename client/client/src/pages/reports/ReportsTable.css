@@ -1,0 +1,32 @@
+.table-wrapper{
+    width:100%;
+    overflow:auto;
+    background:#fff;
+    border-radius:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+thead{
+    background:#2563eb;
+    color:#fff;
+}
+
+th{
+    padding:16px;
+    font-size:15px;
+    text-align:left;
+}
+
+td{
+    padding:16px;
+    border-bottom:1px solid #ececec;
+}
+
+tbody tr:hover{
+    background:#f8fbff;
+}

@@ -14,38 +14,45 @@ const AdminInfoCard = () => {
 
             <div className="admin-box">
 
-                <FaUserShield
-                    size={65}
-                    color="#2563eb"
-                />
+                <div className="admin-avatar">
 
-                <h3>{admin?.name || "Administrator"}</h3>
+                    <FaUserShield size={70} />
 
-                <p>{admin?.email}</p>
+                </div>
+
+                <h3>
+                    {admin?.name || "Administrator"}
+                </h3>
+
+                <p>
+                    {admin?.email || "admin@gmail.com"}
+                </p>
 
                 <div className="admin-info">
 
-                    <div>
+                    <div className="admin-item">
 
                         <strong>Role</strong>
 
-                        <p>Admin</p>
+                        <span>Admin</span>
 
                     </div>
 
-                    <div>
+                    <div className="admin-item">
 
                         <strong>Status</strong>
 
-                        <p>Active</p>
+                        <span className="active-status">
+                            Active
+                        </span>
 
                     </div>
 
-                    <div>
+                    <div className="admin-item">
 
                         <strong>Version</strong>
 
-                        <p>v1.0</p>
+                        <span>v1.0</span>
 
                     </div>
 

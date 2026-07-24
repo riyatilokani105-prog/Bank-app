@@ -5,67 +5,67 @@ import { changePassword } from "../../api/settingsApi";
 
 const ChangePassword = () => {
 
-  const [loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [formData,setFormData]=useState({
+  const [formData, setFormData] = useState({
 
-    oldPassword:"",
-    newPassword:"",
-    confirmPassword:""
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: ""
 
   });
 
-  const changeHandler=(e)=>{
+  const changeHandler = (e) => {
 
     setFormData({
 
       ...formData,
 
-      [e.target.name]:e.target.value
+      [e.target.name]: e.target.value
 
     });
 
   };
 
-  const submitHandler=async(e)=>{
+  const submitHandler = async (e) => {
 
     e.preventDefault();
 
-    if(formData.newPassword!==formData.confirmPassword){
+    if (formData.newPassword !== formData.confirmPassword) {
 
       return toast.error("Passwords do not match");
 
     }
 
-    try{
+    try {
 
       setLoading(true);
 
       const res = await changePassword({
 
-  currentPassword: formData.oldPassword,
+        currentPassword: formData.oldPassword,
 
-  newPassword: formData.newPassword,
+        newPassword: formData.newPassword,
 
-});
+      });
 
       toast.success(res.message);
 
       setFormData({
 
-        oldPassword:"",
-        newPassword:"",
-        confirmPassword:""
+        oldPassword: "",
+        newPassword: "",
+        confirmPassword: ""
 
       });
 
     }
 
-    catch(err){
+    catch (err) {
 
       toast.error(
 
-        err.response?.data?.message||
+        err.response?.data?.message ||
 
         "Unable to Change Password"
 
@@ -73,7 +73,7 @@ const ChangePassword = () => {
 
     }
 
-    finally{
+    finally {
 
       setLoading(false);
 
@@ -81,39 +81,48 @@ const ChangePassword = () => {
 
   };
 
-  return(
+  return (
 
     <div className="settings-card">
 
       <h2>Change Password</h2>
 
-      <form onSubmit={submitHandler}>
+      <form
+        className="settings-form"
+        onSubmit={submitHandler}
+      >
 
         <input
-        type="password"
-        name="oldPassword"
-        placeholder="Current Password"
-        value={formData.oldPassword}
-        onChange={changeHandler}
+          className="settings-input"
+          type="password"
+          name="oldPassword"
+          placeholder="Current Password"
+          value={formData.oldPassword}
+          onChange={changeHandler}
         />
 
         <input
-        type="password"
-        name="newPassword"
-        placeholder="New Password"
-        value={formData.newPassword}
-        onChange={changeHandler}
+          className="settings-input"
+          type="password"
+          name="newPassword"
+          placeholder="New Password"
+          value={formData.newPassword}
+          onChange={changeHandler}
         />
 
         <input
-        type="password"
-        name="confirmPassword"
-        placeholder="Confirm Password"
-        value={formData.confirmPassword}
-        onChange={changeHandler}
+          className="settings-input"
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          value={formData.confirmPassword}
+          onChange={changeHandler}
         />
 
-        <button className="save-btn">
+        <button
+          type="submit"
+          className="settings-btn"
+        >
 
           {loading ? "Updating..." : "Change Password"}
 

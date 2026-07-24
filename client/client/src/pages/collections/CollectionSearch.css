@@ -1,0 +1,28 @@
+.collection-search{
+    width:100%;
+    background:#fff;
+    padding:15px 20px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+    margin:25px 0;
+}
+
+.collection-search .search-icon{
+    color:#777;
+    font-size:18px;
+}
+
+.collection-search input{
+    flex:1;
+    border:none;
+    outline:none;
+    font-size:16px;
+    background:transparent;
+}
+
+.collection-search input::placeholder{
+    color:#999;
+}

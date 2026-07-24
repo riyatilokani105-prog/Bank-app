@@ -96,27 +96,31 @@ const BackupSettings = () => {
 
       <h2>Backup Management</h2>
 
-      <button
-        className="save-btn"
-        onClick={check}
-      >
-        Check Previous Month
-      </button>
+      <div className="backup-actions">
 
-      <button
-        className="save-btn"
-        onClick={backup}
-        disabled={loading}
-      >
-        {loading ? "Creating..." : "Create Backup"}
-      </button>
+        <button
+          className="settings-btn"
+          onClick={check}
+        >
+          Check Previous Month
+        </button>
 
-      <button
-        className="delete-btn"
-        onClick={remove}
-      >
-        Delete Previous Month Data
-      </button>
+        <button
+          className="settings-btn"
+          onClick={backup}
+          disabled={loading}
+        >
+          {loading ? "Creating..." : "Create Backup"}
+        </button>
+
+        <button
+          className="danger-btn"
+          onClick={remove}
+        >
+          Delete Previous Month Data
+        </button>
+
+      </div>
 
     </div>
 

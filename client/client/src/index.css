@@ -1,0 +1,115 @@
+/* ==========================================
+   Google Font
+========================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+/* ==========================================
+   Reset
+========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body,
+#root{
+    width:100%;
+    min-height:100%;
+}
+
+body{
+    font-family:"Inter",sans-serif;
+    background:#f4f7fc;
+    color:#1f2937;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+}
+
+/* ==========================================
+   Links
+========================================== */
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+/* ==========================================
+   Buttons
+========================================== */
+
+button{
+    cursor:pointer;
+    border:none;
+    outline:none;
+    background:none;
+    font-family:inherit;
+}
+
+/* ==========================================
+   Inputs
+========================================== */
+
+input,
+textarea,
+select{
+    font-family:inherit;
+    outline:none;
+}
+
+/* ==========================================
+   Images
+========================================== */
+
+img{
+    display:block;
+    max-width:100%;
+}
+
+/* ==========================================
+   Lists
+========================================== */
+
+ul,
+ol{
+    list-style:none;
+}
+
+/* ==========================================
+   IMPORTANT
+   Don't style tables globally.
+========================================== */
+
+table{
+    border-collapse:collapse;
+    border-spacing:0;
+}
+
+/* No global th or td styles */
+
+/* ==========================================
+   Scrollbar
+========================================== */
+
+::-webkit-scrollbar{
+    width:8px;
+    height:8px;
+}
+
+::-webkit-scrollbar-track{
+    background:#edf2f7;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#9ca3af;
+    border-radius:20px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:#6b7280;
+}

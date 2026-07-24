@@ -1,0 +1,170 @@
+/* ===========================
+   Add Collection Modal
+=========================== */
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+    backdrop-filter:blur(3px);
+}
+
+.modal{
+    width:430px;
+    background:#fff;
+    border-radius:16px;
+    padding:28px;
+    box-shadow:0 15px 40px rgba(0,0,0,.18);
+    animation:popup .25s ease;
+}
+
+@keyframes popup{
+    from{
+        opacity:0;
+        transform:scale(.9);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+.modal h2{
+    margin:0 0 25px;
+    text-align:center;
+    color:#1e3a8a;
+    font-size:32px;
+    font-weight:700;
+}
+
+.modal form{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.modal input,
+.modal select{
+    width:100%;
+    height:50px;
+    padding:0 16px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    font-size:15px;
+    outline:none;
+    box-sizing:border-box;
+    transition:.25s;
+}
+
+.modal input:focus,
+.modal select:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.15);
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
+
+/* ===================================
+   Modal Buttons
+=================================== */
+
+.modal-actions{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    margin-top:25px;
+    width:100%;
+}
+
+/* Common Button Style */
+
+.modal-actions button{
+    width:100%;
+    height:52px;
+    border:none;
+    outline:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:600;
+    font-family:inherit;
+    cursor:pointer;
+    transition:all .25s ease;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* Save Button */
+
+.save-btn{
+    background:#2563eb;
+    color:#ffffff !important;
+    box-shadow:0 6px 18px rgba(37,99,235,.25);
+}
+
+.save-btn:hover{
+    background:#1d4ed8;
+    transform:translateY(-2px);
+    box-shadow:0 10px 22px rgba(37,99,235,.35);
+}
+
+.save-btn:active{
+    transform:scale(.98);
+}
+
+/* Cancel Button */
+
+
+.cancel-btn{
+    width:100%;
+    height:50px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:#e5e7eb;
+    color:#1f2937 !important;
+
+    font-size:16px;
+    font-weight:700;
+
+    border:none;
+    border-radius:10px;
+
+    cursor:pointer;
+    transition:.25s ease;
+}
+
+.cancel-btn:hover{
+    background:#d1d5db;
+    color:#111827 !important;
+}
+
+.cancel-btn:active{
+    transform:scale(.98);
+}
+
+
+
+@media(max-width:500px){
+
+    .modal{
+        width:95%;
+        padding:22px;
+    }
+
+    .modal h2{
+        font-size:24px;
+    }
+
+    .modal-buttons{
+        flex-direction:column;
+    }
+}

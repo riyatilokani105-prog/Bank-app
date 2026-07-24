@@ -54,56 +54,60 @@ const SystemSettings = () => {
 
       <h2>System Settings</h2>
 
-      <div className="switch-row">
+      <div className="settings-options">
 
-        <span>Notifications</span>
+        <label className="settings-option">
 
-        <input
-          type="checkbox"
-          checked={settings.notifications}
-          onChange={() => toggle("notifications")}
-        />
+          <span>Notifications</span>
 
-      </div>
+          <input
+            type="checkbox"
+            checked={settings.notifications}
+            onChange={() => toggle("notifications")}
+          />
 
-      <div className="switch-row">
+        </label>
 
-        <span>Auto Logout</span>
+        <label className="settings-option">
 
-        <input
-          type="checkbox"
-          checked={settings.autoLogout}
-          onChange={() => toggle("autoLogout")}
-        />
+          <span>Auto Logout</span>
 
-      </div>
+          <input
+            type="checkbox"
+            checked={settings.autoLogout}
+            onChange={() => toggle("autoLogout")}
+          />
 
-      <div className="switch-row">
+        </label>
 
-        <span>Receipt Printing</span>
+        <label className="settings-option">
 
-        <input
-          type="checkbox"
-          checked={settings.receiptPrint}
-          onChange={() => toggle("receiptPrint")}
-        />
+          <span>Receipt Printing</span>
 
-      </div>
+          <input
+            type="checkbox"
+            checked={settings.receiptPrint}
+            onChange={() => toggle("receiptPrint")}
+          />
 
-      <div className="switch-row">
+        </label>
 
-        <span>Backup Reminder</span>
+        <label className="settings-option">
 
-        <input
-          type="checkbox"
-          checked={settings.backupReminder}
-          onChange={() => toggle("backupReminder")}
-        />
+          <span>Backup Reminder</span>
+
+          <input
+            type="checkbox"
+            checked={settings.backupReminder}
+            onChange={() => toggle("backupReminder")}
+          />
+
+        </label>
 
       </div>
 
       <button
-        className="save-btn"
+        className="settings-btn"
         onClick={saveSettings}
       >
         Save Settings
