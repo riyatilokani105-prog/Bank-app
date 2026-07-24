@@ -11,94 +11,103 @@ const LedgerTable = ({
   onDelete,
 }) => {
   return (
-    <div className="table-wrapper">
 
-      <table>
+<div className="table-wrapper">
 
-        <thead>
+<table>
 
-          <tr>
+<thead>
 
-            <th>Date</th>
-            <th>Account</th>
-            <th>Customer</th>
-            <th>Previous</th>
-            <th>Amount</th>
-            <th>Balance</th>
-            <th>Action</th>
+<tr>
 
-          </tr>
+<th>Date</th>
 
-        </thead>
+<th>Customer</th>
 
-        <tbody>
+<th>Account No.</th>
 
-          {ledger.length === 0 ? (
+<th>Collection</th>
 
-            <tr>
+<th>Balance</th>
 
-              <td colSpan="7">
+<th>Remark</th>
 
-                No Ledger Found
+</tr>
 
-              </td>
+</thead>
 
-            </tr>
+<tbody>
 
-          ) : (
+{ledger.length===0?(
 
-            ledger.map((item) => (
+<tr>
 
-              <tr key={item._id}>
+<td
+colSpan="6"
+className="no-data"
+>
 
-                <td>
-                  {new Date(item.createdAt).toLocaleDateString()}
-                </td>
+No Ledger Records Found
 
-                <td>
-                  {item.accountNumber}
-                </td>
+</td>
 
-                <td>
-                  {item.customerName}
-                </td>
+</tr>
 
-                <td>
-                  ₹ {item.previousBalance}
-                </td>
+):(
 
-                <td>
-                  ₹ {item.amount}
-                </td>
+ledger.map((item)=>(
 
-                <td>
-                  ₹ {item.currentBalance}
-                </td>
+<tr key={item._id}>
 
-                <td className="action-buttons">
+<td>
 
-                
-                  <button
-                    className="delete-btn"
-                    onClick={() => onDelete && onDelete(item)}
-                  >
-                    <FaTrash />
-                  </button>
+{new Date(item.createdAt).toLocaleDateString()}
 
-                </td>
+</td>
 
-              </tr>
+<td>
 
-            ))
+{item.customer?.fullName}
 
-          )}
+</td>
 
-        </tbody>
+<td>
 
-      </table>
+{item.customer?.accountNumber}
 
-    </div>
-  );
+</td>
+
+<td>
+
+₹ {Number(item.amount).toLocaleString()}
+
+</td>
+
+<td>
+
+₹ {Number(item.balance).toLocaleString()}
+
+</td>
+
+<td>
+
+{item.remark||"-"}
+
+</td>
+
+</tr>
+
+))
+
+)}
+
+</tbody>
+
+</table>
+
+</div>
+
+);
 };
 
 export default LedgerTable;

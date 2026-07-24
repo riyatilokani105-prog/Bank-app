@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "../../components/layout/Layout";
+import toast from "react-hot-toast";
 
 import { getCollections } from "../../api/collectionApi";
 

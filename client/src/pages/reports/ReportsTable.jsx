@@ -2,65 +2,95 @@ import "./ReportsTable.css";
 
 const ReportsTable = ({ reports }) => {
   return (
-    <div className="table-wrapper">
-      <table>
 
-        <thead>
+<div className="table-wrapper">
 
-          <tr>
-            <th>Date</th>
-            <th>Account</th>
-            <th>Customer</th>
-            <th>Collection</th>
-            <th>Previous Balance</th>
-            <th>Current Balance</th>
-          </tr>
+<table>
 
-        </thead>
+<thead>
 
-        <tbody>
+<tr>
 
-          {reports.length === 0 ? (
+<th>Date</th>
 
-            <tr>
+<th>Customer</th>
 
-              <td colSpan="6">
-                No Reports Found
-              </td>
+<th>Account</th>
 
-            </tr>
+<th>Collection</th>
 
-          ) : (
+<th>Balance</th>
 
-            reports.map((item) => (
+</tr>
 
-              <tr key={item._id}>
+</thead>
 
-                <td>
-                  {new Date(item.createdAt).toLocaleDateString()}
-                </td>
+<tbody>
 
-                <td>{item.accountNumber}</td>
+{reports.length===0?(
 
-                <td>{item.customerName}</td>
+<tr>
 
-                <td>₹ {item.amount}</td>
+<td
+colSpan="5"
+className="no-data"
+>
 
-                <td>₹ {item.previousBalance}</td>
+No Report Found
 
-                <td>₹ {item.newBalance || item.currentBalance}</td>
+</td>
 
-              </tr>
+</tr>
 
-            ))
+):(
 
-          )}
+reports.map((item)=>(
 
-        </tbody>
+<tr key={item._id}>
 
-      </table>
-    </div>
-  );
+<td>
+
+{new Date(item.createdAt).toLocaleDateString()}
+
+</td>
+
+<td>
+
+{item.customer?.fullName}
+
+</td>
+
+<td>
+
+{item.customer?.accountNumber}
+
+</td>
+
+<td>
+
+₹ {Number(item.amount).toLocaleString()}
+
+</td>
+
+<td>
+
+₹ {Number(item.balance).toLocaleString()}
+
+</td>
+
+</tr>
+
+))
+
+)}
+
+</tbody>
+
+</table>
+
+</div>
+
+);
 };
 
 export default ReportsTable;

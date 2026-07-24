@@ -6,21 +6,22 @@ import {
   FaBook,
   FaChartBar,
   FaDatabase,
-  FaClipboardList,
   FaCog,
   FaSignOutAlt,
   FaChevronLeft,
   FaChevronRight,
-  FaHistory, 
-  FaReceipt
+  FaHistory,
 } from "react-icons/fa";
-import { FaFileExcel } from "react-icons/fa";
-import { FaBell } from "react-icons/fa";
+
 import "./Sidebar.css";
 
-const Sidebar = ({ collapsed, setCollapsed }) => {
-
-  const navigate = useNavigate(); // ✅ Added
+const Sidebar = ({
+  collapsed,
+  setCollapsed,
+  mobileOpen,
+  setMobileOpen,
+}) => {
+  const navigate = useNavigate();
 
   const menuItems = [
     {
@@ -56,7 +57,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
     {
       title: "Audit Logs",
       icon: <FaHistory />,
-      path: "/audit", // ✅ Must match App.jsx route
+      path: "/audit",
     },
     {
       title: "Settings",
@@ -70,75 +71,80 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
     navigate("/");
   };
 
+  const closeMobileSidebar = () => {
+    if (window.innerWidth <= 992) {
+      setMobileOpen(false);
+    }
+  };
+
   return (
-    <aside className={collapsed ? "sidebar collapsed" : "sidebar"}>
+    <>
+      {/* Overlay */}
 
-      <div className="sidebar-top">
+      <div
+        className={`sidebar-overlay ${mobileOpen ? "show" : ""}`}
+        onClick={() => setMobileOpen(false)}
+      ></div>
 
-        <div className="logo-area">
-
-          <div className="logo-circle">
-            DC
-          </div>
-
-          {!collapsed && (
-            <div>
-              <h2>Daily Collection</h2>
-              <p>Management System</p>
-            </div>
-          )}
-
-        </div>
-
-        <button
-          className="collapse-btn"
-          onClick={() => setCollapsed(!collapsed)}
-        >
-          {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
-        </button>
-
-      </div>
-
-      <div className="sidebar-menu">
-
-        {menuItems.map((item) => (
-          <NavLink
-            key={item.title}
-            to={item.path}
-            className={({ isActive }) =>
-              isActive ? "menu-item active" : "menu-item"
-            }
-          >
-            <span className="menu-icon">
-              {item.icon}
-            </span>
+      <aside
+        className={`sidebar
+          ${collapsed ? "collapsed" : ""}
+          ${mobileOpen ? "show" : ""}
+        `}
+      >
+        <div className="sidebar-top">
+          <div className="logo-area">
+            <div className="logo-circle">DC</div>
 
             {!collapsed && (
-              <span className="menu-title">
-                {item.title}
-              </span>
+              <div>
+                <h2>Daily Collection</h2>
+                <p>Management System</p>
+              </div>
             )}
-          </NavLink>
-        ))}
+          </div>
 
-      </div>
+          <button
+            className="collapse-btn"
+            onClick={() => setCollapsed(!collapsed)}
+          >
+            {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
+          </button>
+        </div>
 
-      <div className="sidebar-bottom">
+        <div className="sidebar-menu">
+          {menuItems.map((item) => (
+            <NavLink
+              key={item.title}
+              to={item.path}
+              onClick={closeMobileSidebar}
+              className={({ isActive }) =>
+                isActive ? "menu-item active" : "menu-item"
+              }
+            >
+              <span className="menu-icon">{item.icon}</span>
 
-        <button
-          className="logout-btn"
-          onClick={logout}
-        >
-          <FaSignOutAlt />
+              {!collapsed && (
+                <span className="menu-title">
+                  {item.title}
+                </span>
+              )}
+            </NavLink>
+          ))}
+        </div>
 
-          {!collapsed && (
-            <span>Logout</span>
-          )}
-        </button>
+        <div className="sidebar-bottom">
+          <button
+            className="logout-btn"
+            onClick={logout}
+          >
+            <FaSignOutAlt />
 
-      </div>
-
-    </aside>
+            {!collapsed && <span>Logout</span>}
+          </button>
+        </div>
+      </aside>
+    </>
   );
 };
 

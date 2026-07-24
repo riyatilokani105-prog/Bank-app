@@ -1,63 +1,122 @@
 .table-wrapper{
+
     width:100%;
-    overflow:auto;
-    background:#fff;
-    border-radius:16px;
-    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    overflow-x:auto;
+    overflow-y:hidden;
+    background:#ffffff;
+    border-radius:18px;
+    border:1px solid #edf2f7;
+    box-shadow:0 10px 30px rgba(15,23,42,.08);
+
 }
 
-table{
+.table-wrapper::-webkit-scrollbar{
+
+    height:8px;
+
+}
+
+.table-wrapper::-webkit-scrollbar-thumb{
+
+    background:#cbd5e1;
+    border-radius:20px;
+
+}
+
+.table-wrapper table{
+
     width:100%;
+    min-width:900px;
     border-collapse:collapse;
+
 }
 
-thead{
+.table-wrapper thead{
+
     background:#2563eb;
+
+}
+
+.table-wrapper th{
+
     color:#fff;
-}
-
-th{
     padding:16px;
-    text-align:left;
-    font-size:15px;
+    font-size:14px;
+    font-weight:600;
+    white-space:nowrap;
+    text-align:center;
+
 }
 
-td{
-    padding:16px;
-    border-bottom:1px solid #eee;
+.table-wrapper td{
+
+    padding:15px;
+    border-bottom:1px solid #edf2f7;
+    text-align:center;
+    color:#374151;
+    white-space:nowrap;
+    font-size:14px;
+
 }
 
-tbody tr:hover{
-    background:#f5f8ff;
+.table-wrapper tbody tr{
+
+    transition:.25s;
+
 }
 
-.action-buttons{
-    display:flex;
-    gap:10px;
+.table-wrapper tbody tr:hover{
+
+    background:#f8fbff;
+
 }
 
-.view-btn,
-.delete-btn{
-    width:35px;
-    height:35px;
-    border:none;
-    border-radius:8px;
-    color:#fff;
-    cursor:pointer;
+.no-data{
+
+    text-align:center;
+    padding:45px;
+    color:#6b7280;
+    font-weight:600;
+
 }
 
-.view-btn{
-    background:#0ea5e9;
+@media(max-width:768px){
+
+.table-wrapper table{
+
+min-width:850px;
+
 }
 
-.delete-btn{
-    background:#ef4444;
+.table-wrapper th{
+
+padding:14px;
+font-size:13px;
+
 }
 
-.view-btn:hover{
-    background:#0284c7;
+.table-wrapper td{
+
+padding:14px;
+font-size:13px;
+
 }
 
-.delete-btn:hover{
-    background:#dc2626;
+}
+
+@media(max-width:480px){
+
+.table-wrapper table{
+
+min-width:800px;
+
+}
+
+.table-wrapper th,
+.table-wrapper td{
+
+padding:12px;
+
+}
+
 }
