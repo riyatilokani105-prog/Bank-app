@@ -8,23 +8,30 @@ const customerSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
+
     fullName: {
       type: String,
       required: true,
       trim: true,
     },
+
     mobile: {
       type: String,
-      required: "",
+      default: "",
+      trim: true,
     },
+
     address: {
       type: String,
       default: "",
+      trim: true,
     },
+
     balance: {
       type: Number,
       default: 0,
     },
+
     isActive: {
       type: Boolean,
       default: true,

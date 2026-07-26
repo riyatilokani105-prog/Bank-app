@@ -4,63 +4,73 @@ import { addCustomer } from "../../api/customerApi";
 import "./AddCustomer.css";
 
 const AddCustomer = ({ closeModal, refreshCustomers }) => {
+
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     accountNumber: "",
     fullName: "",
+    address: "",
     balance: "",
   });
 
   const handleChange = (e) => {
+
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+
   };
 
   const submitHandler = async (e) => {
+
     e.preventDefault();
 
-    if (
-      !formData.accountNumber ||
-      !formData.fullName
-    ) {
+    if (!formData.accountNumber || !formData.fullName) {
       return toast.error("Please fill all required fields");
     }
 
     try {
+
       setLoading(true);
 
       await addCustomer({
-        accountNumber: formData.accountNumber,
-        fullName: formData.fullName,
+        accountNumber: formData.accountNumber.trim(),
+        fullName: formData.fullName.trim(),
+        address: formData.address.trim(),
         balance: Number(formData.balance) || 0,
       });
 
       toast.success("Customer Added Successfully");
 
-      if (refreshCustomers) {
-        refreshCustomers();
-      }
+      refreshCustomers && refreshCustomers();
 
       closeModal();
 
     } catch (error) {
+
       toast.error(
         error.response?.data?.message ||
         "Failed to Add Customer"
       );
+
     } finally {
+
       setLoading(false);
+
     }
+
   };
 
   return (
+
     <div className="modal-overlay">
+
       <div className="customer-modal">
 
         <div className="modal-header">
+
           <h2>Add Customer</h2>
 
           <button
@@ -69,11 +79,13 @@ const AddCustomer = ({ closeModal, refreshCustomers }) => {
           >
             ✕
           </button>
+
         </div>
 
         <form onSubmit={submitHandler}>
 
           <div className="form-group">
+
             <label>Account Number *</label>
 
             <input
@@ -84,9 +96,11 @@ const AddCustomer = ({ closeModal, refreshCustomers }) => {
               onChange={handleChange}
               required
             />
+
           </div>
 
           <div className="form-group">
+
             <label>Full Name *</label>
 
             <input
@@ -97,9 +111,25 @@ const AddCustomer = ({ closeModal, refreshCustomers }) => {
               onChange={handleChange}
               required
             />
+
           </div>
 
           <div className="form-group">
+
+            <label>Address (Optional)</label>
+
+            <input
+              type="text"
+              name="address"
+              placeholder="Enter Address"
+              value={formData.address}
+              onChange={handleChange}
+            />
+
+          </div>
+
+          <div className="form-group">
+
             <label>Opening Balance</label>
 
             <input
@@ -110,6 +140,7 @@ const AddCustomer = ({ closeModal, refreshCustomers }) => {
               onChange={handleChange}
               min="0"
             />
+
           </div>
 
           <button
@@ -123,8 +154,11 @@ const AddCustomer = ({ closeModal, refreshCustomers }) => {
         </form>
 
       </div>
+
     </div>
+
   );
+
 };
 
 export default AddCustomer;
