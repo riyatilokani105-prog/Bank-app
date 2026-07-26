@@ -9,15 +9,14 @@ exports.addCustomer = async (req, res) => {
     const {
       accountNumber,
       fullName,
-      mobile,
       address,
       balance,
     } = req.body;
 
-    if (!accountNumber || !fullName || !mobile) {
+    if (!accountNumber || !fullName) {
       return res.status(400).json({
         success: false,
-        message: "Account Number, Full Name and Mobile are required.",
+        message: "Account Number, Full Name.",
       });
     }
 
@@ -33,8 +32,6 @@ exports.addCustomer = async (req, res) => {
     const customer = await Customer.create({
       accountNumber,
       fullName,
-      mobile,
-      address: address || "",
       balance: Number(balance) || 0,
     });
 
