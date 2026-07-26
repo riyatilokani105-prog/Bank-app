@@ -10,7 +10,6 @@ const AddCustomer = ({ closeModal, refreshCustomers }) => {
   const [formData, setFormData] = useState({
     accountNumber: "",
     fullName: "",
-    address: "",
     balance: "",
   });
 
@@ -38,7 +37,6 @@ const AddCustomer = ({ closeModal, refreshCustomers }) => {
       await addCustomer({
         accountNumber: formData.accountNumber.trim(),
         fullName: formData.fullName.trim(),
-        address: formData.address.trim(),
         balance: Number(formData.balance) || 0,
       });
 
@@ -110,20 +108,6 @@ const AddCustomer = ({ closeModal, refreshCustomers }) => {
               value={formData.fullName}
               onChange={handleChange}
               required
-            />
-
-          </div>
-
-          <div className="form-group">
-
-            <label>Address (Optional)</label>
-
-            <input
-              type="text"
-              name="address"
-              placeholder="Enter Address"
-              value={formData.address}
-              onChange={handleChange}
             />
 
           </div>

@@ -21,11 +21,7 @@ const customerSchema = new mongoose.Schema(
       trim: true,
     },
 
-    address: {
-      type: String,
-      default: "",
-      trim: true,
-    },
+
 
     balance: {
       type: Number,
