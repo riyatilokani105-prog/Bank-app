@@ -26,8 +26,6 @@ const CustomerTable = ({
 
             <th>Customer Name</th>
 
-            <th>Mobile Number</th>
-
             <th>Balance</th>
 
             <th align="center">Actions</th>
@@ -43,7 +41,7 @@ const CustomerTable = ({
             <tr>
 
               <td
-                colSpan="5"
+                colSpan="4"
                 className="no-data"
               >
                 No Customers Found
@@ -58,31 +56,15 @@ const CustomerTable = ({
               <tr key={customer._id}>
 
                 <td>
-
                   {customer.accountNumber}
-
                 </td>
 
                 <td>
-
                   {customer.fullName}
-
                 </td>
 
                 <td>
-
-                  {customer.mobile}
-
-                </td>
-
-                <td>
-
-                  ₹{" "}
-
-                  {Number(
-                    customer.balance || 0
-                  ).toLocaleString()}
-
+                  ₹ {Number(customer.balance || 0).toLocaleString()}
                 </td>
 
                 <td>
@@ -90,37 +72,25 @@ const CustomerTable = ({
                   <div className="action-buttons">
 
                     <button
-
                       className="edit-btn"
-
                       title="Edit Customer"
-
                       onClick={() =>
                         onEdit &&
                         onEdit(customer)
                       }
-
                     >
-
                       <FaEdit />
-
                     </button>
 
                     <button
-
                       className="delete-btn"
-
                       title="Delete Customer"
-
                       onClick={() =>
                         onDelete &&
                         onDelete(customer)
                       }
-
                     >
-
                       <FaTrash />
-
                     </button>
 
                   </div>
