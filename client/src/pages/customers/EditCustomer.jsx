@@ -13,7 +13,6 @@ const EditCustomer = ({
 
   const [formData, setFormData] = useState({
     fullName: customer.fullName || "",
-    mobile: customer.mobile || "",
     balance: customer.balance || 0,
   });
 
@@ -83,18 +82,6 @@ const EditCustomer = ({
             <input
               name="fullName"
               value={formData.fullName}
-              onChange={handleChange}
-            />
-
-          </div>
-
-          <div className="edit-group">
-
-            <label>Mobile</label>
-
-            <input
-              name="mobile"
-              value={formData.mobile}
               onChange={handleChange}
             />
 
