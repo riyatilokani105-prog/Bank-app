@@ -9,7 +9,6 @@ const AddCustomer = ({ closeModal, refreshCustomers }) => {
   const [formData, setFormData] = useState({
     accountNumber: "",
     fullName: "",
-    mobile: "",
     balance: "",
   });
 
@@ -25,8 +24,7 @@ const AddCustomer = ({ closeModal, refreshCustomers }) => {
 
     if (
       !formData.accountNumber ||
-      !formData.fullName ||
-      !formData.mobile
+      !formData.fullName
     ) {
       return toast.error("Please fill all required fields");
     }
@@ -37,7 +35,6 @@ const AddCustomer = ({ closeModal, refreshCustomers }) => {
       await addCustomer({
         accountNumber: formData.accountNumber,
         fullName: formData.fullName,
-        mobile: formData.mobile,
         balance: Number(formData.balance) || 0,
       });
 
@@ -97,19 +94,6 @@ const AddCustomer = ({ closeModal, refreshCustomers }) => {
               name="fullName"
               placeholder="Enter Customer Name"
               value={formData.fullName}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Mobile Number *</label>
-
-            <input
-              type="tel"
-              name="mobile"
-              placeholder="Enter Mobile Number"
-              value={formData.mobile}
               onChange={handleChange}
               required
             />

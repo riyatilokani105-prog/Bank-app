@@ -1,52 +1,64 @@
 .layout{
 
-display:flex;
+    display:flex;
 
-width:100%;
+    width:100%;
 
-min-height:100vh;
+    min-height:100vh;
 
-background:#f5f7fb;
+    background:#f5f7fb;
 
-overflow:hidden;
+    overflow:hidden;
 
 }
 
 .layout-content{
 
-margin-left:270px;
+    margin-left:270px;
 
-width:calc(100% - 270px);
+    width:calc(100% - 270px);
 
-min-height:100vh;
+    min-height:100vh;
 
-transition:.35s;
+    transition:.35s;
 
-display:flex;
+    display:flex;
 
-flex-direction:column;
+    flex-direction:column;
 
 }
 
 .layout-content.expand{
 
-margin-left:85px;
+    margin-left:85px;
 
-width:calc(100% - 85px);
+    width:calc(100% - 85px);
 
 }
+
+/* Leave space for fixed navbar */
 
 .layout-content main{
 
-flex:1;
+    flex:1;
 
-padding:30px;
+    padding:100px 30px 30px;
 
-overflow-x:hidden;
+    overflow-x:hidden;
 
 }
 
-/* Tablet */
+/* Move navbar when sidebar is collapsed */
+
+.layout-content.expand .navbar{
+
+    left:85px;
+
+}
+
+/* ==========================
+        TABLET
+========================== */
 
 @media(max-width:992px){
 
@@ -74,31 +86,43 @@ width:100%;
 
 .layout-content main{
 
-padding:20px;
+padding:90px 20px 20px;
+
+}
+
+.layout-content .navbar{
+
+left:0;
+
+width:100%;
 
 }
 
 }
 
-/* Mobile */
+/* ==========================
+        MOBILE
+========================== */
 
 @media(max-width:768px){
 
 .layout-content main{
 
-padding:15px;
+padding:85px 15px 15px;
 
 }
 
 }
 
-/* Small Mobile */
+/* ==========================
+      SMALL MOBILE
+========================== */
 
 @media(max-width:480px){
 
 .layout-content main{
 
-padding:12px;
+padding:80px 12px 12px;
 
 }
 
