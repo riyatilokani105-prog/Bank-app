@@ -1,84 +1,157 @@
 const Customer = require("../models/Customer");
 const Collection = require("../models/Collection");
+const PDFDocument = require("pdfkit");
 
-// ================================
-// Search Customer Statement
-// ================================
+// =========================================
+// Get Customer Statement
+// =========================================
 exports.getCustomerStatement = async (req, res) => {
   try {
-    const query = req.query.query?.trim();
+    console.log("Query:", req.query);
 
-    if (!query) {
+    const search = req.query.search?.trim();
+
+    if (!search) {
       return res.status(400).json({
         success: false,
-        message: "Search query is required.",
+        message: "Search is required",
       });
     }
 
-    // Search by Account Number or Name
     const customer = await Customer.findOne({
       $or: [
-        { accountNumber: query },
-        { fullName: { $regex: query, $options: "i" } },
+        { accountNumber: search },
+        { fullName: { $regex: search, $options: "i" } },
       ],
     });
 
     if (!customer) {
       return res.status(404).json({
         success: false,
-        message: "Customer not found.",
+        message: "Customer not found",
       });
     }
 
-    // Get all collections
     const collections = await Collection.find({
       customer: customer._id,
     }).sort({ createdAt: 1 });
 
-    let runningBalance = 0;
+    let totalAmount = 0;
 
     const history = collections.map((item) => {
-      runningBalance += Number(item.amount || 0);
+      totalAmount += item.amount;
 
       return {
         _id: item._id,
         date: item.createdAt,
         amount: item.amount,
-        runningBalance,
+        runningBalance: totalAmount,
       };
     });
 
-    res.json({
+    return res.json({
       success: true,
 
       customer: {
-        _id: customer._id,
         accountNumber: customer.accountNumber,
         fullName: customer.fullName,
+        openingBalance: customer.balance,
         createdAt: customer.createdAt,
-        currentBalance: customer.balance,
       },
 
       summary: {
         totalCollections: collections.length,
-        totalAmount: runningBalance,
-        lastCollection:
-          collections.length > 0
-            ? collections[collections.length - 1].createdAt
-            : null,
+        totalAmount,
+        currentBalance: customer.balance,
       },
 
       history,
     });
-
   } catch (err) {
-
-    console.error(err);
+    console.log(err);
 
     res.status(500).json({
       success: false,
       message: err.message,
     });
+  }
+};
 
+// =========================================
+// Download PDF
+// =========================================
+exports.downloadCustomerStatement = async (req, res) => {
+  try {
+    const search = req.query.search?.trim();
+
+    if (!search) {
+      return res.status(400).json({
+        success: false,
+        message: "Search is required",
+      });
+    }
+
+    const customer = await Customer.findOne({
+      $or: [
+        { accountNumber: search },
+        { fullName: { $regex: search, $options: "i" } },
+      ],
+    });
+
+    if (!customer) {
+      return res.status(404).json({
+        success: false,
+        message: "Customer not found",
+      });
+    }
+
+    const collections = await Collection.find({
+      customer: customer._id,
+    }).sort({ createdAt: 1 });
+
+    const doc = new PDFDocument({ margin: 40 });
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=Statement-${customer.accountNumber}.pdf`
+    );
+
+    res.setHeader("Content-Type", "application/pdf");
+
+    doc.pipe(res);
+
+    doc.fontSize(20).text("Customer Statement", {
+      align: "center",
+    });
+
+    doc.moveDown();
+
+    doc.fontSize(13);
+    doc.text(`Account Number : ${customer.accountNumber}`);
+    doc.text(`Customer Name : ${customer.fullName}`);
+    doc.text(`Current Balance : ₹${customer.balance}`);
+
+    doc.moveDown();
+
+    let total = 0;
+
+    collections.forEach((item) => {
+      total += item.amount;
+
+      doc.text(
+        `${new Date(item.createdAt).toLocaleDateString()}    ₹${item.amount}    Running Total : ₹${total}`
+      );
+    });
+
+    doc.moveDown();
+
+    doc.fontSize(15).text(`Total Collection : ₹${total}`);
+
+    doc.end();
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
   }
 };

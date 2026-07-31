@@ -11,17 +11,16 @@ import AuditLogs from "./pages/audit/AuditLogs";
 import Settings from "./pages/settings/Settings";
 import CustomerStatement from "./pages/customerStatement/CustomerStatement";
 
-
-
 import PrivateRoute from "./routes/PrivateRoute";
 
 function App() {
   return (
     <Routes>
-      {/* Public */}
+      {/* Public Route */}
       <Route path="/" element={<Login />} />
 
-      {/* Protected */}
+      {/* Protected Routes */}
+
       <Route
         path="/dashboard"
         element={
@@ -76,7 +75,14 @@ function App() {
         }
       />
 
-     <Route path="/audit" element={<AuditLogs />} />
+      <Route
+        path="/audit"
+        element={
+          <PrivateRoute>
+            <AuditLogs />
+          </PrivateRoute>
+        }
+      />
 
       <Route
         path="/settings"
@@ -86,13 +92,15 @@ function App() {
           </PrivateRoute>
         }
       />
-      
-<Route
-  path="/statement"
-  element={<CustomerStatement />}
-/>
-    
-  
+
+      <Route
+        path="/customer-statement"
+        element={
+          <PrivateRoute>
+            <CustomerStatement />
+          </PrivateRoute>
+        }
+      />
     </Routes>
   );
 }
