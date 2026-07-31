@@ -9,6 +9,7 @@ import Reports from "./pages/reports/Reports";
 import Backup from "./pages/backup/Backup";
 import AuditLogs from "./pages/audit/AuditLogs";
 import Settings from "./pages/settings/Settings";
+import CustomerStatement from "./pages/customerStatement/CustomerStatement";
 
 
 
@@ -85,6 +86,11 @@ function App() {
           </PrivateRoute>
         }
       />
+
+      <Route
+  path="/customer-statement"
+  element={<CustomerStatement />}
+/>
     
   
     </Routes>

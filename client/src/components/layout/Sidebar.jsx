@@ -11,6 +11,7 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaHistory,
+  FaFileInvoiceDollar,
 } from "react-icons/fa";
 
 import "./Sidebar.css";
@@ -38,6 +39,11 @@ const Sidebar = ({
       title: "Collections",
       icon: <FaMoneyBillWave />,
       path: "/collections",
+    },
+    {
+      title: "Customer Statement",
+      icon: <FaFileInvoiceDollar />,
+      path: "/customer-statement",
     },
     {
       title: "Ledger",
@@ -79,18 +85,15 @@ const Sidebar = ({
 
   return (
     <>
-      {/* Overlay */}
-
       <div
         className={`sidebar-overlay ${mobileOpen ? "show" : ""}`}
         onClick={() => setMobileOpen(false)}
       ></div>
 
       <aside
-        className={`sidebar
-          ${collapsed ? "collapsed" : ""}
-          ${mobileOpen ? "show" : ""}
-        `}
+        className={`sidebar ${
+          collapsed ? "collapsed" : ""
+        } ${mobileOpen ? "show" : ""}`}
       >
         <div className="sidebar-top">
           <div className="logo-area">
@@ -108,7 +111,11 @@ const Sidebar = ({
             className="collapse-btn"
             onClick={() => setCollapsed(!collapsed)}
           >
-            {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
+            {collapsed ? (
+              <FaChevronRight />
+            ) : (
+              <FaChevronLeft />
+            )}
           </button>
         </div>
 
@@ -119,10 +126,14 @@ const Sidebar = ({
               to={item.path}
               onClick={closeMobileSidebar}
               className={({ isActive }) =>
-                isActive ? "menu-item active" : "menu-item"
+                isActive
+                  ? "menu-item active"
+                  : "menu-item"
               }
             >
-              <span className="menu-icon">{item.icon}</span>
+              <span className="menu-icon">
+                {item.icon}
+              </span>
 
               {!collapsed && (
                 <span className="menu-title">
