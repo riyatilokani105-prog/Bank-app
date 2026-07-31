@@ -86,9 +86,9 @@ function App() {
           </PrivateRoute>
         }
       />
-
-      <Route
-  path="/customer-statement"
+      
+<Route
+  path="/statement"
   element={<CustomerStatement />}
 />
     
