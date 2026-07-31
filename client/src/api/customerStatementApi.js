@@ -1,4 +1,4 @@
-import axiosInstance from "./axios";
+import API from "./axios";
 
 export const getCustomerStatement = async (search) => {
   const { data } = await axiosInstance.get(
