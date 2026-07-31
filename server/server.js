@@ -20,6 +20,7 @@ const excelRoutes = require("./routes/excelRoutes");
 const auditRoutes = require("./routes/auditRoutes");
 const receiptRoutes = require("./routes/receiptRoutes");
 const settingsRoutes = require("./routes/settingsRoutes");
+const customerStatementRoutes = require("./routes/customerStatementRoutes");
 
 
 
@@ -54,6 +55,7 @@ app.use("/api/excel", excelRoutes);
 app.use("/api/audit", auditRoutes);
 app.use("/api/receipt", receiptRoutes);
 app.use("/api/settings", settingsRoutes);
+app.use("/api/customer-statement",customerStatementRoutes);
 
 
 
