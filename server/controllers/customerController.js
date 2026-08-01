@@ -16,7 +16,7 @@ exports.addCustomer = async (req, res) => {
     if (!accountNumber || !fullName) {
       return res.status(400).json({
         success: false,
-        message: "Account Number, Full Name.",
+        message: "Account Number and Full Name are required.",
       });
     }
 
@@ -35,7 +35,6 @@ exports.addCustomer = async (req, res) => {
       balance: Number(balance) || 0,
     });
 
-    // Create Audit Log only if authenticated user exists
     if (req.user && req.user._id) {
       await createAuditLog(
         req.user._id,
@@ -70,7 +69,11 @@ exports.addCustomer = async (req, res) => {
 exports.getCustomers = async (req, res) => {
   try {
 
-    const customers = await Customer.find().sort({ createdAt: -1 });
+    const customers = await Customer.find();
+
+    customers.sort((a, b) => {
+      return Number(a.accountNumber) - Number(b.accountNumber);
+    });
 
     return res.json({
       success: true,
@@ -241,6 +244,10 @@ exports.searchCustomers = async (req, res) => {
           },
         },
       ],
+    });
+
+    customers.sort((a, b) => {
+      return Number(a.accountNumber) - Number(b.accountNumber);
     });
 
     return res.json({
