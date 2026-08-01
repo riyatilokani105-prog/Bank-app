@@ -1,112 +1,137 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import toast from "react-hot-toast";
+
 import Layout from "../../components/layout/Layout";
 import StatementSearch from "./StatementSearch";
-import { getCustomerStatement } from "../../api/customerStatementApi";
-import "./Statement.css";
+import StatementHeader from "./StatementHeader";
 import StatementInfo from "./StatementInfo";
 import StatementSummary from "./StatementSummary";
 import StatementTable from "./StatementTable";
-import StatementHeader from "./StatementHeader";
-import { useRef } from "react";
+
+import { getCustomerStatement } from "../../api/customerStatementApi";
+
+import "./Statement.css";
 
 const CustomerStatement = () => {
-
-  const [search,setSearch]=useState("");
-
-  const [customer,setCustomer]=useState(null);
-
-  const [summary,setSummary]=useState({});
-
-  const [history,setHistory]=useState([]);
-
   const statementRef = useRef(null);
 
-  const searchCustomer = async()=>{
+  const [search, setSearch] = useState("");
 
-    if(!search.trim()) return;
+  const [customer, setCustomer] = useState(null);
 
-    try{
+  const [summary, setSummary] = useState({
+    totalCollections: 0,
+    totalAmount: 0,
+    currentBalance: 0,
+    lastCollection: null,
+  });
 
-      const res=await getCustomerStatement(search);
+  const [history, setHistory] = useState([]);
 
-      setCustomer(res.customer);
+  const [loading, setLoading] = useState(false);
 
-      setSummary(res.summary);
-
-      setHistory(res.history);
-
+  const searchCustomer = async () => {
+    if (!search.trim()) {
+      return toast.error("Enter Account Number or Customer Name");
     }
 
-    catch(err){
+    try {
+      setLoading(true);
 
+      setCustomer(null);
+      setHistory([]);
+
+      const res = await getCustomerStatement(search);
+
+      setCustomer({
+        ...res.customer,
+
+        currentBalance:
+          Number(
+            res.customer?.currentBalance ??
+              res.summary?.currentBalance ??
+              res.customer?.openingBalance ??
+              0
+          ) || 0,
+      });
+
+      setSummary({
+        totalCollections: Number(res.summary?.totalCollections || 0),
+        totalAmount: Number(res.summary?.totalAmount || 0),
+        currentBalance: Number(res.summary?.currentBalance || 0),
+        lastCollection: res.summary?.lastCollection || null,
+      });
+
+      setHistory(res.history || []);
+    } catch (err) {
       console.log(err);
+
+      toast.error(
+        err.response?.data?.message || "Customer not found"
+      );
 
       setCustomer(null);
 
-      setSummary({});
+      setSummary({
+        totalCollections: 0,
+        totalAmount: 0,
+        currentBalance: 0,
+        lastCollection: null,
+      });
 
       setHistory([]);
-
+    } finally {
+      setLoading(false);
     }
-
   };
 
   const printStatement = () => {
+    window.print();
+  };
 
-  window.print();
+  const downloadPDF = () => {
+    window.open(
+      `https://bank-app-6l8z.onrender.com/api/customer-statement/pdf?search=${search}`,
+      "_blank"
+    );
+  };
 
-};
-
-const downloadPDF = () => {
-
-  alert("PDF Download will be connected with backend.");
-
-};
-
-  return(
-
+  return (
     <Layout>
-
       <div className="statement-page">
-
         <h1>Customer Statement</h1>
 
         <StatementSearch
-
-        value={search}
-
-        onChange={setSearch}
-
-        onSearch={searchCustomer}
-
+          value={search}
+          onChange={setSearch}
+          onSearch={searchCustomer}
         />
-        {customer && (
 
-<div ref={statementRef}>
-  
-    <StatementHeader
-customer={customer}
-summary={summary}
-onPrint={printStatement}
-onPDF={downloadPDF}
-/>
+        {loading && (
+          <div className="statement-loading">
+            <h3>Loading Customer Statement...</h3>
+          </div>
+        )}
 
-<StatementInfo customer={customer}/>
+        {!loading && customer && (
+          <div ref={statementRef}>
+            <StatementHeader
+              customer={customer}
+              summary={summary}
+              onPrint={printStatement}
+              onPDF={downloadPDF}
+            />
 
-    <StatementSummary summary={summary} />
+            <StatementInfo customer={customer} />
 
-    <StatementTable history={history}/>
+            <StatementSummary summary={summary} />
 
-  </div>
-
-)}
-
+            <StatementTable history={history} />
+          </div>
+        )}
       </div>
-
     </Layout>
-
   );
-
 };
 
 export default CustomerStatement;

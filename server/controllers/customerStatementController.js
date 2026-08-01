@@ -7,8 +7,6 @@ const PDFDocument = require("pdfkit");
 // =========================================
 exports.getCustomerStatement = async (req, res) => {
   try {
-    console.log("Query:", req.query);
-
     const search = req.query.search?.trim();
 
     if (!search) {
@@ -36,16 +34,16 @@ exports.getCustomerStatement = async (req, res) => {
       customer: customer._id,
     }).sort({ createdAt: 1 });
 
-    let totalAmount = 0;
+    let runningBalance = 0;
 
     const history = collections.map((item) => {
-      totalAmount += item.amount;
+      runningBalance += Number(item.amount);
 
       return {
         _id: item._id,
         date: item.createdAt,
         amount: item.amount,
-        runningBalance: totalAmount,
+        runningBalance,
       };
     });
 
@@ -53,16 +51,24 @@ exports.getCustomerStatement = async (req, res) => {
       success: true,
 
       customer: {
+        _id: customer._id,
         accountNumber: customer.accountNumber,
         fullName: customer.fullName,
-        openingBalance: customer.balance,
         createdAt: customer.createdAt,
+
+        openingBalance: Number(customer.balance || 0),
+
+        currentBalance: Number(customer.balance || 0),
       },
 
       summary: {
         totalCollections: collections.length,
-        totalAmount,
-        currentBalance: customer.balance,
+        totalAmount: runningBalance,
+        currentBalance: Number(customer.balance || 0),
+        lastCollection:
+          collections.length > 0
+            ? collections[collections.length - 1].createdAt
+            : null,
       },
 
       history,
@@ -76,6 +82,7 @@ exports.getCustomerStatement = async (req, res) => {
     });
   }
 };
+
 
 // =========================================
 // Download PDF
