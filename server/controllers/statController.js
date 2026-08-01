@@ -1,9 +1,9 @@
 const Customer = require("../models/Customer");
 const Collection = require("../models/Collection");
 
+
 exports.dashboardStats = async (req, res) => {
   try {
-
     const today = new Date();
 
     const startToday = new Date(
@@ -35,6 +35,7 @@ exports.dashboardStats = async (req, res) => {
       todayCollection,
       monthCollection,
       balance,
+      todayCustomers,
     ] = await Promise.all([
 
       Customer.countDocuments(),
@@ -87,12 +88,35 @@ exports.dashboardStats = async (req, res) => {
           },
         },
       ]),
+
+      // Today's Unique Customers
+      Collection.aggregate([
+        {
+          $match: {
+            createdAt: {
+              $gte: startToday,
+              $lt: endToday,
+            },
+          },
+        },
+        {
+          $group: {
+            _id: "$customer",
+          },
+        },
+        {
+          $count: "totalCustomers",
+        },
+      ]),
     ]);
 
     res.json({
       success: true,
       stats: {
         totalCustomers,
+
+        todayCustomers:
+          todayCustomers[0]?.totalCustomers || 0,
 
         todayCollection:
           todayCollection[0]?.total || 0,
@@ -106,6 +130,8 @@ exports.dashboardStats = async (req, res) => {
     });
 
   } catch (err) {
+
+    console.log(err);
 
     res.status(500).json({
       success: false,

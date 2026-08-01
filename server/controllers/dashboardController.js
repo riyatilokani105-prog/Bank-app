@@ -182,3 +182,67 @@ message:err.message
 }
 
 };
+
+const Customer = require("../models/Customer");
+const Collection = require("../models/Collection");
+
+exports.getDashboard = async (req, res) => {
+  try {
+
+    const start = new Date();
+    start.setHours(0,0,0,0);
+
+    const end = new Date();
+    end.setHours(23,59,59,999);
+
+    const todayCollections = await Collection.find({
+      createdAt: {
+        $gte: start,
+        $lte: end,
+      },
+    });
+
+    const todayCollection = todayCollections.reduce(
+      (sum, item) => sum + item.amount,
+      0
+    );
+
+    const todayCustomers = new Set(
+      todayCollections.map(item => item.customer.toString())
+    ).size;
+
+    const totalCustomers = await Customer.countDocuments();
+
+    const totalCollection = await Collection.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$amount" },
+        },
+      },
+    ]);
+
+    res.json({
+      success: true,
+
+      summary: {
+        todayCollection,
+
+        todayCustomers,
+
+        totalCustomers,
+
+        totalCollection:
+          totalCollection[0]?.total || 0,
+      },
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+
+  }
+};

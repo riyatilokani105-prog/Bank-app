@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "../../components/layout/Layout";
+import { FaUserCheck } from "react-icons/fa";
 
 import {
   getDashboard,
@@ -96,6 +97,14 @@ return (
         </div>
 
         <div className="stat-card">
+            <div className="icon">
+                <FaUserCheck />
+            </div>
+            <h4>Today's Customers</h4>
+            <h2>{stats.todayCustomers ?? 0}</h2>
+          </div>
+
+        <div className="stat-card">
           <h4>Today's Collection</h4>
           <h2>₹ {stats.todayCollection ?? 0}</h2>
         </div>
@@ -109,7 +118,9 @@ return (
           <h4>Pending Balance</h4>
           <h2>₹ {stats.pendingBalance ?? 0}</h2>
         </div>
+         
 
+        
       </div>
 
     </div>
