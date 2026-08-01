@@ -128,16 +128,15 @@ STAT CARD
 
 .stat-card h4{
 
-    color:#64748b;
+    color:#000;
 
     font-size:14px;
 
     margin-bottom:10px;
 
-    font-weight:500;
+    font-weight:600;
 
 }
-
 .stat-card h2{
 
     color:#2563eb;
