@@ -101,7 +101,7 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
 
           {/* Search Box */}
           <div className="customer-search-box">
-            <FaSearch className="search-icon" />
+
 
             <input
               type="text"
