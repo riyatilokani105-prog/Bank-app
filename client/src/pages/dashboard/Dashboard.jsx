@@ -91,8 +91,7 @@ const Dashboard = () => {
 
             <h1>Dashboard</h1>
 
-            <p>Welcome Back Administrator 👋</p>
-
+           
           </div>
 
           <div className="dashboard-date">
