@@ -101,15 +101,13 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
 
           {/* Search Box */}
           <div className="customer-search-box">
-            <FaSearch className="search-icon" />
-
-            <input
-              type="text"
-              placeholder="Search by Account Number or Customer Name"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
+  <input
+    type="text"
+    placeholder="Search by Account Number or Customer Name"
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+  />
+</div>
 
           {/* Customer Dropdown */}
           <select
