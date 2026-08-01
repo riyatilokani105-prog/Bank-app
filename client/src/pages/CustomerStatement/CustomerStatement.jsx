@@ -1,21 +1,12 @@
 import { useState } from "react";
-
 import Layout from "../../components/layout/Layout";
-
 import StatementSearch from "./StatementSearch";
-
 import { getCustomerStatement } from "../../api/customerStatementApi";
-
 import "./Statement.css";
-
 import StatementInfo from "./StatementInfo";
-
 import StatementSummary from "./StatementSummary";
-
 import StatementTable from "./StatementTable";
-
 import StatementHeader from "./StatementHeader";
-
 import { useRef } from "react";
 
 const CustomerStatement = () => {

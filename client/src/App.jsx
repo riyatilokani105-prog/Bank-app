@@ -9,7 +9,7 @@ import Reports from "./pages/reports/Reports";
 import Backup from "./pages/backup/Backup";
 import AuditLogs from "./pages/audit/AuditLogs";
 import Settings from "./pages/settings/Settings";
-import CustomerStatement from "./pages/customerStatement/CustomerStatement";
+import CustomerStatement from "./pages/CustomerStatement/CustomerStatement";
 
 import PrivateRoute from "./routes/PrivateRoute";
 
