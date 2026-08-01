@@ -97,9 +97,6 @@ return (
         </div>
 
         <div className="stat-card">
-            <div className="icon">
-                <FaUserCheck />
-            </div>
             <h4>Today's Customers</h4>
             <h2>{stats.todayCustomers ?? 0}</h2>
           </div>
