@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
+import { FaSearch } from "react-icons/fa";
 
 import { addCollection } from "../../api/collectionApi";
 import { getCustomers } from "../../api/customerApi";
@@ -9,6 +10,8 @@ import "./AddCollection.css";
 const AddCollection = ({ closeModal, refreshCollections }) => {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const [search, setSearch] = useState("");
 
   const [formData, setFormData] = useState({
     customerId: "",
@@ -35,6 +38,19 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
       toast.error("Unable to load customers");
     }
   };
+
+  const filteredCustomers = useMemo(() => {
+    if (!search.trim()) return customers;
+
+    const query = search.toLowerCase();
+
+    return customers.filter((customer) => {
+      return (
+        customer.fullName?.toLowerCase().includes(query) ||
+        customer.accountNumber?.toString().includes(query)
+      );
+    });
+  }, [customers, search]);
 
   const changeHandler = (e) => {
     setFormData((prev) => ({
@@ -68,8 +84,7 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
       closeModal();
     } catch (err) {
       toast.error(
-        err.response?.data?.message ||
-          "Unable to Add Collection"
+        err.response?.data?.message || "Unable to Add Collection"
       );
     } finally {
       setLoading(false);
@@ -84,6 +99,19 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
 
         <form onSubmit={submitHandler}>
 
+          {/* Search Box */}
+          <div className="customer-search-box">
+            <FaSearch className="search-icon" />
+
+            <input
+              type="text"
+              placeholder="Search by Account Number or Customer Name"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+
+          {/* Customer Dropdown */}
           <select
             name="customerId"
             value={formData.customerId}
@@ -92,12 +120,12 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
           >
             <option value="">Select Customer</option>
 
-            {customers.map((customer) => (
+            {filteredCustomers.map((customer) => (
               <option
                 key={customer._id}
                 value={customer._id}
               >
-                {customer.fullName} ({customer.accountNumber})
+                {customer.accountNumber} - {customer.fullName}
               </option>
             ))}
           </select>
@@ -111,25 +139,25 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
             required
           />
 
-         <div className="modal-actions">
+          <div className="modal-actions">
 
-  <button
-    type="submit"
-    className="save-btn"
-    disabled={loading}
-  >
-    {loading ? "Saving..." : "Save Collection"}
-  </button>
+            <button
+              type="submit"
+              className="save-btn"
+              disabled={loading}
+            >
+              {loading ? "Saving..." : "Save Collection"}
+            </button>
 
-  <button
-    type="button"
-    className="cancel-btn"
-    onClick={closeModal}
-  >
-    Cancel
-  </button>
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={closeModal}
+            >
+              Cancel
+            </button>
 
-</div>
+          </div>
 
         </form>
 
