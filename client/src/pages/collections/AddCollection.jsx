@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
-import { FaSearch } from "react-icons/fa";
 
 import { addCollection } from "../../api/collectionApi";
 import { getCustomers } from "../../api/customerApi";
@@ -59,6 +58,50 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
     }));
   };
 
+  const saveCollection = async (forceSave = false) => {
+    try {
+      setLoading(true);
+
+      const payload = {
+        ...formData,
+        forceSave,
+      };
+
+      const res = await addCollection(payload);
+
+      toast.success(res.message);
+
+      if (refreshCollections) {
+        await refreshCollections();
+      }
+
+      closeModal();
+
+    } catch (err) {
+
+      if (err.response?.status === 409) {
+
+        const confirmSave = window.confirm(
+          "Collection for this account has already been added today.\n\nDo you want to add another collection for the same account?"
+        );
+
+        if (confirmSave) {
+          return saveCollection(true);
+        }
+
+        return;
+      }
+
+      toast.error(
+        err.response?.data?.message ||
+          "Unable to Add Collection"
+      );
+
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -70,25 +113,7 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
       return toast.error("Enter valid amount");
     }
 
-    try {
-      setLoading(true);
-
-      const res = await addCollection(formData);
-
-      toast.success(res.message);
-
-      if (refreshCollections) {
-        await refreshCollections();
-      }
-
-      closeModal();
-    } catch (err) {
-      toast.error(
-        err.response?.data?.message || "Unable to Add Collection"
-      );
-    } finally {
-      setLoading(false);
-    }
+    saveCollection(false);
   };
 
   return (
@@ -99,17 +124,15 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
 
         <form onSubmit={submitHandler}>
 
-          {/* Search Box */}
           <div className="customer-search-box">
-  <input
-    type="text"
-    placeholder="Search by Account Number or Customer Name"
-    value={search}
-    onChange={(e) => setSearch(e.target.value)}
-  />
-</div>
+            <input
+              type="text"
+              placeholder="Search by Account Number or Customer Name"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
 
-          {/* Customer Dropdown */}
           <select
             name="customerId"
             value={formData.customerId}
@@ -151,6 +174,7 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
               type="button"
               className="cancel-btn"
               onClick={closeModal}
+              disabled={loading}
             >
               Cancel
             </button>

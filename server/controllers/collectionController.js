@@ -6,7 +6,11 @@ const createAuditLog = require("../utils/createAuditLog");
 // Add Collection
 exports.addCollection = async (req, res) => {
   try {
-    const { customerId, amount } = req.body;
+    const {
+    customerId,
+    amount,
+    forceSave,
+} = req.body;
 
     if (!customerId || !amount || Number(amount) <= 0) {
       return res.status(400).json({
@@ -23,46 +27,43 @@ exports.addCollection = async (req, res) => {
         message: "Customer not found.",
       });
     }
-
-    // Check duplicate collection for today
     const today = new Date();
 
-    const startOfDay = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate(),
-      0,
-      0,
-      0,
-      0
-    );
+const startOfDay = new Date(
+  today.getFullYear(),
+  today.getMonth(),
+  today.getDate(),
+  0,
+  0,
+  0,
+  0
+);
 
-    const endOfDay = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate(),
-      23,
-      59,
-      59,
-      999
-    );
+const endOfDay = new Date(
+  today.getFullYear(),
+  today.getMonth(),
+  today.getDate(),
+  23,
+  59,
+  59,
+  999
+);
 
-    const alreadyCollected = await Collection.findOne({
-      customer: customer._id,
-      createdAt: {
-        $gte: startOfDay,
-        $lte: endOfDay,
-      },
-    });
+const alreadyCollected = await Collection.findOne({
+  customer: customer._id,
+  createdAt: {
+    $gte: startOfDay,
+    $lte: endOfDay,
+  },
+});
 
-    if (alreadyCollected) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Collection for this account has already been added today.",
-      });
-    }
-
+if (alreadyCollected && !forceSave) {
+  return res.status(409).json({
+    success: false,
+    message:
+      "Collection for this account has already been added today.",
+  });
+}
     const previousBalance = customer.balance;
     const newBalance = previousBalance + Number(amount);
 
@@ -88,12 +89,12 @@ exports.addCollection = async (req, res) => {
       currentBalance: newBalance,
     });
 
-    await createAuditLog(
-      req.user?._id || null,
-      "Collection Added",
-      `${customer.fullName} (${customer.accountNumber}) collected ₹${amount}`,
-      req.ip
-    );
+await createAuditLog(
+  req.user?._id || null,
+  "Collection Added",
+  `${customer.fullName} (${customer.accountNumber}) collected ₹${amount}`,
+  req.ip
+);
 
     res.status(201).json({
       success: true,
@@ -190,10 +191,10 @@ exports.deleteCollection = async (req, res) => {
     await collection.deleteOne();
 
     // Audit Log
-    await createAuditLog(
+   await createAuditLog(
   req.user?._id || null,
-  "Collection Added",
-  `${customer.fullName} (${customer.accountNumber}) collected ₹${amount}`,
+  "Collection Deleted",
+  `${customer.fullName} (${customer.accountNumber}) deleted collection of ₹${collection.amount}`,
   req.ip
 );
     res.json({
@@ -269,10 +270,10 @@ exports.bulkCollection = async (req, res) => {
     }
 
     // Audit Log
-    await createAuditLog(
+   await createAuditLog(
   req.user?._id || null,
-  "Collection Added",
-  `${customer.fullName} (${customer.accountNumber}) collected ₹${amount}`,
+  "Bulk Collection Added",
+  `${savedCollections.length} collections added`,
   req.ip
 );
     res.status(201).json({
