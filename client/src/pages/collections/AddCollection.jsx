@@ -166,146 +166,128 @@ const res = await bulkCollection({
   };
 
     return (
-    <div className="modal-overlay">
+  <div className="modal-overlay">
+    <div className="collection-modal">
 
-      <div className="collection-modal">
-
-        <div className="collection-header">
-
-          <h2>Daily Collection Sheet</h2>
+      {/* Header */}
+      <div className="collection-header">
+        <h2>Daily Collection Sheet</h2>
 
         
-
-        </div>
-
-        <div className="collection-search">
-
-          <input
-            type="text"
-            placeholder="Search by Account Number or Customer Name..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-
-        </div>
-
-        <form onSubmit={submitHandler}>
-
-          <div className="table-container">
-
-            <table className="collection-table">
-
-              <thead>
-
-                <tr>
-                  <th>Sr.</th>
-                  <th>Account No.</th>
-                  <th>Customer Name</th>
-                  <th>Today's Collection</th>
-                </tr>
-
-              </thead>
-
-              <tbody>
-
-                {filteredRows.length === 0 ? (
-
-                  <tr>
-
-                    <td
-                      colSpan="4"
-                      style={{
-                        textAlign: "center",
-                        padding: "30px",
-                      }}
-                    >
-                      No Customer Found
-                    </td>
-
-                  </tr>
-
-                ) : (
-
-                  filteredRows.map((row, index) => (
-
-                    <tr key={row.customerId}>
-
-                      <td>{index + 1}</td>
-
-                      <td>{row.accountNumber}</td>
-
-                      <td>{row.fullName}</td>
-
-                      <td>
-
-                        <input
-                          type="number"
-                          min="0"
-                          step="1"
-                          placeholder="0"
-                          value={row.amount}
-                          onChange={(e) =>
-                            amountChangeHandler(
-                              row.customerId,
-                              e.target.value
-                            )
-                          }
-                        />
-
-                      </td>
-
-                    </tr>
-
-                  ))
-
-                )}
-
-              </tbody>
-
-            </table>
-
-          </div>
-
-                    <div className="collection-footer">
-
-            <div className="collection-total">
-              <h3>
-                Total Collection :
-                <span> ₹ {totalAmount}</span>
-              </h3>
-            </div>
-
-            <div className="collection-buttons">
-
-              <button
-                type="submit"
-                className="save-btn"
-                disabled={loading}
-              >
-                {loading
-                  ? "Saving..."
-                  : "Save All Collections"}
-              </button>
-
-              <button
-                type="button"
-                className="cancel-btn"
-                onClick={closeModal}
-                disabled={loading}
-              >
-                Cancel
-              </button>
-
-            </div>
-
-          </div>
-
-        </form>
-
       </div>
 
+      {/* Search */}
+      <div className="collection-search">
+        <input
+          type="text"
+          placeholder="Search by Account Number or Customer Name..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+
+      {/* Form */}
+      <form onSubmit={submitHandler}>
+
+        {/* Table */}
+        <div className="table-container">
+          <table className="collection-table">
+
+            <thead>
+              <tr>
+                <th>Sr.</th>
+                <th>Account No.</th>
+                <th>Customer Name</th>
+                <th>Today's Collection</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {filteredRows.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="4"
+                    style={{
+                      textAlign: "center",
+                      padding: "30px",
+                    }}
+                  >
+                    No Customer Found
+                  </td>
+                </tr>
+              ) : (
+                filteredRows.map((row, index) => (
+                  <tr key={row.customerId}>
+                    <td>{index + 1}</td>
+
+                    <td>{row.accountNumber}</td>
+
+                    <td>{row.fullName}</td>
+
+                    <td>
+                      <input
+                        type="number"
+                        min="0"
+                        step="1"
+                        placeholder="0"
+                        value={row.amount}
+                        onChange={(e) =>
+                          amountChangeHandler(
+                            row.customerId,
+                            e.target.value
+                          )
+                        }
+                      />
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+
+          </table>
+        </div>
+
+        {/* Footer */}
+        <div className="collection-footer">
+
+          <div className="collection-total">
+            <h3>
+              Total Collection :
+              <span> ₹ {totalAmount}</span>
+            </h3>
+          </div>
+
+          <div className="collection-buttons">
+
+            <button
+              type="submit"
+              className="save-btn"
+              disabled={loading}
+            >
+              {loading
+                ? "Saving..."
+                : "Save All Collections"}
+            </button>
+
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={closeModal}
+              disabled={loading}
+            >
+              Cancel
+            </button>
+
+          </div>
+
+        </div>
+
+      </form>
+
     </div>
-  );
+  </div>
+);
+
 };
 
 export default AddCollection;
