@@ -134,10 +134,10 @@ const saveAllCollections = async (forceSave = false) => {
       return;
     }
 
-   await bulkCollection(
-    collections,
-    forceSave
-);
+const res = await bulkCollection({
+  collections,
+  forceSave,
+});
 
     toast.success(res.message);
     localStorage.removeItem(STORAGE_KEY);

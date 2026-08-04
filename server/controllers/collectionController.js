@@ -216,13 +216,13 @@ exports.deleteCollection = async (req, res) => {
 
 };
 
+
 // Bulk Collection
 exports.bulkCollection = async (req, res) => {
   try {
-    console.log(req.body);
-     
-    console.log("COLLECTIONS =>", collections);
-    const { collections, forceSave = false } = req.body;
+console.log(req.body);
+const { collections, forceSave = false } = req.body;
+console.log("COLLECTIONS =>", collections);
 
     if (!Array.isArray(collections) || collections.length === 0) {
       return res.status(400).json({
@@ -257,14 +257,24 @@ exports.bulkCollection = async (req, res) => {
     );
 
     for (const item of collections) {
+      console.log("Processing:", item);
 
-      if (!item.customerId) continue;
+      if (!item.customerId) {
+        console.log("Skipped - customerId missing");
+        continue;
+      }
 
-      if (!item.amount || Number(item.amount) <= 0) continue;
+      if (!item.amount || Number(item.amount) <= 0) {
+        console.log("Skipped - invalid amount");
+        continue;
+      }
 
       const customer = await Customer.findById(item.customerId);
 
-      if (!customer) continue;
+      if (!customer) {
+        console.log("Customer not found:", item.customerId);
+        continue;
+      }
 
       // Duplicate Check
       const alreadyCollected = await Collection.findOne({
@@ -276,108 +286,98 @@ exports.bulkCollection = async (req, res) => {
       });
 
       if (alreadyCollected && !forceSave) {
-
         duplicateCustomers.push({
           customerId: customer._id,
           accountNumber: customer.accountNumber,
           customerName: customer.fullName,
         });
 
+        console.log("Duplicate Collection:", customer.fullName);
         continue;
       }
 
-      const previousBalance = customer.balance;
-      const newBalance =
-        previousBalance + Number(item.amount);
+const previousBalance = Number(customer.balance ?? 0);
+const newBalance = previousBalance + Number(item.amount);
 
-      customer.balance = newBalance;
+customer.balance = newBalance;
+await customer.save();
 
-      await customer.save();
-
+console.log("Previous Balance:", previousBalance);
+console.log("New Balance:", newBalance);
+      console.log("Customer Updated");
+      console.log({
+        customer: customer._id,
+        accountNumber: customer.accountNumber,
+        customerName: customer.fullName,
+        amount: Number(item.amount),
+        previousBalance,
+        newBalance,
+      });
       const collection = await Collection.create({
 
+        
         customer: customer._id,
-
         accountNumber: customer.accountNumber,
-
         customerName: customer.fullName,
-
         amount: Number(item.amount),
-
         previousBalance,
-
         newBalance,
-
       });
+
+      console.log("Collection Saved");
 
       await Ledger.create({
-
         customer: customer._id,
-
         accountNumber: customer.accountNumber,
-
         customerName: customer.fullName,
-
         previousBalance,
-
         amount: Number(item.amount),
-
         currentBalance: newBalance,
-
       });
+
+      console.log("Ledger Saved");
 
       savedCollections.push(collection);
     }
 
-    // If duplicates exist and user hasn't confirmed
+    // Duplicate found
     if (duplicateCustomers.length > 0 && !forceSave) {
-
       return res.status(409).json({
-
         success: false,
-
         duplicates: duplicateCustomers,
-
-        message:
-          "Some customers already have collections for today.",
-
+        message: "Some customers already have collections for today.",
       });
-
     }
 
-    await createAuditLog(
+    try {
+      await createAuditLog(
+        req.user?._id || null,
+        "Bulk Collection Added",
+        `${savedCollections.length} collections added.`,
+        req.ip
+      );
 
-      req.user?._id || null,
+      console.log("Audit Log Saved");
+    } catch (auditError) {
+      console.log("Audit Log Error:", auditError.message);
+    }
 
-      "Bulk Collection Added",
-
-      `${savedCollections.length} collections added.`,
-
-      req.ip
-
-    );
-
-    res.status(201).json({
-
+    return res.status(201).json({
       success: true,
-
       message: `${savedCollections.length} collections saved successfully.`,
-
       totalCollections: savedCollections.length,
-
       collections: savedCollections,
-
     });
 
   } catch (err) {
+    console.log("====================");
+    console.log(err);
+    console.log(err.stack);
+    console.log("====================");
 
     res.status(500).json({
-
-      success: false,
-
-      message: err.message,
-
+        success: false,
+        message: err.message,
     });
-
-  }
+}
 };
