@@ -7,10 +7,10 @@ const createAuditLog = require("../utils/createAuditLog");
 exports.addCollection = async (req, res) => {
   try {
     const {
-    customerId,
-    amount,
-    forceSave,
-} = req.body;
+      customerId,
+      amount,
+      forceSave = false,
+    } = req.body;
 
     if (!customerId || !amount || Number(amount) <= 0) {
       return res.status(400).json({
@@ -27,48 +27,51 @@ exports.addCollection = async (req, res) => {
         message: "Customer not found.",
       });
     }
+
+    // Today's Date
     const today = new Date();
 
-const startOfDay = new Date(
-  today.getFullYear(),
-  today.getMonth(),
-  today.getDate(),
-  0,
-  0,
-  0,
-  0
-);
+    const startOfDay = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      0,
+      0,
+      0,
+      0
+    );
 
-const endOfDay = new Date(
-  today.getFullYear(),
-  today.getMonth(),
-  today.getDate(),
-  23,
-  59,
-  59,
-  999
-);
+    const endOfDay = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      23,
+      59,
+      59,
+      999
+    );
 
-const alreadyCollected = await Collection.findOne({
-  customer: customer._id,
-  createdAt: {
-    $gte: startOfDay,
-    $lte: endOfDay,
-  },
-});
+    // Duplicate Check
+    const alreadyCollected = await Collection.findOne({
+      customer: customer._id,
+      createdAt: {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      },
+    });
 
-if (alreadyCollected && !forceSave) {
-  return res.status(409).json({
-    success: false,
-    message:
-      "Collection for this account has already been added today.",
-  });
-}
+    if (alreadyCollected && !forceSave) {
+      return res.status(409).json({
+        success: false,
+        message:
+          "Collection for this account has already been added today.",
+      });
+    }
+
     const previousBalance = customer.balance;
     const newBalance = previousBalance + Number(amount);
 
     customer.balance = newBalance;
-
     await customer.save();
 
     const collection = await Collection.create({
@@ -89,12 +92,12 @@ if (alreadyCollected && !forceSave) {
       currentBalance: newBalance,
     });
 
-await createAuditLog(
-  req.user?._id || null,
-  "Collection Added",
-  `${customer.fullName} (${customer.accountNumber}) collected ₹${amount}`,
-  req.ip
-);
+    await createAuditLog(
+      req.user?._id || null,
+      "Collection Added",
+      `${customer.fullName} (${customer.accountNumber}) collected ₹${amount}`,
+      req.ip
+    );
 
     res.status(201).json({
       success: true,
@@ -215,10 +218,11 @@ exports.deleteCollection = async (req, res) => {
 
 // Bulk Collection
 exports.bulkCollection = async (req, res) => {
-
   try {
-
-    const collections = req.body;
+    console.log(req.body);
+     
+    console.log("COLLECTIONS =>", collections);
+    const { collections, forceSave = false } = req.body;
 
     if (!Array.isArray(collections) || collections.length === 0) {
       return res.status(400).json({
@@ -228,68 +232,152 @@ exports.bulkCollection = async (req, res) => {
     }
 
     const savedCollections = [];
+    const duplicateCustomers = [];
+
+    const today = new Date();
+
+    const startOfDay = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      0,
+      0,
+      0,
+      0
+    );
+
+    const endOfDay = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      23,
+      59,
+      59,
+      999
+    );
 
     for (const item of collections) {
 
-      const { customerId, amount } = item;
+      if (!item.customerId) continue;
 
-      if (!customerId || !amount || Number(amount) <= 0) {
-        continue;
-      }
+      if (!item.amount || Number(item.amount) <= 0) continue;
 
-      const customer = await Customer.findById(customerId);
+      const customer = await Customer.findById(item.customerId);
 
       if (!customer) continue;
 
+      // Duplicate Check
+      const alreadyCollected = await Collection.findOne({
+        customer: customer._id,
+        createdAt: {
+          $gte: startOfDay,
+          $lte: endOfDay,
+        },
+      });
+
+      if (alreadyCollected && !forceSave) {
+
+        duplicateCustomers.push({
+          customerId: customer._id,
+          accountNumber: customer.accountNumber,
+          customerName: customer.fullName,
+        });
+
+        continue;
+      }
+
       const previousBalance = customer.balance;
-      const newBalance = previousBalance + Number(amount);
+      const newBalance =
+        previousBalance + Number(item.amount);
 
       customer.balance = newBalance;
 
       await customer.save();
 
       const collection = await Collection.create({
+
         customer: customer._id,
+
         accountNumber: customer.accountNumber,
+
         customerName: customer.fullName,
-        amount,
+
+        amount: Number(item.amount),
+
         previousBalance,
+
         newBalance,
+
       });
 
       await Ledger.create({
+
         customer: customer._id,
+
         accountNumber: customer.accountNumber,
+
         customerName: customer.fullName,
+
         previousBalance,
-        amount,
+
+        amount: Number(item.amount),
+
         currentBalance: newBalance,
+
       });
 
       savedCollections.push(collection);
     }
 
-    // Audit Log
-   await createAuditLog(
-  req.user?._id || null,
-  "Bulk Collection Added",
-  `${savedCollections.length} collections added`,
-  req.ip
-);
+    // If duplicates exist and user hasn't confirmed
+    if (duplicateCustomers.length > 0 && !forceSave) {
+
+      return res.status(409).json({
+
+        success: false,
+
+        duplicates: duplicateCustomers,
+
+        message:
+          "Some customers already have collections for today.",
+
+      });
+
+    }
+
+    await createAuditLog(
+
+      req.user?._id || null,
+
+      "Bulk Collection Added",
+
+      `${savedCollections.length} collections added.`,
+
+      req.ip
+
+    );
+
     res.status(201).json({
+
       success: true,
-      message: "Bulk Collection Saved Successfully",
+
+      message: `${savedCollections.length} collections saved successfully.`,
+
       totalCollections: savedCollections.length,
+
       collections: savedCollections,
+
     });
 
   } catch (err) {
 
     res.status(500).json({
+
       success: false,
+
       message: err.message,
+
     });
 
   }
-
 };
