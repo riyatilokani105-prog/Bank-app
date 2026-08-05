@@ -82,7 +82,7 @@ const Login = () => {
 
           <h5>Daily Collection Management System</h5>
 
-          <p>Sign in to continue</p>
+          <p>Login in to continue</p>
 
         </div>
 
