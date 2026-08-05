@@ -33,12 +33,6 @@ const Navbar = ({ toggleSidebar }) => {
 
       <div className="navbar-right">
 
-        {/* Notification */}
-
-        <button className="icon-btn">
-          <FaBell />
-          <span className="notification">3</span>
-        </button>
 
         {/* Profile */}
 
