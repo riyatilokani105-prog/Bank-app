@@ -115,23 +115,32 @@ const Dashboard = () => {
 
         <div className="dashboard-header">
 
-          <div>
+  <div className="dashboard-bank">
 
-            <h1>Dashboard</h1>
+    <h1>Rajura Nagri Sahakari Path Sanstha Maryadit</h1>
 
-           
-          </div>
+    <h2>Ballarpur Branch</h2>
 
-          <div className="dashboard-date">
-            {new Date().toLocaleDateString("en-IN", {
-              weekday: "long",
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
-          </div>
+    <h3>राजुरा नागरी सहकारी पतसंस्था मर्यादित</h3>
 
-        </div>
+    <h4>बल्लारपूर शाखा</h4>
+
+    <p>Daily Collection Management Dashboard</p>
+
+  </div>
+
+  <div className="dashboard-date">
+
+    {new Date().toLocaleDateString("en-IN", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })}
+
+  </div>
+
+</div>
 
         {/* Statistics */}
 

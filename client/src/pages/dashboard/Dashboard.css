@@ -668,3 +668,113 @@ min-width:560px;
 }
 
 }
+
+/* ==========================================
+   BANK HEADER
+========================================== */
+
+.dashboard-bank{
+
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+
+}
+
+.dashboard-bank h1{
+
+    margin:0;
+    font-size:30px;
+    color:#1e3a8a;
+    font-weight:700;
+
+}
+
+.dashboard-bank h2{
+
+    margin:0;
+    color:#2563eb;
+    font-size:22px;
+    font-weight:600;
+
+}
+
+.dashboard-bank h3{
+
+    margin-top:10px;
+    color:#0f172a;
+    font-size:21px;
+    font-weight:700;
+
+}
+
+.dashboard-bank h4{
+
+    margin:0;
+    color:#2563eb;
+    font-size:18px;
+    font-weight:600;
+
+}
+
+.dashboard-bank p{
+
+    margin-top:10px;
+    color:#64748b;
+    font-size:15px;
+    font-weight:500;
+
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media(max-width:768px){
+
+.dashboard-header{
+
+    flex-direction:column;
+    align-items:flex-start;
+    gap:20px;
+
+}
+
+.dashboard-bank h1{
+
+    font-size:21px;
+
+}
+
+.dashboard-bank h2{
+
+    font-size:17px;
+
+}
+
+.dashboard-bank h3{
+
+    font-size:17px;
+
+}
+
+.dashboard-bank h4{
+
+    font-size:15px;
+
+}
+
+.dashboard-bank p{
+
+    font-size:13px;
+
+}
+
+.dashboard-date{
+
+    width:100%;
+    text-align:left;
+
+}
+
+}
