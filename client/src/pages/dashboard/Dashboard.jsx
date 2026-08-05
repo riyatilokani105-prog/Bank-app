@@ -310,102 +310,7 @@ const Dashboard = () => {
 
       </div>
 
-      {/* ===========================================================
-                          SUMMARY BAR
-      =========================================================== */}
-
-      <div className="summary-grid">
-
-        <div className="summary-card">
-
-          <FaBuilding className="summary-icon"/>
-
-          <div>
-
-            <small>
-
-              Institution
-
-            </small>
-
-            <h3>
-
-              Rajura Nagri Sahakari
-
-            </h3>
-
-          </div>
-
-        </div>
-
-        <div className="summary-card">
-
-          <FaUniversity className="summary-icon"/>
-
-          <div>
-
-            <small>
-
-              Branch
-
-            </small>
-
-            <h3>
-
-              Ballarpur
-
-            </h3>
-
-          </div>
-
-        </div>
-
-        <div className="summary-card">
-
-          <FaShieldAlt className="summary-icon"/>
-
-          <div>
-
-            <small>
-
-              System
-
-            </small>
-
-            <h3>
-
-              Daily Collection
-
-            </h3>
-
-          </div>
-
-        </div>
-
-        <div className="summary-card">
-
-          <div className="status-dot"></div>
-
-          <div>
-
-            <small>
-
-              Server Status
-
-            </small>
-
-            <h3 className="online">
-
-              Online
-
-            </h3>
-
-          </div>
-
-        </div>
-
-      </div>
-
+    
       {/* ===========================================================
                           DASHBOARD OVERVIEW
       =========================================================== */}
@@ -419,15 +324,6 @@ const Dashboard = () => {
             Daily Collection Management
 
           </h3>
-
-          <p>
-
-            This dashboard provides complete control over
-            customer records, daily collections, ledger,
-            reports, customer statements and secure backup
-            management for the bank.
-
-          </p>
 
         </div>
 
