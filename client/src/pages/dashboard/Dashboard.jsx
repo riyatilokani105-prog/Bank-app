@@ -113,53 +113,7 @@ const Dashboard = () => {
 
   };
 
-  if (loading) {
-
-    return (
-
-      <Layout>
-
-        <div className="dashboard-loading">
-
-          <div className="loader-card">
-
-            <div className="loader-logo">
-
-              <FaUniversity className="loader-icon" />
-
-            </div>
-
-            <h2>
-              Rajura Nagri Sahakari Path Sanstha Maryadit
-            </h2>
-
-            <h3>
-              Ballarpur Branch
-            </h3>
-
-            <p>
-              राजुरा नागरी सहकारी पतसंस्था मर्यादित
-            </p>
-
-            <span>
-              बल्लारपूर शाखा
-            </span>
-
-            <div className="loader-spinner"></div>
-
-            <strong>
-              Loading Banking Dashboard...
-            </strong>
-
-          </div>
-
-        </div>
-
-      </Layout>
-
-    );
-
-  }
+  if (loading) 
 
   return (
 
