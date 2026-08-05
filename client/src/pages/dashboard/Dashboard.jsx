@@ -229,7 +229,7 @@ const Dashboard = () => {
               className="action-card"
               onClick={() => navigate("/customers")}
             >
-              <FaUserPlus />
+              
               <span>Add Customer</span>
             </div>
 
@@ -237,7 +237,7 @@ const Dashboard = () => {
               className="action-card"
               onClick={() => navigate("/collections")}
             >
-              <FaMoneyBillWave />
+              
               <span>Add Collection</span>
             </div>
 
@@ -245,7 +245,7 @@ const Dashboard = () => {
               className="action-card"
               onClick={() => navigate("/customer-statement")}
             >
-              <FaFileInvoiceDollar />
+              
               <span>Customer Statement</span>
             </div>
 
@@ -253,7 +253,7 @@ const Dashboard = () => {
               className="action-card"
               onClick={() => navigate("/reports")}
             >
-              <FaChartBar />
+              
               <span>Reports</span>
             </div>
 
@@ -261,7 +261,7 @@ const Dashboard = () => {
               className="action-card"
               onClick={() => navigate("/backup")}
             >
-              <FaDatabase />
+           
               <span>Backup</span>
             </div>
 
