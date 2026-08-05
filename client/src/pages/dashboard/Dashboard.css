@@ -1,17 +1,23 @@
+/* ==========================================================
+   PROFESSIONAL BANK DASHBOARD
+   PART 1
+========================================================== */
+
 .dashboard{
     width:100%;
-    animation:fadeIn .4s ease;
+    animation:fadeIn .5s ease;
+    padding-bottom:40px;
 }
 
-/*========================
-    ANIMATION
-=========================*/
+/* ==========================================
+   Animation
+========================================== */
 
 @keyframes fadeIn{
 
     from{
         opacity:0;
-        transform:translateY(15px);
+        transform:translateY(20px);
     }
 
     to{
@@ -21,40 +27,247 @@
 
 }
 
-/*========================
-PAGE TITLE
-=========================*/
+/* ==========================================
+   Dashboard Header
+========================================== */
 
-.page-title{
-    margin-bottom:30px;
+.dashboard-header{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:25px;
+
+    padding:35px;
+
+    margin-bottom:35px;
+
+    border-radius:28px;
+
+    background:
+    linear-gradient(135deg,#0f4c81,#2563eb);
+
+    color:#fff;
+
+    position:relative;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 18px 45px rgba(37,99,235,.28);
+
 }
 
-.page-title h1{
-    font-size:32px;
+.dashboard-header::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:350px;
+    height:350px;
+
+    right:-120px;
+    top:-120px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.08);
+
+}
+
+.dashboard-header::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:220px;
+    height:220px;
+
+    left:-60px;
+    bottom:-90px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.05);
+
+}
+
+/* ==========================================
+   Bank Details
+========================================== */
+
+.dashboard-bank{
+
+    position:relative;
+    z-index:2;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:6px;
+
+    max-width:75%;
+
+}
+
+.dashboard-bank h1{
+
+    margin:0;
+
+    font-size:34px;
+
     font-weight:700;
-    color:#1f2937;
-    margin-bottom:8px;
+
+    line-height:1.2;
+
+    color:#fff;
+
 }
 
-.page-title p{
-    color:#6b7280;
+.dashboard-bank h2{
+
+    margin:0;
+
+    font-size:23px;
+
+    font-weight:500;
+
+    color:#dbeafe;
+
+}
+
+.dashboard-bank h3{
+
+    margin-top:12px;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    color:#ffffff;
+
+}
+
+.dashboard-bank h4{
+
+    margin:0;
+
+    font-size:18px;
+
+    font-weight:500;
+
+    color:#dbeafe;
+
+}
+
+.dashboard-bank p{
+
+    margin-top:12px;
+
+    color:#e2e8f0;
+
     font-size:15px;
+
+    letter-spacing:.5px;
+
 }
 
-/*========================
-STATISTICS GRID
-=========================*/
+/* ==========================================
+   Date Card
+========================================== */
+
+.dashboard-date{
+
+    position:relative;
+    z-index:2;
+
+    background:rgba(255,255,255,.18);
+
+    backdrop-filter:blur(10px);
+
+    border:1px solid rgba(255,255,255,.25);
+
+    padding:18px 22px;
+
+    border-radius:18px;
+
+    text-align:center;
+
+    min-width:240px;
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    line-height:1.6;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+
+}
+
+/* ==========================================
+   Section Titles
+========================================== */
+
+.section-title{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+}
+
+.section-title h2{
+
+    margin:0;
+
+    font-size:28px;
+
+    font-weight:700;
+
+    color:#1e293b;
+
+}
+
+.section-title p{
+
+    margin-top:6px;
+
+    color:#64748b;
+
+    font-size:15px;
+
+}
+
+/* ==========================================================
+   PROFESSIONAL STATISTICS CARDS
+   PART 2
+========================================================== */
 
 .stats-grid{
+
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-    gap:22px;
-    margin-bottom:35px;
+
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+
+    gap:25px;
+
+    margin-bottom:40px;
+
 }
 
-/*========================
-STAT CARD
-=========================*/
+/* ==========================================
+   Stat Card
+========================================== */
 
 .stat-card{
 
@@ -62,19 +275,61 @@ STAT CARD
 
     overflow:hidden;
 
-    background:#fff;
+    background:#ffffff;
 
-    border-radius:18px;
+    border-radius:22px;
 
-    padding:24px;
+    padding:28px;
 
-    border:1px solid #edf2f7;
+    border:1px solid #e8eef8;
 
-    box-shadow:0 8px 24px rgba(15,23,42,.08);
+    box-shadow:
+        0 12px 35px rgba(15,23,42,.08);
 
-    transition:.3s ease;
+    transition:.35s ease;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+    min-height:140px;
 
 }
+
+.stat-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+        0 22px 50px rgba(37,99,235,.18);
+
+}
+
+/* Decorative Circle */
+
+.stat-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    right:-45px;
+
+    top:-45px;
+
+    width:130px;
+
+    height:130px;
+
+    border-radius:50%;
+
+    background:rgba(37,99,235,.05);
+
+}
+
+/* Left Border */
 
 .stat-card::before{
 
@@ -86,31 +341,57 @@ STAT CARD
 
     top:0;
 
-    width:5px;
+    width:7px;
 
     height:100%;
+
+}
+
+/* ==========================================
+   Card Colors
+========================================== */
+
+.stat-card.blue::before{
 
     background:#2563eb;
 
 }
 
-.stat-card:hover{
+.stat-card.green::before{
 
-    transform:translateY(-6px);
-
-    box-shadow:0 18px 35px rgba(0,0,0,.12);
+    background:#16a34a;
 
 }
 
+.stat-card.purple::before{
+
+    background:#7c3aed;
+
+}
+
+.stat-card.orange::before{
+
+    background:#ea580c;
+
+}
+
+.stat-card.red::before{
+
+    background:#dc2626;
+
+}
+
+/* ==========================================
+   Icons
+========================================== */
+
 .stat-icon{
 
-    width:58px;
+    width:72px;
 
-    height:58px;
+    height:72px;
 
-    border-radius:15px;
-
-    background:#eff6ff;
+    border-radius:18px;
 
     display:flex;
 
@@ -118,52 +399,174 @@ STAT CARD
 
     justify-content:center;
 
-    color:#2563eb;
-
-    font-size:24px;
-
-    margin-bottom:18px;
-
-}
-
-.stat-card h4{
-
-    color:#000;
-
-    font-size:14px;
-
-    margin-bottom:10px;
-
-    font-weight:600;
-
-}
-.stat-card h2{
-
-    color:#2563eb;
+    flex-shrink:0;
 
     font-size:30px;
 
+    color:#fff;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.12);
+
+}
+
+.blue .stat-icon{
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+
+}
+
+.green .stat-icon{
+
+    background:linear-gradient(135deg,#16a34a,#22c55e);
+
+}
+
+.purple .stat-icon{
+
+    background:linear-gradient(135deg,#7c3aed,#9333ea);
+
+}
+
+.orange .stat-icon{
+
+    background:linear-gradient(135deg,#ea580c,#f97316);
+
+}
+
+.red .stat-icon{
+
+    background:linear-gradient(135deg,#dc2626,#ef4444);
+
+}
+
+/* ==========================================
+   Text
+========================================== */
+
+.stat-card h4{
+
+    margin:0;
+
+    color:#64748b;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    letter-spacing:.4px;
+
+}
+
+.stat-card h2{
+
+    margin-top:8px;
+
+    margin-bottom:10px;
+
+    font-size:32px;
+
     font-weight:700;
+
+    color:#0f172a;
 
     word-break:break-word;
 
 }
 
+/* Small Label */
+
 .stat-card small{
 
-    display:block;
+    display:inline-flex;
 
-    margin-top:12px;
+    align-items:center;
 
-    color:#94a3b8;
+    gap:6px;
 
-    font-size:13px;
+    padding:6px 12px;
+
+    border-radius:30px;
+
+    font-size:12px;
+
+    font-weight:600;
 
 }
 
-/*========================
-QUICK ACTIONS
-=========================*/
+.blue small{
+
+    background:#dbeafe;
+
+    color:#1d4ed8;
+
+}
+
+.green small{
+
+    background:#dcfce7;
+
+    color:#15803d;
+
+}
+
+.purple small{
+
+    background:#ede9fe;
+
+    color:#6d28d9;
+
+}
+
+.orange small{
+
+    background:#ffedd5;
+
+    color:#c2410c;
+
+}
+
+.red small{
+
+    background:#fee2e2;
+
+    color:#b91c1c;
+
+}
+
+/* ==========================================
+   Number Animation
+========================================== */
+
+.stat-card h2{
+
+    animation:numberFade .5s ease;
+
+}
+
+@keyframes numberFade{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(10px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ==========================================================
+   QUICK ACTIONS
+   PART 3
+========================================================== */
 
 .quick-actions{
 
@@ -173,83 +576,208 @@ QUICK ACTIONS
 
 .quick-actions h2{
 
-    font-size:24px;
+    font-size:28px;
 
-    margin-bottom:20px;
+    font-weight:700;
 
-    color:#1f2937;
+    color:#0f172a;
+
+    margin-bottom:8px;
 
 }
+
+.quick-actions p{
+
+    color:#64748b;
+
+    margin-bottom:28px;
+
+    font-size:15px;
+
+}
+
+/* ==========================================
+   Action Grid
+========================================== */
 
 .action-grid{
 
     display:grid;
 
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
 
-    gap:20px;
+    gap:24px;
 
 }
 
+/* ==========================================
+   Action Card
+========================================== */
+
 .action-card{
 
-    background:#fff;
+    position:relative;
 
-    border-radius:18px;
+    overflow:hidden;
+
+    background:#ffffff;
+
+    border-radius:22px;
 
     padding:28px;
 
     border:1px solid #edf2f7;
 
-    box-shadow:0 8px 24px rgba(15,23,42,.08);
+    box-shadow:
+        0 10px 28px rgba(15,23,42,.08);
 
-    text-align:center;
-
-    transition:.3s;
+    transition:.35s ease;
 
     cursor:pointer;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:18px;
 
 }
 
 .action-card:hover{
 
-    transform:translateY(-6px);
+    transform:translateY(-8px);
 
-    box-shadow:0 18px 35px rgba(0,0,0,.12);
+    box-shadow:
+        0 22px 45px rgba(37,99,235,.18);
 
 }
+
+/* Decorative Shape */
+
+.action-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:120px;
+
+    height:120px;
+
+    border-radius:50%;
+
+    right:-35px;
+
+    top:-35px;
+
+    background:rgba(37,99,235,.05);
+
+}
+
+.action-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    bottom:0;
+
+    width:100%;
+
+    height:4px;
+
+    background:linear-gradient(
+        90deg,
+        #2563eb,
+        #60a5fa
+    );
+
+    transform:scaleX(0);
+
+    transition:.35s;
+
+}
+
+.action-card:hover::after{
+
+    transform:scaleX(1);
+
+}
+
+/* ==========================================
+   Action Icon
+========================================== */
 
 .action-card svg{
 
-    font-size:36px;
+    width:62px;
 
-    color:#2563eb;
+    height:62px;
 
-    margin-bottom:14px;
+    padding:16px;
+
+    border-radius:18px;
+
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #3b82f6
+    );
+
+    color:#fff;
+
+    font-size:28px;
+
+    box-shadow:
+        0 10px 25px rgba(37,99,235,.25);
 
 }
 
+/* ==========================================
+   Action Text
+========================================== */
+
 .action-card h4{
 
-    color:#1f2937;
+    margin:0;
 
-    margin-bottom:10px;
+    font-size:20px;
+
+    font-weight:700;
+
+    color:#0f172a;
 
 }
 
 .action-card p{
 
+    margin:0;
+
     color:#64748b;
 
     font-size:14px;
 
-    line-height:1.5;
+    line-height:1.6;
 
 }
 
-/*========================
-TABLE SECTION
-=========================*/
+.action-card span{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#1e293b;
+
+}
+
+/* ==========================================
+   Dashboard Content Cards
+========================================== */
 
 .dashboard-row{
 
@@ -257,9 +785,9 @@ TABLE SECTION
 
     grid-template-columns:2fr 1fr;
 
-    gap:24px;
+    gap:25px;
 
-    margin-top:35px;
+    margin-top:40px;
 
 }
 
@@ -267,31 +795,32 @@ TABLE SECTION
 
     background:#fff;
 
-    border-radius:18px;
+    border-radius:22px;
 
-    padding:24px;
+    padding:28px;
 
     border:1px solid #edf2f7;
 
-    box-shadow:0 10px 30px rgba(15,23,42,.08);
-
-    overflow:hidden;
+    box-shadow:
+        0 10px 30px rgba(15,23,42,.08);
 
 }
 
 .dashboard-card h3{
 
-    margin-bottom:18px;
+    margin:0 0 22px;
 
-    font-size:20px;
+    font-size:22px;
 
-    color:#1e293b;
+    font-weight:700;
+
+    color:#0f172a;
 
 }
 
-/*========================
-TABLE WRAPPER
-=========================*/
+/* ==========================================
+   Table Wrapper
+========================================== */
 
 .table-wrapper{
 
@@ -315,11 +844,11 @@ TABLE WRAPPER
 
 }
 
-/*========================
-TABLE
-=========================*/
+/* ==========================================
+   Table
+========================================== */
 
-table{
+.dashboard-card table{
 
     width:100%;
 
@@ -329,51 +858,53 @@ table{
 
 }
 
-thead{
+.dashboard-card thead{
 
     background:#eff6ff;
 
 }
 
-th{
+.dashboard-card th{
 
     padding:15px;
 
     text-align:left;
 
-    color:#1e3a8a;
-
     font-size:14px;
+
+    color:#1d4ed8;
+
+    font-weight:700;
 
 }
 
-td{
+.dashboard-card td{
 
     padding:15px;
 
-    color:#374151;
-
     font-size:14px;
 
-    border-bottom:1px solid #eef2f7;
+    color:#475569;
+
+    border-bottom:1px solid #edf2f7;
 
 }
 
-tbody tr{
+.dashboard-card tbody tr{
 
-    transition:.3s;
-
-}
-
-tbody tr:hover{
-
-    background:#f8fafc;
+    transition:.25s;
 
 }
 
-/*========================
-BADGES
-=========================*/
+.dashboard-card tbody tr:hover{
+
+    background:#f8fbff;
+
+}
+
+/* ==========================================
+   Status Badges
+========================================== */
 
 .badge-success{
 
@@ -387,19 +918,7 @@ BADGES
 
     font-size:12px;
 
-}
-
-.badge-danger{
-
-    background:#fee2e2;
-
-    color:#dc2626;
-
-    padding:6px 12px;
-
-    border-radius:20px;
-
-    font-size:12px;
+    font-weight:600;
 
 }
 
@@ -415,11 +934,29 @@ BADGES
 
     font-size:12px;
 
+    font-weight:600;
+
 }
 
-/*========================
-LOADING
-=========================*/
+.badge-danger{
+
+    background:#fee2e2;
+
+    color:#dc2626;
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+/* ==========================================
+   Loading Dashboard
+========================================== */
 
 .loading-dashboard{
 
@@ -431,330 +968,681 @@ LOADING
 
     height:70vh;
 
-    font-size:24px;
+    font-size:26px;
 
-    font-weight:600;
+    font-weight:700;
 
     color:#2563eb;
 
 }
 
-/*========================
-LARGE TABLET
-=========================*/
+/* ==========================================================
+   QUICK ACTIONS
+   PART 3
+========================================================== */
 
-@media(max-width:1200px){
+.quick-actions{
 
-.stats-grid{
-
-grid-template-columns:repeat(2,1fr);
-
-}
-
-.action-grid{
-
-grid-template-columns:repeat(2,1fr);
+    margin-top:10px;
 
 }
 
-}
+.quick-actions h2{
 
-/*========================
-TABLET
-=========================*/
+    font-size:28px;
 
-@media(max-width:992px){
+    font-weight:700;
 
-.dashboard-row{
+    color:#0f172a;
 
-grid-template-columns:1fr;
+    margin-bottom:8px;
 
 }
 
-.stats-grid{
+.quick-actions p{
 
-grid-template-columns:repeat(2,1fr);
+    color:#64748b;
 
-}
+    margin-bottom:28px;
 
-.action-grid{
-
-grid-template-columns:repeat(2,1fr);
-
-}
-
-.dashboard-card{
-
-padding:20px;
-
-}
-
-}
-
-/*========================
-MOBILE
-=========================*/
-
-@media(max-width:768px){
-
-.dashboard{
-
-padding:0;
-
-}
-
-.page-title{
-
-text-align:center;
-
-margin-bottom:25px;
-
-}
-
-.page-title h1{
-
-font-size:26px;
-
-}
-
-.page-title p{
-
-font-size:14px;
-
-}
-
-.stats-grid{
-
-grid-template-columns:1fr;
-
-gap:16px;
-
-}
-
-.stat-card{
-
-padding:20px;
-
-}
-
-.stat-icon{
-
-width:52px;
-
-height:52px;
-
-font-size:22px;
-
-}
-
-.stat-card h2{
-
-font-size:26px;
-
-}
-
-.action-grid{
-
-grid-template-columns:1fr;
-
-}
-
-.action-card{
-
-padding:20px;
-
-}
-
-.dashboard-row{
-
-grid-template-columns:1fr;
-
-gap:20px;
-
-}
-
-.dashboard-card{
-
-padding:18px;
-
-}
-
-table{
-
-min-width:650px;
-
-}
-
-th{
-
-font-size:13px;
-
-padding:12px;
-
-}
-
-td{
-
-font-size:13px;
-
-padding:12px;
-
-}
-
-}
-
-/*========================
-SMALL MOBILE
-=========================*/
-
-@media(max-width:480px){
-
-.page-title h1{
-
-font-size:22px;
-
-}
-
-.page-title p{
-
-font-size:13px;
-
-}
-
-.stat-card{
-
-padding:18px;
-
-}
-
-.stat-icon{
-
-width:46px;
-
-height:46px;
-
-font-size:18px;
-
-}
-
-.stat-card h2{
-
-font-size:22px;
-
-}
-
-.action-card{
-
-padding:18px;
-
-}
-
-.action-card svg{
-
-font-size:30px;
-
-}
-
-.dashboard-card{
-
-padding:15px;
-
-}
-
-table{
-
-min-width:560px;
-
-}
+    font-size:15px;
 
 }
 
 /* ==========================================
-   BANK HEADER
+   Action Grid
 ========================================== */
 
-.dashboard-bank{
+.action-grid{
 
-    display:flex;
-    flex-direction:column;
-    gap:4px;
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+
+    gap:24px;
 
 }
 
-.dashboard-bank h1{
+/* ==========================================
+   Action Card
+========================================== */
+
+.action-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:#ffffff;
+
+    border-radius:22px;
+
+    padding:28px;
+
+    border:1px solid #edf2f7;
+
+    box-shadow:
+        0 10px 28px rgba(15,23,42,.08);
+
+    transition:.35s ease;
+
+    cursor:pointer;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:18px;
+
+}
+
+.action-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+        0 22px 45px rgba(37,99,235,.18);
+
+}
+
+/* Decorative Shape */
+
+.action-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:120px;
+
+    height:120px;
+
+    border-radius:50%;
+
+    right:-35px;
+
+    top:-35px;
+
+    background:rgba(37,99,235,.05);
+
+}
+
+.action-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    bottom:0;
+
+    width:100%;
+
+    height:4px;
+
+    background:linear-gradient(
+        90deg,
+        #2563eb,
+        #60a5fa
+    );
+
+    transform:scaleX(0);
+
+    transition:.35s;
+
+}
+
+.action-card:hover::after{
+
+    transform:scaleX(1);
+
+}
+
+/* ==========================================
+   Action Icon
+========================================== */
+
+.action-card svg{
+
+    width:62px;
+
+    height:62px;
+
+    padding:16px;
+
+    border-radius:18px;
+
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #3b82f6
+    );
+
+    color:#fff;
+
+    font-size:28px;
+
+    box-shadow:
+        0 10px 25px rgba(37,99,235,.25);
+
+}
+
+/* ==========================================
+   Action Text
+========================================== */
+
+.action-card h4{
 
     margin:0;
-    font-size:30px;
-    color:#1e3a8a;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    color:#0f172a;
+
+}
+
+.action-card p{
+
+    margin:0;
+
+    color:#64748b;
+
+    font-size:14px;
+
+    line-height:1.6;
+
+}
+
+.action-card span{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#1e293b;
+
+}
+
+/* ==========================================
+   Dashboard Content Cards
+========================================== */
+
+.dashboard-row{
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr;
+
+    gap:25px;
+
+    margin-top:40px;
+
+}
+
+.dashboard-card{
+
+    background:#fff;
+
+    border-radius:22px;
+
+    padding:28px;
+
+    border:1px solid #edf2f7;
+
+    box-shadow:
+        0 10px 30px rgba(15,23,42,.08);
+
+}
+
+.dashboard-card h3{
+
+    margin:0 0 22px;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    color:#0f172a;
+
+}
+
+/* ==========================================
+   Table Wrapper
+========================================== */
+
+.table-wrapper{
+
+    width:100%;
+
+    overflow-x:auto;
+
+}
+
+.table-wrapper::-webkit-scrollbar{
+
+    height:8px;
+
+}
+
+.table-wrapper::-webkit-scrollbar-thumb{
+
+    background:#cbd5e1;
+
+    border-radius:20px;
+
+}
+
+/* ==========================================
+   Table
+========================================== */
+
+.dashboard-card table{
+
+    width:100%;
+
+    min-width:650px;
+
+    border-collapse:collapse;
+
+}
+
+.dashboard-card thead{
+
+    background:#eff6ff;
+
+}
+
+.dashboard-card th{
+
+    padding:15px;
+
+    text-align:left;
+
+    font-size:14px;
+
+    color:#1d4ed8;
+
     font-weight:700;
 
 }
 
-.dashboard-bank h2{
+.dashboard-card td{
 
-    margin:0;
-    color:#2563eb;
-    font-size:22px;
+    padding:15px;
+
+    font-size:14px;
+
+    color:#475569;
+
+    border-bottom:1px solid #edf2f7;
+
+}
+
+.dashboard-card tbody tr{
+
+    transition:.25s;
+
+}
+
+.dashboard-card tbody tr:hover{
+
+    background:#f8fbff;
+
+}
+
+/* ==========================================
+   Status Badges
+========================================== */
+
+.badge-success{
+
+    background:#dcfce7;
+
+    color:#15803d;
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
     font-weight:600;
+
+}
+
+.badge-warning{
+
+    background:#fef3c7;
+
+    color:#ca8a04;
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.badge-danger{
+
+    background:#fee2e2;
+
+    color:#dc2626;
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+/* ==========================================
+   Loading Dashboard
+========================================== */
+
+.loading-dashboard{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    height:70vh;
+
+    font-size:26px;
+
+    font-weight:700;
+
+    color:#2563eb;
+
+}
+
+/* ==========================================================
+   RESPONSIVE DESIGN
+   PART 4
+========================================================== */
+
+/* ==========================================
+   Large Laptop
+========================================== */
+
+@media (max-width:1400px){
+
+.dashboard-bank h1{
+
+    font-size:30px;
 
 }
 
 .dashboard-bank h3{
 
-    margin-top:10px;
-    color:#0f172a;
-    font-size:21px;
-    font-weight:700;
+    font-size:22px;
 
 }
 
-.dashboard-bank h4{
+.stats-grid{
 
-    margin:0;
-    color:#2563eb;
-    font-size:18px;
-    font-weight:600;
+    grid-template-columns:repeat(3,1fr);
 
 }
 
-.dashboard-bank p{
+.action-grid{
 
-    margin-top:10px;
-    color:#64748b;
-    font-size:15px;
-    font-weight:500;
+    grid-template-columns:repeat(3,1fr);
+
+}
 
 }
 
 /* ==========================================
-   MOBILE
+   Laptop
 ========================================== */
 
-@media(max-width:768px){
+@media (max-width:1200px){
 
 .dashboard-header{
 
-    flex-direction:column;
-    align-items:flex-start;
     gap:20px;
 
 }
 
 .dashboard-bank h1{
 
-    font-size:21px;
+    font-size:28px;
 
 }
 
 .dashboard-bank h2{
 
-    font-size:17px;
+    font-size:20px;
 
 }
 
 .dashboard-bank h3{
 
+    font-size:20px;
+
+}
+
+.dashboard-bank h4{
+
     font-size:17px;
+
+}
+
+.stats-grid{
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+.action-grid{
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+.dashboard-row{
+
+    grid-template-columns:1fr;
+
+}
+
+}
+
+/* ==========================================
+   Tablet
+========================================== */
+
+@media (max-width:992px){
+
+.dashboard{
+
+    padding:5px;
+
+}
+
+.dashboard-header{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:20px;
+
+}
+
+.dashboard-bank{
+
+    width:100%;
+
+}
+
+.dashboard-bank h1{
+
+    font-size:26px;
+
+}
+
+.dashboard-bank h2{
+
+    font-size:18px;
+
+}
+
+.dashboard-bank h3{
+
+    font-size:19px;
+
+}
+
+.dashboard-bank h4{
+
+    font-size:16px;
+
+}
+
+.dashboard-bank p{
+
+    font-size:14px;
+
+}
+
+.dashboard-date{
+
+    width:100%;
+
+    text-align:left;
+
+}
+
+.stats-grid{
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:18px;
+
+}
+
+.stat-card{
+
+    padding:22px;
+
+}
+
+.stat-icon{
+
+    width:64px;
+
+    height:64px;
+
+    font-size:26px;
+
+}
+
+.stat-card h2{
+
+    font-size:28px;
+
+}
+
+.action-grid{
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+.action-card{
+
+    padding:22px;
+
+}
+
+.dashboard-card{
+
+    padding:20px;
+
+}
+
+}
+
+/* ==========================================
+   Mobile
+========================================== */
+
+@media (max-width:768px){
+
+.dashboard{
+
+    padding:0;
+
+}
+
+.dashboard-header{
+
+    padding:22px;
+
+    border-radius:20px;
+
+}
+
+.dashboard-bank{
+
+    text-align:center;
+
+    width:100%;
+
+}
+
+.dashboard-bank h1{
+
+    font-size:21px;
+
+    line-height:1.4;
+
+}
+
+.dashboard-bank h2{
+
+    font-size:16px;
+
+}
+
+.dashboard-bank h3{
+
+    font-size:18px;
 
 }
 
@@ -773,8 +1661,217 @@ min-width:560px;
 .dashboard-date{
 
     width:100%;
-    text-align:left;
+
+    justify-content:center;
+
+    text-align:center;
+
+    font-size:14px;
 
 }
+
+.stats-grid{
+
+    grid-template-columns:1fr;
+
+    gap:16px;
+
+}
+
+.stat-card{
+
+    padding:20px;
+
+}
+
+.stat-icon{
+
+    width:58px;
+
+    height:58px;
+
+    font-size:24px;
+
+}
+
+.stat-card h2{
+
+    font-size:25px;
+
+}
+
+.action-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+.action-card{
+
+    padding:20px;
+
+}
+
+.action-card svg{
+
+    width:58px;
+
+    height:58px;
+
+    font-size:24px;
+
+}
+
+.dashboard-card{
+
+    padding:18px;
+
+}
+
+.dashboard-card table{
+
+    min-width:650px;
+
+}
+
+}
+
+/* ==========================================
+   Small Mobile
+========================================== */
+
+@media (max-width:480px){
+
+.dashboard-header{
+
+    padding:18px;
+
+}
+
+.dashboard-bank h1{
+
+    font-size:18px;
+
+}
+
+.dashboard-bank h2{
+
+    font-size:14px;
+
+}
+
+.dashboard-bank h3{
+
+    font-size:16px;
+
+}
+
+.dashboard-bank h4{
+
+    font-size:13px;
+
+}
+
+.dashboard-bank p{
+
+    font-size:12px;
+
+}
+
+.dashboard-date{
+
+    font-size:12px;
+
+    padding:10px 14px;
+
+}
+
+.stat-card{
+
+    padding:18px;
+
+    gap:15px;
+
+}
+
+.stat-icon{
+
+    width:52px;
+
+    height:52px;
+
+    font-size:20px;
+
+}
+
+.stat-card h4{
+
+    font-size:13px;
+
+}
+
+.stat-card h2{
+
+    font-size:22px;
+
+}
+
+.action-card{
+
+    padding:18px;
+
+}
+
+.action-card svg{
+
+    width:52px;
+
+    height:52px;
+
+    padding:14px;
+
+    font-size:20px;
+
+}
+
+.action-card span{
+
+    font-size:16px;
+
+}
+
+.dashboard-card{
+
+    padding:15px;
+
+}
+
+.dashboard-card table{
+
+    min-width:560px;
+
+}
+
+}
+
+/* ==========================================
+   Smooth Scroll
+========================================== */
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+/* ==========================================
+   Selection Color
+========================================== */
+
+::selection{
+
+    background:#2563eb;
+
+    color:#fff;
 
 }
