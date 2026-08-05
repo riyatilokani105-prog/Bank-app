@@ -23,11 +23,27 @@ const Customers = () => {
 
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
+useEffect(() => {
 
+  loadCustomers();
+
+  const refreshCustomers = () => {
     loadCustomers();
+  };
 
-  }, []);
+  window.addEventListener(
+    "customerUpdated",
+    refreshCustomers
+  );
+
+  return () => {
+    window.removeEventListener(
+      "customerUpdated",
+      refreshCustomers
+    );
+  };
+
+}, []);
 
   const loadCustomers = async () => {
 

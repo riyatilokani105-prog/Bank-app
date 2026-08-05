@@ -22,8 +22,26 @@ const Collections = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
+
+  loadCollections();
+
+  const refreshCollectionsPage = () => {
     loadCollections();
-  }, []);
+  };
+
+  window.addEventListener(
+    "customerUpdated",
+    refreshCollectionsPage
+  );
+
+  return () => {
+    window.removeEventListener(
+      "customerUpdated",
+      refreshCollectionsPage
+    );
+  };
+
+}, []);
 
   const loadCollections = async () => {
   try {

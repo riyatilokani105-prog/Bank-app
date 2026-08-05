@@ -21,13 +21,17 @@ const DeleteCustomer = ({
 
       const res = await deleteCustomer(customer._id);
 
-      toast.success(
-        res.message || "Customer Deleted Successfully"
-      );
+// Refresh Customers page
+await refreshCustomers?.();
 
-      await refreshCustomers();
+// Notify all other pages
+window.dispatchEvent(new Event("customerUpdated"));
 
-      closeModal();
+toast.success(
+  res.message || "Customer Deleted Successfully"
+);
+
+closeModal();
 
     } catch (error) {
       console.log(error);

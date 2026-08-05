@@ -35,16 +35,19 @@ const AddCustomer = ({ closeModal, refreshCustomers }) => {
       setLoading(true);
 
       await addCustomer({
-        accountNumber: formData.accountNumber.trim(),
-        fullName: formData.fullName.trim(),
-        balance: Number(formData.balance) || 0,
-      });
+  accountNumber: formData.accountNumber.trim(),
+  fullName: formData.fullName.trim(),
+  balance: Number(formData.balance) || 0,
+});
 
-      toast.success("Customer Added Successfully");
+await refreshCustomers?.();
 
-      refreshCustomers && refreshCustomers();
+// Notify all pages that customer data changed
+window.dispatchEvent(new Event("customerUpdated"));
 
-      closeModal();
+toast.success("Customer Added Successfully");
+
+closeModal();
 
     } catch (error) {
 

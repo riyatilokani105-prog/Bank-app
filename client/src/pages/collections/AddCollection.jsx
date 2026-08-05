@@ -16,8 +16,26 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
   const STORAGE_KEY = "dailyCollectionSheet";
 
   useEffect(() => {
+
+  loadCustomers();
+
+  const refreshCustomerList = () => {
     loadCustomers();
-  }, []);
+  };
+
+  window.addEventListener(
+    "customerUpdated",
+    refreshCustomerList
+  );
+
+  return () => {
+    window.removeEventListener(
+      "customerUpdated",
+      refreshCustomerList
+    );
+  };
+
+}, []);
 
   useEffect(() => {
 
@@ -33,6 +51,7 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
 
   const loadCustomers = async () => {
   try {
+
     const res = await getCustomers();
 
     const list = Array.isArray(res.customers)
@@ -46,32 +65,45 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
     const today = new Date().toDateString();
 
     const saved = JSON.parse(
-      localStorage.getItem("dailyCollectionSheet")
+      localStorage.getItem(STORAGE_KEY)
     );
 
-    if (saved && saved.date === today) {
-      setRows(saved.rows);
-    } else {
-      const newRows = list.map((customer) => ({
+    // Preserve already-entered amounts
+    const oldRows =
+      saved && saved.date === today
+        ? saved.rows
+        : rows;
+
+    const newRows = list.map((customer) => {
+
+      const existing = oldRows.find(
+        (r) => r.customerId === customer._id
+      );
+
+      return {
         customerId: customer._id,
         accountNumber: customer.accountNumber,
         fullName: customer.fullName,
-        amount: "",
-      }));
+        amount: existing ? existing.amount : "",
+      };
+    });
 
-      setRows(newRows);
+    setRows(newRows);
 
-      localStorage.setItem(
-        "dailyCollectionSheet",
-        JSON.stringify({
-          date: today,
-          rows: newRows,
-        })
-      );
-    }
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        date: today,
+        rows: newRows,
+      })
+    );
+
   } catch (err) {
+
     console.log(err);
+
     toast.error("Unable to load customers");
+
   }
 };
  
@@ -139,12 +171,16 @@ const res = await bulkCollection({
   forceSave,
 });
 
-    toast.success(res.message);
-    localStorage.removeItem(STORAGE_KEY);
+toast.success(res.message);
 
-    refreshCollections && (await refreshCollections());
+localStorage.removeItem(STORAGE_KEY);
 
-    closeModal();
+await refreshCollections?.();
+
+// Notify every page that collections changed
+window.dispatchEvent(new Event("collectionUpdated"));
+
+closeModal();
 
   } catch (err) {
     console.log(err.response?.data);

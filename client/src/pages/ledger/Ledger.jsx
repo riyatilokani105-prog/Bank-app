@@ -20,8 +20,36 @@ const Ledger = () => {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
+
+  loadLedger();
+
+  const refreshLedgerPage = () => {
     loadLedger();
-  }, []);
+  };
+
+  window.addEventListener(
+    "customerUpdated",
+    refreshLedgerPage
+  );
+
+  window.addEventListener(
+    "collectionUpdated",
+    refreshLedgerPage
+  );
+
+  return () => {
+    window.removeEventListener(
+      "customerUpdated",
+      refreshLedgerPage
+    );
+
+    window.removeEventListener(
+      "collectionUpdated",
+      refreshLedgerPage
+    );
+  };
+
+}, []);
 
   const loadLedger = async () => {
 

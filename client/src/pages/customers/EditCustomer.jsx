@@ -35,11 +35,15 @@ const EditCustomer = ({
 
       await updateCustomer(customer._id, formData);
 
-      toast.success("Customer Updated Successfully");
+// Refresh customer list
+await refreshCustomers?.();
 
-      refreshCustomers();
+// Notify every page that customer data changed
+window.dispatchEvent(new Event("customerUpdated"));
 
-      closeModal();
+toast.success("Customer Updated Successfully");
+
+closeModal();
 
     } catch (error) {
 

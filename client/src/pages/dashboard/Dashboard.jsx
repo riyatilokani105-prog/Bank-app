@@ -30,8 +30,36 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
+  loadDashboard();
+
+  const refreshDashboard = () => {
     loadDashboard();
-  }, []);
+  };
+
+  window.addEventListener(
+    "customerUpdated",
+    refreshDashboard
+  );
+
+  window.addEventListener(
+    "collectionUpdated",
+    refreshDashboard
+  );
+
+  return () => {
+    window.removeEventListener(
+      "customerUpdated",
+      refreshDashboard
+    );
+
+    window.removeEventListener(
+      "collectionUpdated",
+      refreshDashboard
+    );
+  };
+
+}, []);
 
   const loadDashboard = async () => {
     try {
