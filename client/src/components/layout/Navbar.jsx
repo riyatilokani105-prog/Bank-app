@@ -7,7 +7,7 @@ import {
 } from "react-icons/fa";
 
 const Navbar = ({ toggleSidebar }) => {
-  const navigate = useNavigate();
+
 
   return (
     <header className="navbar">
