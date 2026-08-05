@@ -337,88 +337,7 @@ const Dashboard = () => {
 
         </section>
 
-        {/* ===========================================================
-                    DASHBOARD OVERVIEW
-        =========================================================== */}
-
-        <section className="overview-section">
-
-          <div className="overview-card">
-
-            <div className="overview-left">
-
-              <span>
-
-                BANK OVERVIEW
-
-              </span>
-
-              <h2>
-
-                Daily Collection Management
-
-              </h2>
-
-              <p>
-
-                Monitor customer collections,
-                pending balances and banking
-                activities with real-time updates.
-
-              </p>
-
-            </div>
-
-            <div className="overview-right">
-
-              <div className="overview-item">
-
-                <FaUsers />
-
-                <div>
-
-                  <h3>
-
-                    {dashboard.totalCustomers ??
-                      stats.totalCustomers ??
-                      0}
-
-                  </h3>
-
-                  <p>Total Customers</p>
-
-                </div>
-
-              </div>
-
-              <div className="overview-item">
-
-                <FaMoneyBillWave />
-
-                <div>
-
-                  <h3>
-
-                    ₹{" "}
-
-                    {dashboard.todayCollection ??
-                      stats.todayCollection ??
-                      0}
-
-                  </h3>
-
-                  <p>Today's Collection</p>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </section>
-
+      
         {/* ===========================================================
                         STATISTICS
         =========================================================== */}
@@ -653,242 +572,252 @@ const Dashboard = () => {
 
         </section>
 
-        {/* ===========================================================
-                      QUICK ACTIONS
-        =========================================================== */}
+         {/* ===========================================================
+                    QUICK ACTIONS
+=========================================================== */}
 
-        <section className="quick-actions-section">
+<section className="quick-actions-section">
 
-          <div className="section-header">
+  <div className="section-header">
 
-            <div>
+    <div>
 
-              <span className="section-badge">
+      <span className="section-badge">
 
-                BANKING SHORTCUTS
+        BANKING SHORTCUTS
 
-              </span>
+      </span>
 
-              <h2>
+      <h2>
 
-                Quick Actions
+        Quick Actions
 
-              </h2>
+      </h2>
 
-              <p>
+      <p>
 
-                Access frequently used banking operations instantly.
+        Frequently used banking operations
 
-              </p>
+      </p>
 
-            </div>
+    </div>
 
-          </div>
+  </div>
 
-          <div className="action-grid">
+  <div className="action-grid">
 
-            <div
-              className="action-card"
-              onClick={() => navigate("/customers")}
-            >
+    {/* Add Customer */}
 
-              <div className="action-icon blue">
+    <div
+      className="action-card"
+      onClick={() => navigate("/customers")}
+    >
 
-                <FaUserPlus />
+      <div className="action-icon blue">
 
-              </div>
-
-              <div className="action-content">
-
-                <h3>
-
-                  Add Customer
-
-                </h3>
-
-                <p>
-
-                  Register a new customer account.
-
-                </p>
-
-              </div>
-
-              <FaArrowRight className="action-arrow" />
-
-            </div>
-
-            <div
-              className="action-card"
-              onClick={() => navigate("/collections")}
-            >
-
-              <div className="action-icon green">
-
-                <FaMoneyBillWave />
-
-              </div>
-
-              <div className="action-content">
-
-                <h3>
-
-                  Add Collection
-
-                </h3>
-
-                <p>
-
-                  Record today's customer collections.
-
-                </p>
-
-              </div>
-
-              <FaArrowRight className="action-arrow" />
-
-            </div>
-
-            <div
-              className="action-card"
-              onClick={() => navigate("/customer-statement")}
-            >
-
-              <div className="action-icon purple">
-
-                <FaFileInvoiceDollar />
-
-              </div>
-
-              <div className="action-content">
-
-                <h3>
-
-                  Customer Statement
-
-                </h3>
-
-                <p>
-
-                  View and print customer statements.
-
-                </p>
-
-              </div>
-
-              <FaArrowRight className="action-arrow" />
-
-            </div>
-
-                        <div
-              className="action-card"
-              onClick={() => navigate("/reports")}
-            >
-
-              <div className="action-icon orange">
-
-                <FaChartBar />
-
-              </div>
-
-              <div className="action-content">
-
-                <h3>
-
-                  Reports
-
-                </h3>
-
-                <p>
-
-                  Daily, monthly and yearly collection reports.
-
-                </p>
-
-              </div>
-
-              <FaArrowRight className="action-arrow" />
-
-            </div>
-
-            <div
-              className="action-card"
-              onClick={() => navigate("/backup")}
-            >
-
-              <div className="action-icon red">
-
-                <FaDatabase />
-
-              </div>
-
-              <div className="action-content">
-
-                <h3>
-
-                  Database Backup
-
-                </h3>
-
-                <p>
-
-                  Secure backup and restore customer data.
-
-                </p>
-
-              </div>
-
-              <FaArrowRight className="action-arrow" />
-
-            </div>
-
-          </div>
-
-        </section>
-
-        {/* ===========================================================
-                      FOOTER
-        =========================================================== */}
-
-        <section className="dashboard-footer">
-
-          <div className="footer-card">
-
-            <FaUniversity className="footer-icon" />
-
-            <div>
-
-              <h3>
-
-                Rajura Nagri Sahakari Path Sanstha Maryadit
-
-              </h3>
-
-              <p>
-
-                Ballarpur Branch • Daily Collection Management System
-
-              </p>
-
-            </div>
-
-            <div className="footer-status">
-
-              <span className="status-dot"></span>
-
-              System Online
-
-            </div>
-
-          </div>
-
-        </section>
+        <FaUserPlus />
 
       </div>
 
-    </Layout>
+      <div className="action-content">
 
-  );
+        <h3>
+
+          Add Customer
+
+        </h3>
+
+        <p>
+
+          Register a new customer account.
+
+        </p>
+
+      </div>
+
+      <FaArrowRight className="action-arrow" />
+
+    </div>
+
+    {/* Add Collection */}
+
+    <div
+      className="action-card"
+      onClick={() => navigate("/collections")}
+    >
+
+      <div className="action-icon green">
+
+        <FaMoneyBillWave />
+
+      </div>
+
+      <div className="action-content">
+
+        <h3>
+
+          Add Collection
+
+        </h3>
+
+        <p>
+
+          Record today's customer collections.
+
+        </p>
+
+      </div>
+
+      <FaArrowRight className="action-arrow" />
+
+    </div>
+
+    {/* Customer Statement */}
+
+    <div
+      className="action-card"
+      onClick={() => navigate("/customer-statement")}
+    >
+
+      <div className="action-icon purple">
+
+        <FaFileInvoiceDollar />
+
+      </div>
+
+      <div className="action-content">
+
+        <h3>
+
+          Customer Statement
+
+        </h3>
+
+        <p>
+
+          View and print customer statements.
+
+        </p>
+
+      </div>
+
+      <FaArrowRight className="action-arrow" />
+
+    </div>
+
+    {/* Reports */}
+
+    <div
+      className="action-card"
+      onClick={() => navigate("/reports")}
+    >
+
+      <div className="action-icon orange">
+
+        <FaChartBar />
+
+      </div>
+
+      <div className="action-content">
+
+        <h3>
+
+          Reports
+
+        </h3>
+
+        <p>
+
+          Daily, monthly and yearly reports.
+
+        </p>
+
+      </div>
+
+      <FaArrowRight className="action-arrow" />
+
+    </div>
+
+    {/* Backup */}
+
+    <div
+      className="action-card"
+      onClick={() => navigate("/backup")}
+    >
+
+      <div className="action-icon red">
+
+        <FaDatabase />
+
+      </div>
+
+      <div className="action-content">
+
+        <h3>
+
+          Database Backup
+
+        </h3>
+
+        <p>
+
+          Secure backup and restore customer data.
+
+        </p>
+
+      </div>
+
+      <FaArrowRight className="action-arrow" />
+
+    </div>
+
+  </div>
+
+</section>
+
+{/* ===========================================================
+                        FOOTER
+=========================================================== */}
+
+<section className="dashboard-footer">
+
+  <div className="footer-card">
+
+    <FaUniversity className="footer-icon" />
+
+    <div>
+
+      <h3>
+
+        Rajura Nagri Sahakari Path Sanstha Maryadit
+
+      </h3>
+
+      <p>
+
+        Ballarpur Branch • Daily Collection Management System
+
+      </p>
+
+    </div>
+
+    <div className="footer-status">
+
+      <span className="status-dot"></span>
+
+      System Online
+
+    </div>
+
+  </div>
+
+</section>
+
+</div>
+
+</Layout>
+
+);
 
 };
 
