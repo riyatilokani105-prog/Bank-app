@@ -572,206 +572,155 @@ const Dashboard = () => {
 
         </section>
 
-         {/* ===========================================================
-                    QUICK ACTIONS
-=========================================================== */}
+        {/* ===========================================================
+                          QUICK ACTIONS
+        =========================================================== */}
 
-<section className="quick-actions-section">
+        <section className="quick-actions-section">
 
-  <div className="section-header">
+          <div className="section-title">
 
-    <div>
+            <div>
 
-      <span className="section-badge">
+              <h2>Quick Actions</h2>
 
-        BANKING SHORTCUTS
+              <p>
+                Frequently used banking operations
+              </p>
 
-      </span>
+            </div>
 
-      <h2>
+          </div>
 
-        Quick Actions
+          <div className="action-grid">
 
-      </h2>
+            <div
+              className="action-card"
+              onClick={() => navigate("/customers")}
+            >
 
-      <p>
+              <div className="action-icon blue">
 
-        Frequently used banking operations
+                <FaUserPlus />
 
-      </p>
+              </div>
 
-    </div>
+              <div className="action-content">
 
-  </div>
+                <h3>Add Customer</h3>
 
-  <div className="action-grid">
+                <p>
+                  Register a new customer account.
+                </p>
 
-    {/* Add Customer */}
+              </div>
 
-    <div
-      className="action-card"
-      onClick={() => navigate("/customers")}
-    >
+              <FaArrowRight className="action-arrow"/>
 
-      <div className="action-icon blue">
+            </div>
 
-        <FaUserPlus />
+            <div
+              className="action-card"
+              onClick={() => navigate("/collections")}
+            >
 
-      </div>
+              <div className="action-icon green">
 
-      <div className="action-content">
+                <FaMoneyBillWave />
 
-        <h3>
+              </div>
 
-          Add Customer
+              <div className="action-content">
 
-        </h3>
+                <h3>Add Collection</h3>
 
-        <p>
+                <p>
+                  Record today's customer collections.
+                </p>
 
-          Register a new customer account.
+              </div>
 
-        </p>
+              <FaArrowRight className="action-arrow"/>
 
-      </div>
+            </div>
 
-      <FaArrowRight className="action-arrow" />
+            <div
+              className="action-card"
+              onClick={() => navigate("/customer-statement")}
+            >
 
-    </div>
+              <div className="action-icon purple">
 
-    {/* Add Collection */}
+                <FaFileInvoiceDollar />
 
-    <div
-      className="action-card"
-      onClick={() => navigate("/collections")}
-    >
+              </div>
 
-      <div className="action-icon green">
+              <div className="action-content">
 
-        <FaMoneyBillWave />
+                <h3>Customer Statement</h3>
 
-      </div>
+                <p>
+                  View and print customer statements.
+                </p>
 
-      <div className="action-content">
+              </div>
 
-        <h3>
+              <FaArrowRight className="action-arrow"/>
 
-          Add Collection
+            </div>
 
-        </h3>
+            <div
+              className="action-card"
+              onClick={() => navigate("/reports")}
+            >
 
-        <p>
+              <div className="action-icon orange">
 
-          Record today's customer collections.
+                <FaChartBar />
 
-        </p>
+              </div>
 
-      </div>
+              <div className="action-content">
 
-      <FaArrowRight className="action-arrow" />
+                <h3>Reports</h3>
 
-    </div>
+                <p>
+                  Daily, monthly and yearly reports.
+                </p>
 
-    {/* Customer Statement */}
+              </div>
 
-    <div
-      className="action-card"
-      onClick={() => navigate("/customer-statement")}
-    >
+              <FaArrowRight className="action-arrow"/>
 
-      <div className="action-icon purple">
+            </div>
 
-        <FaFileInvoiceDollar />
+            <div
+              className="action-card"
+              onClick={() => navigate("/backup")}
+            >
 
-      </div>
+              <div className="action-icon red">
 
-      <div className="action-content">
+                <FaDatabase />
 
-        <h3>
+              </div>
 
-          Customer Statement
+              <div className="action-content">
 
-        </h3>
+                <h3>Database Backup</h3>
 
-        <p>
+                <p>
+                  Secure backup and restore customer data.
+                </p>
 
-          View and print customer statements.
+              </div>
 
-        </p>
+              <FaArrowRight className="action-arrow"/>
 
-      </div>
+            </div>
 
-      <FaArrowRight className="action-arrow" />
+          </div>
 
-    </div>
-
-    {/* Reports */}
-
-    <div
-      className="action-card"
-      onClick={() => navigate("/reports")}
-    >
-
-      <div className="action-icon orange">
-
-        <FaChartBar />
-
-      </div>
-
-      <div className="action-content">
-
-        <h3>
-
-          Reports
-
-        </h3>
-
-        <p>
-
-          Daily, monthly and yearly reports.
-
-        </p>
-
-      </div>
-
-      <FaArrowRight className="action-arrow" />
-
-    </div>
-
-    {/* Backup */}
-
-    <div
-      className="action-card"
-      onClick={() => navigate("/backup")}
-    >
-
-      <div className="action-icon red">
-
-        <FaDatabase />
-
-      </div>
-
-      <div className="action-content">
-
-        <h3>
-
-          Database Backup
-
-        </h3>
-
-        <p>
-
-          Secure backup and restore customer data.
-
-        </p>
-
-      </div>
-
-      <FaArrowRight className="action-arrow" />
-
-    </div>
-
-  </div>
 
 </section>
 
