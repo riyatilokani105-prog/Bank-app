@@ -103,9 +103,16 @@ function App() {
         }
       />
 
-      <Route path="/admin-profile" element={<AdminProfile />} />
+      <Route
+  path="/admin-profile"
+  element={
+    <PrivateRoute>
+      <AdminProfile />
+    </PrivateRoute>
+  }
+/>
 
-      
+
     </Routes>
   );
 }

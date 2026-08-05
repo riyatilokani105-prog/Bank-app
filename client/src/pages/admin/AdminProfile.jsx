@@ -15,15 +15,14 @@ import {
   FaBuilding,
   FaCalendarAlt,
   FaCircle,
-  FaMoneyBillWave,
-FaChartLine,
-FaUsers,
 } from "react-icons/fa";
 import { useEffect, useState } from "react";
 
 const AdminProfile = () => {
     const [admin, setAdmin] = useState({});
-useEffect(() => {
+    
+
+    useEffect(() => {
 
     loadAdmin();
 
