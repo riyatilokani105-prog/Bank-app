@@ -33,8 +33,7 @@ const Dashboard = () => {
 
   const [dashboard, setDashboard] = useState({});
   const [stats, setStats] = useState({});
-  const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
 
     loadDashboard();
@@ -73,47 +72,37 @@ const Dashboard = () => {
 
   const loadDashboard = async () => {
 
-    try {
+   try {
 
-      setLoading(true);
+  const [dashboardRes, statsRes] = await Promise.all([
+    getDashboard(),
+    getStats(),
+  ]);
 
-      const [dashboardRes, statsRes] =
-        await Promise.all([
-          getDashboard(),
-          getStats(),
-        ]);
+  setDashboard(
+    dashboardRes.dashboard ||
+    dashboardRes.summary ||
+    dashboardRes.data ||
+    dashboardRes ||
+    {}
+  );
 
-      setDashboard(
-        dashboardRes.dashboard ||
-        dashboardRes.summary ||
-        dashboardRes.data ||
-        dashboardRes ||
-        {}
-      );
+  setStats(
+    statsRes.stats ||
+    statsRes.data ||
+    statsRes ||
+    {}
+  );
 
-      setStats(
-        statsRes.stats ||
-        statsRes.data ||
-        statsRes ||
-        {}
-      );
+} catch (err) {
 
-    } catch (err) {
+  console.log(err);
 
-      console.log(err);
+  setDashboard({});
+  setStats({});
 
-      setDashboard({});
-      setStats({});
-
-    } finally {
-
-      setLoading(false);
-
-    }
-
+}
   };
-
-  if (loading) 
 
   return (
 
@@ -526,8 +515,7 @@ const Dashboard = () => {
 
         </section>
 
-
-
+       
 {/* ===========================================================
                         FOOTER
 =========================================================== */}
