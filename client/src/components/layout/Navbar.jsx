@@ -7,6 +7,8 @@ import {
 } from "react-icons/fa";
 
 const Navbar = ({ toggleSidebar }) => {
+  const navigate = useNavigate();
+
   return (
     <header className="navbar">
       <div className="navbar-left">
@@ -36,16 +38,17 @@ const Navbar = ({ toggleSidebar }) => {
 
         {/* Profile */}
 
-        <div className="profile">
+        <div
+  className="admin-profile"
+  onClick={() => navigate("/admin-profile")}
+>
+    <img src={profileImage} alt="Admin" />
 
-          <FaUserCircle className="profile-icon" />
-
-          <div className="profile-info">
-            <h4>Administrator</h4>
-            <p>Admin</p>
-          </div>
-
-        </div>
+    <div>
+        <h4>Administrator</h4>
+        <p>Admin</p>
+    </div>
+</div>
 
       </div>
     </header>
