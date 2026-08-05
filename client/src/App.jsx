@@ -10,7 +10,6 @@ import Backup from "./pages/backup/Backup";
 import AuditLogs from "./pages/audit/AuditLogs";
 import Settings from "./pages/settings/Settings";
 import CustomerStatement from "./pages/CustomerStatement/CustomerStatement";
-import AdminProfile from "./pages/admin/AdminProfile";
 
 import PrivateRoute from "./routes/PrivateRoute";
 
@@ -102,17 +101,6 @@ function App() {
           </PrivateRoute>
         }
       />
-
-      <Route
-  path="/admin-profile"
-  element={
-    <PrivateRoute>
-      <AdminProfile />
-    </PrivateRoute>
-  }
-/>
-
-
     </Routes>
   );
 }
