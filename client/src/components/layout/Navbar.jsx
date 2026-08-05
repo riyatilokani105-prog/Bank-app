@@ -7,6 +7,7 @@ import {
 } from "react-icons/fa";
 
 const Navbar = ({ toggleSidebar }) => {
+  const profileImage = "/images/admin-profile.jpg"; // Replace with the actual path to your profile image
 
 
   return (
