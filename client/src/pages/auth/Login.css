@@ -1,48 +1,168 @@
+/* ======================================================
+   LOGIN PAGE
+====================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
 .login{
-
     width:100%;
-
-    height:100vh;
+    min-height:100vh;
 
     display:flex;
-
     justify-content:center;
-
     align-items:center;
 
-    background:#eef3f9;
+    padding:25px;
 
+    background:
+        linear-gradient(rgba(18,52,86,.85),rgba(37,99,235,.82)),
+        url("https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1400&q=80");
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
 }
+
+/* ======================================================
+   LOGIN CARD
+====================================================== */
 
 .login-card{
 
-    width:420px;
+    width:100%;
+    max-width:520px;
 
-    background:white;
+    background:rgba(255,255,255,.96);
 
-    padding:40px;
+    backdrop-filter:blur(18px);
 
-    border-radius:18px;
+    border-radius:22px;
 
-    box-shadow:0 15px 40px rgba(0,0,0,.1);
+    padding:42px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.25);
+
+    animation:popup .35s ease;
+}
+
+@keyframes popup{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
 
 }
 
-.login-card h1{
+/* ======================================================
+   BANK TITLE
+====================================================== */
+
+.bank-title{
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+    border-bottom:1px solid #e5e7eb;
+
+    padding-bottom:22px;
+
+}
+
+.bank-title h1{
 
     font-size:30px;
+
+    color:#0f172a;
+
+    font-weight:700;
+
+    line-height:1.35;
+
+}
+
+.bank-title h2{
+
+    margin-top:8px;
+
+    color:#2563eb;
+
+    font-size:22px;
+
+    font-weight:700;
+
+}
+
+.bank-title h3{
+
+    margin-top:18px;
+
+    color:#1e293b;
+
+    font-size:23px;
+
+    font-weight:700;
+
+    line-height:1.4;
+
+}
+
+.bank-title h4{
+
+    margin-top:8px;
+
+    color:#2563eb;
+
+    font-size:20px;
+
+    font-weight:600;
+
+}
+
+/* ======================================================
+   LOGIN HEADING
+====================================================== */
+
+.login-heading{
+
+    text-align:center;
+
+    margin-bottom:28px;
+
+}
+
+.login-heading h5{
+
+    font-size:22px;
+
+    color:#0f172a;
 
     margin-bottom:10px;
 
 }
 
-.login-card p{
+.login-heading p{
 
-    color:#666;
+    color:#64748b;
 
-    margin-bottom:25px;
+    font-size:15px;
 
 }
+
+/* ======================================================
+   FORM
+====================================================== */
 
 .login-card form{
 
@@ -56,27 +176,63 @@
 
 .login-card input{
 
-    padding:15px;
+    width:100%;
 
-    border:1px solid #ddd;
+    height:56px;
 
-    border-radius:10px;
+    border:1px solid #d1d5db;
+
+    border-radius:12px;
+
+    padding:0 18px;
 
     font-size:15px;
 
+    outline:none;
+
+    transition:.3s;
+
+    background:#fff;
+
 }
+
+.login-card input:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.15);
+
+}
+
+.login-card input::placeholder{
+
+    color:#94a3b8;
+
+}
+
+/* ======================================================
+   BUTTON
+====================================================== */
 
 .login-card button{
 
+    width:100%;
+
+    height:56px;
+
+    border:none;
+
+    border-radius:12px;
+
     background:#2563eb;
 
-    color:white;
+    color:#fff;
 
-    padding:15px;
+    font-size:17px;
 
-    border-radius:10px;
+    font-weight:600;
 
-    font-size:16px;
+    cursor:pointer;
 
     transition:.3s;
 
@@ -85,5 +241,225 @@
 .login-card button:hover{
 
     background:#1d4ed8;
+
+    transform:translateY(-2px);
+
+}
+
+.login-card button:disabled{
+
+    opacity:.7;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+}
+
+/* ======================================================
+   TABLET
+====================================================== */
+
+@media(max-width:992px){
+
+.login{
+
+padding:20px;
+
+}
+
+.login-card{
+
+max-width:500px;
+
+padding:35px;
+
+}
+
+.bank-title h1{
+
+font-size:27px;
+
+}
+
+.bank-title h2{
+
+font-size:21px;
+
+}
+
+.bank-title h3{
+
+font-size:22px;
+
+}
+
+.bank-title h4{
+
+font-size:19px;
+
+}
+
+}
+
+/* ======================================================
+   MOBILE
+====================================================== */
+
+@media(max-width:768px){
+
+.login{
+
+padding:15px;
+
+align-items:center;
+
+}
+
+.login-card{
+
+padding:28px 22px;
+
+border-radius:18px;
+
+}
+
+.bank-title{
+
+margin-bottom:22px;
+
+padding-bottom:18px;
+
+}
+
+.bank-title h1{
+
+font-size:22px;
+
+line-height:1.45;
+
+}
+
+.bank-title h2{
+
+font-size:18px;
+
+}
+
+.bank-title h3{
+
+font-size:18px;
+
+line-height:1.5;
+
+}
+
+.bank-title h4{
+
+font-size:16px;
+
+}
+
+.login-heading h5{
+
+font-size:19px;
+
+}
+
+.login-heading p{
+
+font-size:14px;
+
+}
+
+.login-card input{
+
+height:52px;
+
+font-size:14px;
+
+}
+
+.login-card button{
+
+height:52px;
+
+font-size:15px;
+
+}
+
+}
+
+/* ======================================================
+   SMALL MOBILE
+====================================================== */
+
+@media(max-width:480px){
+
+.login{
+
+padding:10px;
+
+}
+
+.login-card{
+
+padding:22px 18px;
+
+}
+
+.bank-title h1{
+
+font-size:19px;
+
+}
+
+.bank-title h2{
+
+font-size:16px;
+
+}
+
+.bank-title h3{
+
+font-size:16px;
+
+}
+
+.bank-title h4{
+
+font-size:15px;
+
+}
+
+.login-heading h5{
+
+font-size:17px;
+
+}
+
+.login-heading p{
+
+font-size:13px;
+
+}
+
+.login-card input{
+
+height:48px;
+
+font-size:13px;
+
+padding:0 14px;
+
+}
+
+.login-card button{
+
+height:48px;
+
+font-size:14px;
+
+}
 
 }

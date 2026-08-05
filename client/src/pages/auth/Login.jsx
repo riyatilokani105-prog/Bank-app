@@ -8,120 +8,113 @@ import { loginUser } from "../../api/authApi";
 
 const Login = () => {
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-    const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-        email: "",
+  const handleChange = (e) => {
 
-        password: "",
-
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
     });
 
-    const handleChange = (e) => {
+  };
 
-        setFormData({
-
-            ...formData,
-
-            [e.target.name]: e.target.value,
-
-        });
-
-    };
-
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
 
     e.preventDefault();
 
     try {
 
-        setLoading(true);
+      setLoading(true);
 
-        const response = await loginUser(formData);
+      const response = await loginUser(formData);
 
-        localStorage.setItem(
-            "token",
-            response.token
-        );
+      localStorage.setItem(
+        "token",
+        response.token
+      );
 
-        toast.success("Welcome Back");
+      toast.success("Welcome Back");
 
-        navigate("/dashboard");
+      navigate("/dashboard");
 
-    }
+    } catch (error) {
 
-    catch (error) {
+      toast.error(
+        error?.response?.data?.message ||
+        "Invalid Email or Password"
+      );
 
-        toast.error(
+    } finally {
 
-            error?.response?.data?.message ||
-
-            "Invalid Email or Password"
-
-        );
-
-    }
-
-    finally {
-
-        setLoading(false);
+      setLoading(false);
 
     }
 
-};
+  };
 
-    return (
+  return (
 
-        <div className="login">
+    <div className="login">
 
-            <div className="login-card">
+      <div className="login-card">
 
-                <h1>Daily Collection</h1>
+        <div className="bank-title">
 
-                <p>Sign in to continue</p>
+          <h1>Rajura Nagri Sahakari Path Sanstha Maryadit</h1>
 
-                <form onSubmit={handleSubmit}>
+          <h2>Ballarpur Branch</h2>
 
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        value={formData.email}
-                        onChange={handleChange}
-                    />
+          <h3>राजुरा नागरी सहकारी पतसंस्था मर्यादित</h3>
 
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={formData.password}
-                        onChange={handleChange}
-                    />
-
-                    <button disabled={loading}>
-
-                        {
-
-                            loading
-
-                                ? "Signing In..."
-
-                                : "Login"
-
-                        }
-
-                    </button>
-
-                </form>
-
-            </div>
+          <h4>बल्लारपूर शाखा</h4>
 
         </div>
 
-    );
+        <div className="login-heading">
+
+          <h5>Daily Collection Management System</h5>
+
+          <p>Sign in to continue</p>
+
+        </div>
+
+        <form onSubmit={handleSubmit}>
+
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            value={formData.email}
+            onChange={handleChange}
+          />
+
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+
+          <button disabled={loading}>
+            {loading ? "Signing In..." : "Login"}
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  );
 
 };
 
