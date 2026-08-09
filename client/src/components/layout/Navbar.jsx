@@ -21,7 +21,7 @@ const Navbar = ({ toggleSidebar }) => {
 
         {/* Search */}
         <div className="search-box">
-          <FaSearch className="search-icon" />
+         
 
           <input
             type="text"

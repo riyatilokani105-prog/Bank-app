@@ -21,8 +21,6 @@ const customerSchema = new mongoose.Schema(
       trim: true,
     },
 
-
-
     balance: {
       type: Number,
       default: 0,
@@ -31,6 +29,16 @@ const customerSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: true,
+    },
+
+    // ==========================
+    // COLLECTION SHIFT
+    // ==========================
+
+    shift: {
+      type: [String],
+      enum: ["Morning", "Evening"],
+      default: ["Morning"],
     },
   },
   {

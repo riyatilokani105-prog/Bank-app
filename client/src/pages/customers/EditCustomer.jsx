@@ -14,15 +14,37 @@ const EditCustomer = ({
   const [formData, setFormData] = useState({
     fullName: customer.fullName || "",
     balance: customer.balance || 0,
+    shift: customer.shift || ["Morning"],
   });
 
   const handleChange = (e) => {
-
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
 
+  const handleShiftChange = (shift) => {
+    let updatedShift = [...formData.shift];
+
+    if (updatedShift.includes(shift)) {
+      updatedShift = updatedShift.filter(
+        (item) => item !== shift
+      );
+    } else {
+      updatedShift.push(shift);
+    }
+
+    if (updatedShift.length === 0) {
+      return toast.error(
+        "Select at least one shift."
+      );
+    }
+
+    setFormData({
+      ...formData,
+      shift: updatedShift,
+    });
   };
 
   const submitHandler = async (e) => {
@@ -33,23 +55,29 @@ const EditCustomer = ({
 
       setLoading(true);
 
-      await updateCustomer(customer._id, formData);
+      await updateCustomer(customer._id, {
+        fullName: formData.fullName,
+        balance: Number(formData.balance),
+        shift: formData.shift,
+      });
 
-// Refresh customer list
-await refreshCustomers?.();
+      await refreshCustomers?.();
 
-// Notify every page that customer data changed
-window.dispatchEvent(new Event("customerUpdated"));
+      window.dispatchEvent(
+        new Event("customerUpdated")
+      );
 
-toast.success("Customer Updated Successfully");
+      toast.success(
+        "Customer Updated Successfully"
+      );
 
-closeModal();
+      closeModal();
 
     } catch (error) {
 
       toast.error(
         error.response?.data?.message ||
-          "Unable to Update Customer"
+        "Unable to Update Customer"
       );
 
     } finally {
@@ -57,11 +85,9 @@ closeModal();
       setLoading(false);
 
     }
-
   };
 
   return (
-
     <div className="edit-overlay">
 
       <div className="edit-modal">
@@ -70,9 +96,11 @@ closeModal();
 
           <h2>Edit Customer</h2>
 
-          <button onClick={closeModal}>
+          <button
+            type="button"
+            onClick={closeModal}
+          >
             ✕
-
           </button>
 
         </div>
@@ -84,6 +112,7 @@ closeModal();
             <label>Full Name</label>
 
             <input
+              type="text"
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
@@ -104,13 +133,53 @@ closeModal();
 
           </div>
 
+          {/* Shift Selection */}
+
+          <div className="edit-group">
+
+            <label>Collection Shift</label>
+
+            <div className="shift-options">
+
+              <label className="shift-box">
+
+                <input
+                  type="checkbox"
+                  checked={formData.shift.includes("Morning")}
+                  onChange={() =>
+                    handleShiftChange("Morning")
+                  }
+                />
+
+                Morning
+
+              </label>
+
+              <label className="shift-box">
+
+                <input
+                  type="checkbox"
+                  checked={formData.shift.includes("Evening")}
+                  onChange={() =>
+                    handleShiftChange("Evening")
+                  }
+                />
+
+                Evening
+
+              </label>
+
+            </div>
+
+          </div>
+
           <button
             className="update-btn"
             disabled={loading}
           >
-
-            {loading ? "Updating..." : "Update Customer"}
-
+            {loading
+              ? "Updating..."
+              : "Update Customer"}
           </button>
 
         </form>
@@ -118,9 +187,7 @@ closeModal();
       </div>
 
     </div>
-
   );
-
 };
 
 export default EditCustomer;

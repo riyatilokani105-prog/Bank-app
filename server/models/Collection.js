@@ -34,6 +34,14 @@ const collectionSchema = new mongoose.Schema(
       required: true,
     },
 
+    // NEW FIELD
+    session: {
+      type: String,
+      enum: ["Morning", "Evening"],
+      required: true,
+      default: "Morning",
+    },
+
     collectedBy: {
       type: String,
       default: "Admin",

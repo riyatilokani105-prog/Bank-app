@@ -1,249 +1,596 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Layout from "../../components/layout/Layout";
-import { getCustomers } from "../../api/customerApi";
+import toast from "react-hot-toast";
+
+import {
+  getCustomers,
+  deleteCustomer,
+} from "../../api/customerApi";
 
 import AddCustomer from "./AddCustomer";
-import CustomerSearch from "./CustomerSearch";
-import CustomerTable from "./CustomerTable";
 import EditCustomer from "./EditCustomer";
-import DeleteCustomer from "./DeleteCustomer";
 
 import "./Customers.css";
 
 const Customers = () => {
-
   const [customers, setCustomers] = useState([]);
+
   const [loading, setLoading] = useState(true);
-
-  const [showModal, setShowModal] = useState(false);
-  const [editModal, setEditModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
 
   const [search, setSearch] = useState("");
 
-useEffect(() => {
+  const [showAddModal, setShowAddModal] = useState(false);
 
-  loadCustomers();
+  const [showEditModal, setShowEditModal] = useState(false);
 
-  const refreshCustomers = () => {
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+
+  const [deletingId, setDeletingId] = useState(null);
+
+  // DELETE CONFIRMATION MODAL
+  const [customerToDelete, setCustomerToDelete] =
+    useState(null);
+
+  // =====================================================
+  // LOAD CUSTOMERS FROM BACKEND
+  // =====================================================
+
+  useEffect(() => {
     loadCustomers();
-  };
 
-  window.addEventListener(
-    "customerUpdated",
-    refreshCustomers
-  );
+    const handleCustomerUpdated = () => {
+      loadCustomers();
+    };
 
-  return () => {
-    window.removeEventListener(
+    window.addEventListener(
       "customerUpdated",
-      refreshCustomers
+      handleCustomerUpdated
     );
-  };
 
-}, []);
+    return () => {
+      window.removeEventListener(
+        "customerUpdated",
+        handleCustomerUpdated
+      );
+    };
+  }, []);
+
+  // =====================================================
+  // GET CUSTOMERS
+  // =====================================================
 
   const loadCustomers = async () => {
-
     try {
-
       setLoading(true);
 
-      const res = await getCustomers();
+      const response = await getCustomers();
 
-      if (Array.isArray(res)) {
+      console.log(
+        "CUSTOMERS API RESPONSE:",
+        response
+      );
 
-        setCustomers(res);
+      const customerList = Array.isArray(
+        response?.customers
+      )
+        ? response.customers
+        : Array.isArray(response)
+        ? response
+        : [];
 
-      } else if (Array.isArray(res.customers)) {
+      // DEBUG CUSTOMER SHIFTS
+      console.log("ALL CUSTOMER SHIFTS:");
 
-        setCustomers(res.customers);
+      customerList.forEach((customer) => {
+        console.log(
+          "Account:",
+          customer.accountNumber,
+          "| Name:",
+          customer.fullName,
+          "| Shift:",
+          customer.shift
+        );
+      });
 
-      } else if (Array.isArray(res.data)) {
-
-        setCustomers(res.data);
-
-      } else {
-
-        setCustomers([]);
-
-      }
-
+      setCustomers(customerList);
     } catch (error) {
+      console.error(
+        "GET CUSTOMERS ERROR:",
+        error
+      );
 
-      console.log(error);
-
-      setCustomers([]);
-
+      toast.error(
+        error.response?.data?.message ||
+          "Unable to load customers"
+      );
     } finally {
-
       setLoading(false);
+    }
+  };
 
+  // =====================================================
+  // SEARCH
+  // =====================================================
+
+  const filteredCustomers = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    if (!query) {
+      return customers;
     }
 
-  };
+    return customers.filter((customer) => {
+      const accountNumber =
+        customer.accountNumber
+          ?.toString()
+          .toLowerCase() || "";
 
-  const editCustomer = (customer) => {
+      const fullName =
+        customer.fullName
+          ?.toLowerCase() || "";
 
+      const mobile =
+        customer.mobile
+          ?.toString()
+          .toLowerCase() || "";
+
+      return (
+        accountNumber.includes(query) ||
+        fullName.includes(query) ||
+        mobile.includes(query)
+      );
+    });
+  }, [customers, search]);
+
+  // =====================================================
+  // MORNING CUSTOMERS
+  // =====================================================
+
+  const morningCustomers = useMemo(() => {
+    return filteredCustomers.filter((customer) => {
+      const shifts = Array.isArray(customer.shift)
+        ? customer.shift
+        : customer.shift
+        ? [customer.shift]
+        : ["Morning"];
+
+      return shifts.includes("Morning");
+    });
+  }, [filteredCustomers]);
+
+  // =====================================================
+  // EVENING CUSTOMERS
+  // =====================================================
+
+  const eveningCustomers = useMemo(() => {
+    return filteredCustomers.filter((customer) => {
+      const shifts = Array.isArray(customer.shift)
+        ? customer.shift
+        : customer.shift
+        ? [customer.shift]
+        : [];
+
+      return shifts.includes("Evening");
+    });
+  }, [filteredCustomers]);
+
+  // =====================================================
+  // EDIT CUSTOMER
+  // =====================================================
+
+  const handleEdit = (customer) => {
     setSelectedCustomer(customer);
-
-    setEditModal(true);
-
+    setShowEditModal(true);
   };
 
-  const deleteCustomerHandler = (customer) => {
+  // =====================================================
+  // CLOSE EDIT
+  // =====================================================
 
-    setSelectedCustomer(customer);
-
-    setDeleteModal(true);
-
+  const closeEditModal = () => {
+    setShowEditModal(false);
+    setSelectedCustomer(null);
   };
 
-  const filteredCustomers = customers.filter((item) => {
+  // =====================================================
+  // DELETE CUSTOMER
+  // =====================================================
 
-    const query = search.toLowerCase();
+  const handleDelete = async (customer) => {
+    if (!customer?._id) {
+      toast.error("Customer ID not found");
+      return;
+    }
 
+    try {
+      setDeletingId(customer._id);
+
+      const response = await deleteCustomer(
+        customer._id
+      );
+
+      toast.success(
+        response?.message ||
+          "Customer deleted successfully"
+      );
+
+      // Reload customers
+      await loadCustomers();
+
+      // Notify other pages
+      window.dispatchEvent(
+        new Event("customerUpdated")
+      );
+    } catch (error) {
+      console.error(
+        "DELETE CUSTOMER ERROR:",
+        error
+      );
+
+      toast.error(
+        error.response?.data?.message ||
+          "Unable to delete customer"
+      );
+    } finally {
+      setDeletingId(null);
+
+      // Close confirmation modal
+      setCustomerToDelete(null);
+    }
+  };
+
+  // =====================================================
+  // CUSTOMER TABLE
+  // =====================================================
+
+  const renderCustomerTable = (
+    customerList,
+    shiftName
+  ) => {
     return (
+      <div className="customer-table-wrapper">
+        <table className="customer-table">
+          <thead>
+            <tr>
+              <th>Sr. No.</th>
+              <th>Account No.</th>
+              <th>Customer Name</th>
+              <th>Balance</th>
+              <th>Shift</th>
+              <th>Action</th>
+            </tr>
+          </thead>
 
-      item.fullName?.toLowerCase().includes(query) ||
+          <tbody>
+            {customerList.length === 0 ? (
+              <tr>
+                <td
+                  colSpan="7"
+                  className="empty-row"
+                >
+                  No {shiftName} Customers Found
+                </td>
+              </tr>
+            ) : (
+              customerList.map(
+                (customer, index) => (
+                  <tr
+                    key={customer._id}
+                  >
+                    <td>
+                      {index + 1}
+                    </td>
 
-      item.accountNumber?.toString().includes(search) ||
+                    <td>
+                      {customer.accountNumber}
+                    </td>
 
-      item.mobile?.includes(search)
+                    <td className="customer-name">
+                      {customer.fullName}
+                    </td>
 
+
+                    <td>
+                      ₹{" "}
+                      {Number(
+                        customer.balance || 0
+                      ).toLocaleString(
+                        "en-IN"
+                      )}
+                    </td>
+
+                    <td>
+                      <span
+                        className={
+                          shiftName === "Morning"
+                            ? "shift-badge morning-badge"
+                            : "shift-badge evening-badge"
+                        }
+                      >
+                        {shiftName}
+                      </span>
+                    </td>
+
+                    <td>
+                      <div className="customer-actions">
+                        {/* EDIT */}
+                        <button
+                          type="button"
+                          className="edit-btn"
+                          onClick={() =>
+                            handleEdit(
+                              customer
+                            )
+                          }
+                        >
+                          Edit
+                        </button>
+
+                        {/* DELETE */}
+                        <button
+                          type="button"
+                          className="delete-btn"
+                          onClick={() =>
+                            setCustomerToDelete(
+                              customer
+                            )
+                          }
+                          disabled={
+                            deletingId ===
+                            customer._id
+                          }
+                        >
+                          {deletingId ===
+                          customer._id
+                            ? "Deleting..."
+                            : "Delete"}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              )
+            )}
+          </tbody>
+        </table>
+      </div>
     );
+  };
 
-  });
+  // =====================================================
+  // JSX
+  // =====================================================
 
   return (
-
     <Layout>
+      <div className="customers-page">
 
-      <div className="customers">
+        {/* =================================================
+            HEADER
+        ================================================= */}
 
-        <div className="customer-header">
-
+        <div className="page-header">
           <div>
+            <h1>Customers</h1>
 
-            <h1>Customer Management</h1>
-
-            <p
-              style={{
-                color: "#6b7280",
-                marginTop: "6px",
-                fontSize: "14px",
-              }}
-            >
-              Manage customer accounts, balances and details.
+            <p>
+              Manage Morning and Evening
+              customers
             </p>
-
           </div>
 
           <button
+            type="button"
             className="add-btn"
-            onClick={() => setShowModal(true)}
+            onClick={() =>
+              setShowAddModal(true)
+            }
           >
             + Add Customer
           </button>
-
         </div>
 
+        {/* =================================================
+            SEARCH
+        ================================================= */}
+
+        <div className="customer-search">
+          <input
+            type="text"
+            placeholder="Search by Account Number, Name or Mobile..."
+            value={search}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
+          />
+        </div>
+
+        {/* =================================================
+            LOADING
+        ================================================= */}
+
         {loading ? (
-
           <div className="loading-box">
-
-            <h2>Loading Customers...</h2>
-
+            <h2>
+              Loading Customers...
+            </h2>
           </div>
-
         ) : (
-
           <>
+            {/* =============================================
+                MORNING
+            ============================================== */}
 
-            <CustomerSearch
+            <section className="shift-section">
+              <div className="shift-section-header morning-header">
+                <div>
+                  <h2>
+                    🌅 Morning Customers
+                  </h2>
 
-              value={search}
+                  <p>
+                    Customers assigned to
+                    Morning shift
+                  </p>
+                </div>
 
-              onChange={setSearch}
+                <span className="customer-count">
+                  {morningCustomers.length}
+                </span>
+              </div>
 
-            />
+              {renderCustomerTable(
+                morningCustomers,
+                "Morning"
+              )}
+            </section>
 
-            <CustomerTable
+            {/* =============================================
+                EVENING
+            ============================================== */}
 
-              customers={filteredCustomers}
+            <section className="shift-section">
+              <div className="shift-section-header evening-header">
+                <div>
+                  <h2>
+                    🌇 Evening Customers
+                  </h2>
 
-              onView={(customer) => console.log(customer)}
+                  <p>
+                    Customers assigned to
+                    Evening shift
+                  </p>
+                </div>
 
-              onEdit={editCustomer}
+                <span className="customer-count">
+                  {eveningCustomers.length}
+                </span>
+              </div>
 
-              onDelete={deleteCustomerHandler}
-
-            />
-
+              {renderCustomerTable(
+                eveningCustomers,
+                "Evening"
+              )}
+            </section>
           </>
-
         )}
 
-        {showModal && (
+        {/* =================================================
+            ADD CUSTOMER
+        ================================================= */}
 
+        {showAddModal && (
           <AddCustomer
-
-            closeModal={() => setShowModal(false)}
-
-            refreshCustomers={loadCustomers}
-
+            closeModal={() =>
+              setShowAddModal(false)
+            }
+            refreshCustomers={
+              loadCustomers
+            }
           />
-
         )}
 
-        {editModal && selectedCustomer && (
+        {/* =================================================
+            EDIT CUSTOMER
+        ================================================= */}
 
-          <EditCustomer
+        {showEditModal &&
+          selectedCustomer && (
+            <EditCustomer
+              customer={
+                selectedCustomer
+              }
+              closeModal={
+                closeEditModal
+              }
+              refreshCustomers={
+                loadCustomers
+              }
+            />
+          )}
 
-            customer={selectedCustomer}
+        {/* =================================================
+            DELETE CONFIRMATION MODAL
+        ================================================= */}
 
-            closeModal={() => {
+        {customerToDelete && (
+          <div className="delete-modal-overlay">
+            <div className="delete-modal">
 
-              setEditModal(false);
+              {/* ICON */}
+              <div className="delete-modal-icon">
+                ⚠
+              </div>
 
-              setSelectedCustomer(null);
+              {/* TITLE */}
+              <h2>
+                Delete Customer?
+              </h2>
 
-            }}
+              {/* MESSAGE */}
+              <p>
+                Are you sure you want to
+                delete{" "}
+                <strong>
+                  {
+                    customerToDelete.fullName
+                  }
+                </strong>
+                ?
+              </p>
 
-            refreshCustomers={loadCustomers}
+              <p className="delete-warning">
+                This action cannot be
+                undone.
+              </p>
 
-          />
+              {/* BUTTONS */}
+              <div className="delete-modal-actions">
 
-        )}
+                {/* CANCEL */}
+                <button
+                  type="button"
+                  className="cancel-delete-btn"
+                  onClick={() =>
+                    setCustomerToDelete(
+                      null
+                    )
+                  }
+                  disabled={
+                    deletingId !== null
+                  }
+                >
+                  Cancel
+                </button>
 
-        {deleteModal && selectedCustomer && (
+                {/* CONFIRM DELETE */}
+                <button
+                  type="button"
+                  className="confirm-delete-btn"
+                  onClick={() =>
+                    handleDelete(
+                      customerToDelete
+                    )
+                  }
+                  disabled={
+                    deletingId ===
+                    customerToDelete._id
+                  }
+                >
+                  {deletingId ===
+                  customerToDelete._id
+                    ? "Deleting..."
+                    : "Delete Customer"}
+                </button>
 
-          <DeleteCustomer
-
-            customer={selectedCustomer}
-
-            closeModal={() => {
-
-              setDeleteModal(false);
-
-              setSelectedCustomer(null);
-
-            }}
-
-            refreshCustomers={loadCustomers}
-
-          />
-
+              </div>
+            </div>
+          </div>
         )}
 
       </div>
-
     </Layout>
-
   );
-
 };
 
 export default Customers;

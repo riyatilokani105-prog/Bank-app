@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://bank-app-6l8z.onrender.com/api",
+  baseURL: "http://localhost:5000/api",
 });
 
 API.interceptors.request.use(
@@ -14,7 +14,9 @@ API.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
 export default API;
