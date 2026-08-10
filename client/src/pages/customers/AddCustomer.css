@@ -1,563 +1,785 @@
-/* =====================================================
+/* =========================================================
+   ADD COLLECTION MODAL
+   Professional Banking / Admin UI
+========================================================= */
+
+
+/* =========================================================
    OVERLAY
-===================================================== */
+========================================================= */
 
 .modal-overlay {
-  position: fixed;
-  inset: 0;
+    position: fixed;
+    inset: 0;
 
-  background: rgba(0, 0, 0, 0.45);
+    background: rgba(15, 23, 42, 0.60);
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 
-  padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  z-index: 9999;
+    padding: 20px;
 
-  box-sizing: border-box;
+    box-sizing: border-box;
+
+    z-index: 9999;
+
+    animation: overlayFade 0.2s ease;
+}
+
+@keyframes overlayFade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 
-/* =====================================================
-   CUSTOMER MODAL
-===================================================== */
+/* =========================================================
+   CUSTOMER / ADD COLLECTION MODAL
+========================================================= */
 
 .customer-modal {
-  width: min(500px, 100%);
+    width: min(500px, 100%);
 
-  max-height: 90vh;
+    max-height: 90vh;
 
-  background: #ffffff;
+    background: #ffffff;
 
-  border-radius: 18px;
+    border: 1px solid #e2e8f0;
 
-  padding: 25px;
+    border-radius: 18px;
 
-  box-sizing: border-box;
+    padding: 0;
 
-  overflow-y: auto;
+    box-sizing: border-box;
 
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    overflow-y: auto;
 
-  animation: popup 0.3s ease;
+    box-shadow:
+        0 25px 70px rgba(15, 23, 42, 0.22),
+        0 8px 25px rgba(15, 23, 42, 0.10);
+
+    animation: popup 0.25s ease-out;
+
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.customer-modal::-webkit-scrollbar {
+    width: 6px;
+}
+
+.customer-modal::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.customer-modal::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.customer-modal::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
 }
 
 
-/* =====================================================
+/* =========================================================
    POPUP ANIMATION
-===================================================== */
+========================================================= */
 
 @keyframes popup {
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
+    from {
+        transform: translateY(12px) scale(0.97);
+        opacity: 0;
+    }
 
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
 }
 
 
-/* =====================================================
-   HEADER
-===================================================== */
+/* =========================================================
+   MODAL HEADER
+========================================================= */
 
 .modal-header {
-  display: flex;
+    display: flex;
 
-  justify-content: space-between;
+    justify-content: space-between;
+    align-items: center;
 
-  align-items: center;
+    margin-bottom: 0;
 
-  margin-bottom: 24px;
+    padding: 18px 22px;
 
-  padding-bottom: 15px;
+    background: linear-gradient(
+        135deg,
+        #2563eb 0%,
+        #1d4ed8 100%
+    );
 
-  border-bottom: 1px solid #eeeeee;
+    color: #ffffff;
+
+    border-bottom: 1px solid #1e40af;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 10;
 }
-
 
 .modal-header h2 {
-  margin: 0;
+    margin: 0;
 
-  font-size: 24px;
+    font-size: 21px;
 
-  font-weight: 700;
+    line-height: 1.3;
 
-  color: #111827;
+    font-weight: 700;
+
+    color: #ffffff;
+
+    letter-spacing: -0.2px;
 }
 
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
 
 .modal-header button {
-  width: 36px;
+    width: 34px;
+    height: 34px;
 
-  height: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.20);
 
-  border: none;
+    border-radius: 9px;
 
-  border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
 
-  background: #f3f4f6;
+    color: #ffffff;
 
-  color: #374151;
+    font-size: 18px;
 
-  font-size: 18px;
+    font-weight: 600;
 
-  font-weight: 600;
+    cursor: pointer;
 
-  cursor: pointer;
+    display: flex;
 
-  display: flex;
+    align-items: center;
 
-  align-items: center;
+    justify-content: center;
 
-  justify-content: center;
-
-  transition: 0.25s;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
 }
-
 
 .modal-header button:hover {
-  background: #fee2e2;
+    background: rgba(255, 255, 255, 0.25);
 
-  color: #dc2626;
-
-  transform: rotate(90deg);
+    transform: rotate(90deg);
 }
 
+.modal-header button:active {
+    transform: rotate(90deg) scale(0.94);
+}
 
 .modal-header button:disabled {
-  opacity: 0.5;
+    opacity: 0.5;
 
-  cursor: not-allowed;
+    cursor: not-allowed;
 
-  transform: none;
+    transform: none;
 }
 
 
-/* =====================================================
+/* =========================================================
    FORM
-===================================================== */
+========================================================= */
 
 .customer-modal form {
-  width: 100%;
-}
-
-
-/* =====================================================
-   FORM GROUP
-===================================================== */
-
-.form-group {
-  display: flex;
-
-  flex-direction: column;
-
-  margin-bottom: 18px;
-}
-
-
-.form-group label {
-  margin-bottom: 7px;
-
-  font-size: 14px;
-
-  font-weight: 600;
-
-  color: #374151;
-}
-
-
-/* =====================================================
-   INPUTS
-===================================================== */
-
-.form-group input:not([type="checkbox"]),
-.form-group textarea {
-  width: 100%;
-
-  height: 46px;
-
-  box-sizing: border-box;
-
-  padding: 0 13px;
-
-  border: 1px solid #d1d5db;
-
-  border-radius: 10px;
-
-  background: #ffffff;
-
-  color: #111827;
-
-  font-size: 15px;
-
-  outline: none;
-
-  transition: 0.25s;
-}
-
-
-.form-group input:not([type="checkbox"])::placeholder {
-  color: #9ca3af;
-}
-
-
-.form-group input:not([type="checkbox"]):focus,
-.form-group textarea:focus {
-  border-color: #2563eb;
-
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-}
-
-
-.form-group input:not([type="checkbox"]):disabled {
-  background: #f3f4f6;
-
-  cursor: not-allowed;
-}
-
-
-/* =====================================================
-   SHIFT SECTION
-===================================================== */
-
-.shift-options {
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  gap: 12px;
-
-  width: 100%;
-}
-
-
-/* =====================================================
-   SHIFT BOX
-===================================================== */
-
-.shift-box {
-  min-height: 52px;
-
-  box-sizing: border-box;
-
-  display: flex;
-
-  flex-direction: row;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 9px;
-
-  padding: 12px 15px;
-
-  border: 1px solid #d1d5db;
-
-  border-radius: 10px;
-
-  background: #ffffff;
-
-  color: #374151;
-
-  font-size: 15px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: 0.25s;
-}
-
-
-.shift-box:hover {
-  border-color: #2563eb;
-
-  background: #eff6ff;
-}
-
-
-/* =====================================================
-   SHIFT CHECKBOX
-===================================================== */
-
-.shift-box input[type="checkbox"] {
-  width: 18px;
-
-  height: 18px;
-
-  margin: 0;
-
-  padding: 0;
-
-  accent-color: #2563eb;
-
-  cursor: pointer;
-
-  flex-shrink: 0;
-}
-
-
-.shift-box input[type="checkbox"]:disabled {
-  cursor: not-allowed;
-}
-
-
-/* =====================================================
-   SELECTED SHIFT
-===================================================== */
-
-.selected-shift {
-  display: flex;
-
-  align-items: center;
-
-  gap: 7px;
-
-  margin-top: 10px;
-
-  padding: 9px 12px;
-
-  background: #eff6ff;
-
-  border: 1px solid #dbeafe;
-
-  border-radius: 8px;
-
-  color: #1d4ed8;
-
-  font-size: 13px;
-}
-
-
-.selected-shift small {
-  color: #6b7280;
-
-  font-size: 13px;
-}
-
-
-.selected-shift strong {
-  font-size: 13px;
-
-  color: #2563eb;
-}
-
-
-/* =====================================================
-   SAVE BUTTON
-===================================================== */
-
-.save-btn {
-  width: 100%;
-
-  height: 48px;
-
-  margin-top: 5px;
-
-  background: #2563eb;
-
-  color: #ffffff;
-
-  border: none;
-
-  border-radius: 10px;
-
-  font-size: 16px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: 0.25s;
-}
-
-
-.save-btn:hover {
-  background: #1d4ed8;
-
-  transform: translateY(-1px);
-}
-
-
-.save-btn:active {
-  transform: translateY(0);
-}
-
-
-.save-btn:disabled {
-  opacity: 0.6;
-
-  cursor: not-allowed;
-
-  transform: none;
-}
-
-
-/* =====================================================
-   TABLET
-===================================================== */
-
-@media (max-width: 768px) {
-
-  .modal-overlay {
-    padding: 15px;
-  }
-
-  .customer-modal {
     width: 100%;
-
-    max-width: 500px;
-
-    max-height: 92vh;
 
     padding: 22px;
 
-    border-radius: 15px;
-  }
-
-  .modal-header {
-    margin-bottom: 20px;
-  }
-
-  .modal-header h2 {
-    font-size: 22px;
-  }
-
-  .form-group {
-    margin-bottom: 16px;
-  }
-
-  .shift-options {
-    gap: 10px;
-  }
-
+    box-sizing: border-box;
 }
 
 
-/* =====================================================
+/* =========================================================
+   FORM GROUP
+========================================================= */
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    margin-bottom: 18px;
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   LABEL
+========================================================= */
+
+.form-group label {
+    margin-bottom: 7px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #334155;
+
+    letter-spacing: 0.1px;
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+.form-group input:not([type="checkbox"]),
+.form-group textarea {
+    width: 100%;
+
+    min-height: 46px;
+
+    box-sizing: border-box;
+
+    padding: 0 13px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.form-group textarea {
+    min-height: 90px;
+
+    padding: 11px 13px;
+
+    resize: vertical;
+}
+
+
+/* =========================================================
+   PLACEHOLDER
+========================================================= */
+
+.form-group input:not([type="checkbox"])::placeholder,
+.form-group textarea::placeholder {
+    color: #94a3b8;
+}
+
+
+/* =========================================================
+   INPUT HOVER
+========================================================= */
+
+.form-group input:not([type="checkbox"]):hover,
+.form-group textarea:hover {
+    border-color: #94a3b8;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   INPUT FOCUS
+========================================================= */
+
+.form-group input:not([type="checkbox"]):focus,
+.form-group textarea:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   DISABLED INPUT
+========================================================= */
+
+.form-group input:not([type="checkbox"]):disabled,
+.form-group textarea:disabled {
+    background: #f1f5f9;
+
+    color: #64748b;
+
+    cursor: not-allowed;
+
+    border-color: #e2e8f0;
+}
+
+
+/* =========================================================
+   SHIFT SECTION
+========================================================= */
+
+.shift-options {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   SHIFT BOX
+========================================================= */
+
+.shift-box {
+    min-height: 54px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    flex-direction: row;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    padding: 11px 14px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #334155;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+}
+
+
+/* =========================================================
+   SHIFT BOX HOVER
+========================================================= */
+
+.shift-box:hover {
+    border-color: #93c5fd;
+
+    background: #f8fbff;
+
+    box-shadow:
+        0 3px 10px rgba(37, 99, 235, 0.07);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   SHIFT CHECKBOX
+========================================================= */
+
+.shift-box input[type="checkbox"] {
+    width: 18px;
+
+    height: 18px;
+
+    margin: 0;
+
+    padding: 0;
+
+    accent-color: #2563eb;
+
+    cursor: pointer;
+
+    flex-shrink: 0;
+}
+
+.shift-box input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   SELECTED SHIFT
+========================================================= */
+
+.selected-shift {
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-top: 10px;
+
+    padding: 10px 12px;
+
+    background: #eff6ff;
+
+    border: 1px solid #bfdbfe;
+
+    border-radius: 9px;
+
+    color: #1d4ed8;
+
+    font-size: 13px;
+
+    line-height: 1.4;
+}
+
+.selected-shift small {
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+.selected-shift strong {
+    font-size: 13px;
+
+    color: #2563eb;
+}
+
+
+/* =========================================================
+   SAVE BUTTON
+========================================================= */
+
+.save-btn {
+    width: 100%;
+
+    height: 48px;
+
+    margin-top: 5px;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb 0%,
+        #1d4ed8 100%
+    );
+
+    color: #ffffff;
+
+    border: none;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 12px rgba(37, 99, 235, 0.18);
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* =========================================================
+   SAVE HOVER
+========================================================= */
+
+.save-btn:hover {
+    background: linear-gradient(
+        135deg,
+        #1d4ed8 0%,
+        #1e40af 100%
+    );
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 6px 16px rgba(37, 99, 235, 0.25);
+}
+
+
+/* =========================================================
+   SAVE ACTIVE
+========================================================= */
+
+.save-btn:active {
+    transform: translateY(0);
+
+    box-shadow:
+        0 3px 8px rgba(37, 99, 235, 0.18);
+}
+
+
+/* =========================================================
+   SAVE DISABLED
+========================================================= */
+
+.save-btn:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .modal-overlay {
+        padding: 15px;
+    }
+
+    .customer-modal {
+        width: 100%;
+
+        max-width: 500px;
+
+        max-height: 92vh;
+
+        border-radius: 15px;
+    }
+
+    .modal-header {
+        padding: 16px 18px;
+    }
+
+    .modal-header h2 {
+        font-size: 20px;
+    }
+
+    .modal-header button {
+        width: 33px;
+        height: 33px;
+
+        font-size: 17px;
+    }
+
+    .customer-modal form {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .shift-options {
+        gap: 10px;
+    }
+
+    .shift-box {
+        min-height: 52px;
+
+        font-size: 13px;
+    }
+}
+
+
+/* =========================================================
    MOBILE
-===================================================== */
+========================================================= */
 
 @media (max-width: 480px) {
 
-  .modal-overlay {
-    padding: 10px;
+    .modal-overlay {
+        padding: 10px;
 
-    align-items: center;
-  }
+        align-items: center;
+    }
 
-  .customer-modal {
-    width: 100%;
+    .customer-modal {
+        width: 100%;
 
-    max-height: 94vh;
+        max-height: 94vh;
 
-    padding: 18px;
+        border-radius: 13px;
+    }
 
-    border-radius: 13px;
-  }
+    .modal-header {
+        padding: 14px 15px;
+    }
 
-  .modal-header {
-    margin-bottom: 18px;
+    .modal-header h2 {
+        font-size: 18px;
+    }
 
-    padding-bottom: 12px;
-  }
+    .modal-header button {
+        width: 32px;
+        height: 32px;
 
-  .modal-header h2 {
-    font-size: 20px;
-  }
+        font-size: 16px;
+    }
 
-  .modal-header button {
-    width: 34px;
+    .customer-modal form {
+        padding: 17px;
+    }
 
-    height: 34px;
+    .form-group {
+        margin-bottom: 15px;
+    }
 
-    font-size: 16px;
-  }
+    .form-group label {
+        font-size: 12px;
 
-  .form-group label {
-    font-size: 13px;
-  }
+        margin-bottom: 6px;
+    }
 
-  .form-group input:not([type="checkbox"]),
-  .form-group textarea {
-    height: 44px;
+    .form-group input:not([type="checkbox"]),
+    .form-group textarea {
+        min-height: 43px;
 
-    font-size: 14px;
-  }
+        font-size: 13px;
 
-  /* Shift buttons remain side-by-side */
-  .shift-options {
-    grid-template-columns: 1fr 1fr;
+        border-radius: 8px;
+    }
 
-    gap: 8px;
-  }
+    .form-group textarea {
+        min-height: 80px;
+    }
 
-  .shift-box {
-    min-height: 48px;
+    /* Shift buttons remain side-by-side */
 
-    padding: 9px 6px;
+    .shift-options {
+        grid-template-columns: 1fr 1fr;
 
-    gap: 6px;
+        gap: 8px;
+    }
 
-    font-size: 13px;
-  }
+    .shift-box {
+        min-height: 48px;
 
-  .shift-box input[type="checkbox"] {
-    width: 17px;
+        padding: 8px 6px;
 
-    height: 17px;
-  }
+        gap: 6px;
 
-  .selected-shift {
-    font-size: 12px;
+        border-radius: 8px;
 
-    padding: 8px 10px;
-  }
+        font-size: 12px;
+    }
 
-  .selected-shift small,
-  .selected-shift strong {
-    font-size: 12px;
-  }
+    .shift-box input[type="checkbox"] {
+        width: 16px;
 
-  .save-btn {
-    height: 46px;
+        height: 16px;
+    }
 
-    font-size: 15px;
-  }
+    .selected-shift {
+        margin-top: 8px;
+
+        padding: 8px 10px;
+
+        font-size: 11px;
+    }
+
+    .selected-shift small,
+    .selected-shift strong {
+        font-size: 11px;
+    }
+
+    .save-btn {
+        height: 46px;
+
+        font-size: 14px;
+
+        border-radius: 9px;
+    }
 }
 
 
-/* =====================================================
+/* =========================================================
    VERY SMALL MOBILE
-===================================================== */
+========================================================= */
 
 @media (max-width: 360px) {
 
-  .customer-modal {
-    padding: 15px;
-  }
+    .customer-modal {
+        max-height: 95vh;
 
-  .modal-header h2 {
-    font-size: 18px;
-  }
+        border-radius: 11px;
+    }
 
-  .shift-box {
-    font-size: 12px;
+    .modal-header {
+        padding: 12px 13px;
+    }
 
-    padding: 8px 4px;
-  }
+    .modal-header h2 {
+        font-size: 17px;
+    }
 
-  .shift-box input[type="checkbox"] {
-    width: 16px;
+    .customer-modal form {
+        padding: 14px;
+    }
 
-    height: 16px;
-  }
+    .shift-box {
+        min-height: 46px;
 
+        font-size: 11px;
+
+        padding: 7px 4px;
+    }
+
+    .shift-box input[type="checkbox"] {
+        width: 15px;
+
+        height: 15px;
+    }
+
+    .save-btn {
+        height: 44px;
+
+        font-size: 13px;
+    }
 }
