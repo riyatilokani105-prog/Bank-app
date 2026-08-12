@@ -13,7 +13,6 @@ import "./AddCollection.css";
 const STORAGE_KEY = "dailyCollectionSheet";
 
 const AddCollection = ({ closeModal, refreshCollections }) => {
-
   const [morningRows, setMorningRows] = useState([]);
   const [eveningRows, setEveningRows] = useState([]);
 
@@ -25,171 +24,145 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
 
   const [showAddCustomer, setShowAddCustomer] = useState(false);
 
-const [customerData, setCustomerData] = useState({
-  accountNumber: "",
-  fullName: "",
-  balance: "",
-  shift: ["Morning"],
-});
-
-const [customerLoading, setCustomerLoading] = useState(false);
-const handleChange = (e) => {
-
-  setCustomerData({
-    ...customerData,
-    [e.target.name]: e.target.value,
+  const [customerData, setCustomerData] = useState({
+    accountNumber: "",
+    fullName: "",
+    balance: "",
+    shift: ["Morning"],
   });
 
-};
-
-
-
-const handleShiftChange = (shift) => {
-
-  let updatedShift = [...customerData.shift];
-
-
-  if(updatedShift.includes(shift)){
-
-    updatedShift = updatedShift.filter(
-      (s)=>s !== shift
-    );
-
-  }else{
-
-    updatedShift.push(shift);
-
-  }
-
-
-  if(updatedShift.length === 0){
-
-    return toast.error(
-      "Select at least one shift."
-    );
-
-  }
-
-
-  setCustomerData({
-    ...customerData,
-    shift: updatedShift,
-  });
-
-};
-
-
-
-const handleAddCustomer = async(e)=>{
-
-e.preventDefault();
-
-
-if(
- !customerData.accountNumber ||
- !customerData.fullName
-){
-
- return toast.error(
- "Please fill all required fields"
- );
-
-}
-
-
-try{
-
-setCustomerLoading(true);
-
-
-await addCustomer({
-
-accountNumber:
-customerData.accountNumber.trim(),
-
-fullName:
-customerData.fullName.trim(),
-
-balance:
-Number(customerData.balance) || 0,
-
-shift:
-customerData.shift,
-
-});
-
-
-await loadCustomers();
-
-
-window.dispatchEvent(
-new Event("customerUpdated")
-);
-
-
-toast.success(
-"Customer Added Successfully"
-);
-
-
-
-setCustomerData({
-
-accountNumber:"",
-fullName:"",
-balance:"",
-shift:["Morning"],
-
-});
-
-
-setShowAddCustomer(false);
-
-
-
-}catch(error){
-
-toast.error(
-
-error.response?.data?.message ||
-"Failed to Add Customer"
-
-);
-
-
-}
-finally{
-
-setCustomerLoading(false);
-
-}
-
-};
-
-const handleDeleteCustomer = async(id)=>{
-
-  try{
-
-    await deleteCustomer(id);
-
-    toast.success("Customer Deleted");
-
-    loadCustomers();
-
-  }
-  catch(err){
-
-    toast.error("Unable to delete customer");
-
-  }
-
-};
-  /* ===========================
-        LOAD CUSTOMERS
-  ============================ */
+  const [customerLoading, setCustomerLoading] = useState(false);
+
+  /* =====================================================
+     HANDLE CUSTOMER FORM CHANGE
+  ===================================================== */
+
+  const handleChange = (e) => {
+    setCustomerData({
+      ...customerData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  /* =====================================================
+     HANDLE SHIFT CHANGE
+  ===================================================== */
+
+  const handleShiftChange = (shift) => {
+    let updatedShift = [...customerData.shift];
+
+    if (updatedShift.includes(shift)) {
+      updatedShift = updatedShift.filter(
+        (s) => s !== shift
+      );
+    } else {
+      updatedShift.push(shift);
+    }
+
+    if (updatedShift.length === 0) {
+      return toast.error("Select at least one shift.");
+    }
+
+    setCustomerData({
+      ...customerData,
+      shift: updatedShift,
+    });
+  };
+
+  /* =====================================================
+     ADD CUSTOMER
+  ===================================================== */
+
+  const handleAddCustomer = async (e) => {
+    e.preventDefault();
+
+    if (
+      !customerData.accountNumber ||
+      !customerData.fullName
+    ) {
+      return toast.error(
+        "Please fill all required fields"
+      );
+    }
+
+    try {
+      setCustomerLoading(true);
+
+      await addCustomer({
+        accountNumber:
+          customerData.accountNumber.trim(),
+
+        fullName:
+          customerData.fullName.trim(),
+
+        balance:
+          Number(customerData.balance) || 0,
+
+        shift: customerData.shift,
+      });
+
+      /*
+        Reload customer list.
+
+        Existing unsaved collection amounts will
+        automatically be preserved from localStorage.
+      */
+      await loadCustomers();
+
+      window.dispatchEvent(
+        new Event("customerUpdated")
+      );
+
+      toast.success(
+        "Customer Added Successfully"
+      );
+
+      setCustomerData({
+        accountNumber: "",
+        fullName: "",
+        balance: "",
+        shift: ["Morning"],
+      });
+
+      setShowAddCustomer(false);
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to Add Customer"
+      );
+    } finally {
+      setCustomerLoading(false);
+    }
+  };
+
+  /* =====================================================
+     DELETE CUSTOMER
+  ===================================================== */
+
+  const handleDeleteCustomer = async (id) => {
+    try {
+      await deleteCustomer(id);
+
+      toast.success("Customer Deleted");
+
+      /*
+        Reload customer list.
+
+        Other unsaved collection amounts will remain
+        because the draft is stored permanently until
+        Save All Collections is clicked.
+      */
+      await loadCustomers();
+    } catch (err) {
+      toast.error("Unable to delete customer");
+    }
+  };
+
+  /* =====================================================
+     LOAD CUSTOMERS
+  ===================================================== */
 
   useEffect(() => {
-
     loadCustomers();
 
     const refreshCustomerList = () => {
@@ -207,40 +180,44 @@ const handleDeleteCustomer = async(id)=>{
         refreshCustomerList
       );
     };
-
   }, []);
 
-  /* ===========================
-        TOTALS
-  ============================ */
+  /* =====================================================
+     TOTALS
+  ===================================================== */
 
   useEffect(() => {
-
     const morning = morningRows.reduce(
-      (sum, row) => sum + Number(row.amount || 0),
+      (sum, row) =>
+        sum + Number(row.amount || 0),
       0
     );
 
     const evening = eveningRows.reduce(
-      (sum, row) => sum + Number(row.amount || 0),
+      (sum, row) =>
+        sum + Number(row.amount || 0),
       0
     );
 
     setMorningTotal(morning);
     setEveningTotal(evening);
-
   }, [morningRows, eveningRows]);
 
-  const grandTotal = morningTotal + eveningTotal;
+  const grandTotal =
+    morningTotal + eveningTotal;
 
-  /* ===========================
-        LOAD CUSTOMERS
-  ============================ */
+  /* =====================================================
+     LOAD CUSTOMERS + RESTORE UNSAVED DRAFT
+     
+     IMPORTANT:
+     No date check is used here.
+
+     The collection sheet will remain exactly as it
+     was entered until Save All Collections is clicked.
+  ===================================================== */
 
   const loadCustomers = async () => {
-
     try {
-
       const res = await getCustomers();
 
       const list = Array.isArray(res.customers)
@@ -249,842 +226,760 @@ const handleDeleteCustomer = async(id)=>{
         ? res
         : [];
 
-      const today = new Date().toDateString();
+      /*
+        Get previously entered collection draft.
 
-      const saved = JSON.parse(
-        localStorage.getItem(STORAGE_KEY)
-      );
+        We intentionally DO NOT check the date.
+        This means the draft survives:
+        - midnight
+        - next day
+        - browser refresh
+        - closing/reopening modal
+        - application restart
+      */
+      let saved = null;
+
+      try {
+        saved = JSON.parse(
+          localStorage.getItem(STORAGE_KEY)
+        );
+      } catch (error) {
+        console.log(
+          "Unable to read saved collection draft"
+        );
+
+        saved = null;
+      }
 
       const oldMorning =
-        saved && saved.date === today
-          ? saved.morningRows || []
-          : [];
+        saved?.morningRows || [];
 
       const oldEvening =
-        saved && saved.date === today
-          ? saved.eveningRows || []
-          : [];
+        saved?.eveningRows || [];
 
+      /* =================================================
+         MORNING CUSTOMERS
+      ================================================= */
 
-const morningList = list.filter(
-(customer)=>
-customer.shift?.includes("Morning")
-);
-const morning = morningList.map((customer,index)=>{
+      const morningList = list.filter(
+        (customer) =>
+          customer.shift?.includes("Morning")
+      );
 
-        const existing = oldMorning.find(
-          (r) => r.customerId === customer._id
-        );
+      const morning = morningList.map(
+        (customer, index) => {
+          const existing = oldMorning.find(
+            (r) =>
+              r.customerId === customer._id
+          );
 
-        return {
+          return {
+            customerId: customer._id,
 
-          customerId: customer._id,
+            fullName: customer.fullName,
 
-          fullName: customer.fullName,
+            srNo: index + 1,
 
-          srNo: index + 1,
+            /*
+              Restore previously entered amount.
+            */
+            amount: existing
+              ? existing.amount
+              : "",
+          };
+        }
+      );
 
-          amount: existing
-            ? existing.amount
-            : "",
-
-        };
-
-      });
+      /* =================================================
+         EVENING CUSTOMERS
+      ================================================= */
 
       const eveningList = list.filter(
-(customer)=>
-customer.shift?.includes("Evening")
-);
-const evening = eveningList.map((customer,index)=>{
+        (customer) =>
+          customer.shift?.includes("Evening")
+      );
 
-        const existing = oldEvening.find(
-          (r) => r.customerId === customer._id
-        );
+      const evening = eveningList.map(
+        (customer, index) => {
+          const existing = oldEvening.find(
+            (r) =>
+              r.customerId === customer._id
+          );
 
-        return {
+          return {
+            customerId: customer._id,
 
-          customerId: customer._id,
+            fullName: customer.fullName,
 
-          fullName: customer.fullName,
+            srNo: index + 1,
 
-          srNo: index + 1,
-
-          amount: existing
-            ? existing.amount
-            : "",
-
-        };
-
-      });
+            /*
+              Restore previously entered amount.
+            */
+            amount: existing
+              ? existing.amount
+              : "",
+          };
+        }
+      );
 
       setMorningRows(morning);
       setEveningRows(evening);
 
+      /*
+        Save the current draft again.
+
+        IMPORTANT:
+        No date is stored anymore.
+
+        The draft remains until the user clicks
+        Save All Collections.
+      */
       localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify({
-
-          date: today,
-
           morningRows: morning,
-
           eveningRows: evening,
-
         })
       );
-
     } catch (err) {
-
       console.log(err);
 
-      toast.error("Unable to load customers");
-
+      toast.error(
+        "Unable to load customers"
+      );
     }
-
   };
-    /* ==========================================
-            SEARCH FILTER
-  ========================================== */
+
+  /* =====================================================
+     SEARCH FILTER - MORNING
+  ===================================================== */
 
   const filteredMorning = useMemo(() => {
-
-    if (!search.trim()) return morningRows;
+    if (!search.trim()) {
+      return morningRows;
+    }
 
     return morningRows.filter((row) =>
       row.fullName
         .toLowerCase()
         .includes(search.toLowerCase())
     );
-
   }, [morningRows, search]);
 
-  const filteredEvening = useMemo(() => {
+  /* =====================================================
+     SEARCH FILTER - EVENING
+  ===================================================== */
 
-    if (!search.trim()) return eveningRows;
+  const filteredEvening = useMemo(() => {
+    if (!search.trim()) {
+      return eveningRows;
+    }
 
     return eveningRows.filter((row) =>
       row.fullName
         .toLowerCase()
         .includes(search.toLowerCase())
     );
-
   }, [eveningRows, search]);
 
+  /* =====================================================
+     MORNING AMOUNT CHANGE
+     
+     Every entered amount is immediately saved locally.
+     It is NOT sent to backend until Save All Collections.
+  ===================================================== */
 
-
-  /* ==========================================
-            MORNING AMOUNT CHANGE
-  ========================================== */
-
-  const morningAmountChange = (customerId, value) => {
-
-    const updated = morningRows.map((row) =>
-
-      row.customerId === customerId
-
-        ? {
-            ...row,
-            amount: value,
-          }
-
-        : row
-
+  const morningAmountChange = (
+    customerId,
+    value
+  ) => {
+    const updated = morningRows.map(
+      (row) =>
+        row.customerId === customerId
+          ? {
+              ...row,
+              amount: value,
+            }
+          : row
     );
 
     setMorningRows(updated);
 
     localStorage.setItem(
-
       STORAGE_KEY,
-
       JSON.stringify({
-
-        date: new Date().toDateString(),
-
         morningRows: updated,
-
         eveningRows,
-
       })
-
     );
-
   };
 
+  /* =====================================================
+     EVENING AMOUNT CHANGE
+  ===================================================== */
 
-
-  /* ==========================================
-            EVENING AMOUNT CHANGE
-  ========================================== */
-
-  const eveningAmountChange = (customerId, value) => {
-
-    const updated = eveningRows.map((row) =>
-
-      row.customerId === customerId
-
-        ? {
-            ...row,
-            amount: value,
-          }
-
-        : row
-
+  const eveningAmountChange = (
+    customerId,
+    value
+  ) => {
+    const updated = eveningRows.map(
+      (row) =>
+        row.customerId === customerId
+          ? {
+              ...row,
+              amount: value,
+            }
+          : row
     );
 
     setEveningRows(updated);
 
     localStorage.setItem(
-
       STORAGE_KEY,
-
       JSON.stringify({
-
-        date: new Date().toDateString(),
-
         morningRows,
-
         eveningRows: updated,
-
       })
-
     );
-
   };
 
-
-
-  /* ==========================================
-            SAVE ALL COLLECTIONS
-  ========================================== */
+  /* =====================================================
+     SAVE ALL COLLECTIONS
+     
+     THIS IS THE ONLY PLACE WHERE THE DRAFT IS CLEARED.
+  ===================================================== */
 
   const saveAllCollections = async () => {
-
     try {
-
       setLoading(true);
 
       const collections = [];
 
-
-
-      // Morning Collections
+      /* =================================================
+         MORNING COLLECTIONS
+      ================================================= */
 
       morningRows.forEach((row) => {
-
         if (Number(row.amount) > 0) {
-
           collections.push({
-
             customerId: row.customerId,
-
             amount: Number(row.amount),
-
           });
-
         }
-
       });
 
-
-
-      // Evening Collections
+      /* =================================================
+         EVENING COLLECTIONS
+      ================================================= */
 
       eveningRows.forEach((row) => {
-
         if (Number(row.amount) > 0) {
-
           collections.push({
-
             customerId: row.customerId,
-
             amount: Number(row.amount),
-
           });
-
         }
-
       });
 
-
+      /* =================================================
+         VALIDATION
+      ================================================= */
 
       if (collections.length === 0) {
-
-        toast.error("Please enter at least one amount.");
+        toast.error(
+          "Please enter at least one amount."
+        );
 
         return;
-
       }
 
-
+      /* =================================================
+         SAVE TO BACKEND
+      ================================================= */
 
       const res = await bulkCollection({
-
         collections,
-
       });
-
-
 
       toast.success(res.message);
 
+      /*
+        IMPORTANT:
 
+        Only after successful backend save,
+        remove the local draft.
 
-      localStorage.removeItem(STORAGE_KEY);
-
-
+        Therefore:
+        - Before save = draft remains
+        - After successful save = draft cleared
+      */
+      localStorage.removeItem(
+        STORAGE_KEY
+      );
 
       await refreshCollections?.();
 
-
-
       window.dispatchEvent(
-
         new Event("collectionUpdated")
-
       );
 
-
-
       closeModal();
-
-    }
-
-    catch (err) {
-
+    } catch (err) {
       console.log(err);
 
       toast.error(
-
         err.response?.data?.message ||
-
-        "Unable to save collections."
-
+          "Unable to save collections."
       );
-
-    }
-
-    finally {
-
+    } finally {
       setLoading(false);
-
     }
-
   };
+
   return (
-  <div className="modal-overlay">
-
-    <div className="collection-modal">
-
-      {/* ================= HEADER ================= */}
-
-      <div className="collection-topbar">
-
-  <div className="collection-header">
-
-    <h2>
-      Daily Collection Sheet
-    </h2>
-
-  </div>
-
-
- 
-
-
-</div>
-      {/* ================= SEARCH ================= */}
-
-      <div className="collection-search">
-
-        <input
-          type="text"
-          placeholder="Search Customer..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-
-      </div>
-
-        {
-showAddCustomer && (
-
-<div className="customer-popup">
-
-
-<div className="modal-header">
-
-<h2>
-Add Customer
-</h2>
-
-
-<button
-type="button"
-onClick={()=>setShowAddCustomer(false)}
->
-✕
-</button>
-
-
-</div>
-
-
-
-<form onSubmit={handleAddCustomer}>
-
-
-<div className="form-group">
-
-<label>
-Account Number *
-</label>
-
-
-<input
-
-type="text"
-
-name="accountNumber"
-
-placeholder="Enter Account Number"
-
-value={customerData.accountNumber}
-
-onChange={handleChange}
-
-required
-
-/>
-
-</div>
-
-
-
-<div className="form-group">
-
-<label>
-Full Name *
-</label>
-
-
-<input
-
-type="text"
-
-name="fullName"
-
-placeholder="Enter Customer Name"
-
-value={customerData.fullName}
-
-onChange={handleChange}
-
-required
-
-/>
-
-</div>
-
-
-
-
-<div className="form-group">
-
-<label>
-Opening Balance
-</label>
-
-
-<input
-
-type="number"
-
-name="balance"
-
-placeholder="Enter Opening Balance"
-
-value={customerData.balance}
-
-onChange={handleChange}
-
-min="0"
-
-/>
-
-</div>
-
-
-
-
-
-<div className="form-group">
-
-<label>
-Collection Shift *
-</label>
-
-
-
-<div className="shift-options">
-
-
-<label className="shift-box">
-
-<input
-
-type="checkbox"
-
-checked={
-customerData.shift.includes("Morning")
-}
-
-onChange={()=>
-handleShiftChange("Morning")
-}
-
-/>
-
-
-Morning
-
-</label>
-
-
-
-
-<label className="shift-box">
-
-<input
-
-type="checkbox"
-
-checked={
-customerData.shift.includes("Evening")
-}
-
-onChange={()=>
-handleShiftChange("Evening")
-}
-
-/>
-
-
-Evening
-
-</label>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-<button
-
-type="submit"
-
-className="save-btn"
-
-disabled={customerLoading}
-
->
-
-
-{
-customerLoading
-?
-"Saving..."
-:
-"Save Customer"
-}
-
-
-</button>
-
-
-
-</form>
-
-
-</div>
-
-)
-}
-
-      <div className="collection-body">
-
-        {/* ================= MORNING ================= */}
-
-        <div className="collection-section">
-
-          <h3 className="section-title">
-            🌅 Morning Customers
-          </h3>
-
-          <div className="table-container">
-
-            <table className="collection-table">
-
-              <thead>
-
-                <tr>
-
-                  <th>Sr No</th>
-
-                  <th>Account Holder Name</th>
-
-                  <th>Deposit Amount</th>
-                  <th>Action</th>
-
-                </tr>
-
-              </thead>
-
-              <tbody>
-
-                {filteredMorning.length === 0 ? (
-
-                  <tr>
-
-                    <td
-                      colSpan="3"
-                      style={{
-                        textAlign: "center",
-                        padding: "25px",
-                      }}
-                    >
-
-                      No Customers Found
-
-                    </td>
-
-                  </tr>
-
-                ) : (
-
-                  filteredMorning.map((row) => (
-
-                    <tr key={row.customerId}>
-
-                      <td>{row.srNo}</td>
-
-                      <td>{row.fullName}</td>
-
-                      <td>
-
-                        <input
-                          type="number"
-                          min="0"
-                          placeholder="₹"
-                          value={row.amount}
-                          onChange={(e) =>
-                            morningAmountChange(
-                              row.customerId,
-                              e.target.value
-                            )
-                          }
-                        />
-
-                      </td>
-                            <td>
-
-                            <button
-                            className="delete-btn"
-                            onClick={()=>handleDeleteCustomer(row.customerId)}
-                            >
-                            Delete
-                            </button>
-
-                            </td>
-                    </tr>
-
-                  ))
-
-                )}
-
-              </tbody>
-
-            </table>
-
+    <div className="modal-overlay">
+      <div className="collection-modal">
+
+        {/* =================================================
+            HEADER
+        ================================================= */}
+
+        <div className="collection-topbar">
+          <div className="collection-header">
+            <h2>
+              Daily Collection Sheet
+            </h2>
           </div>
+        </div>
 
-          <div className="section-total">
+        {/* =================================================
+            SEARCH
+        ================================================= */}
 
-            <h3>
+        <div className="collection-search">
+          <input
+            type="text"
+            placeholder="Search Customer..."
+            value={search}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
+          />
+        </div>
 
-              Morning Total :
-              <span> ₹ {morningTotal}</span>
+        {/* =================================================
+            ADD CUSTOMER POPUP
+        ================================================= */}
 
+        {showAddCustomer && (
+          <div className="customer-popup">
+
+            <div className="modal-header">
+              <h2>
+                Add Customer
+              </h2>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setShowAddCustomer(false)
+                }
+              >
+                ✕
+              </button>
+            </div>
+
+            <form
+              onSubmit={handleAddCustomer}
+            >
+
+              {/* ACCOUNT NUMBER */}
+
+              <div className="form-group">
+                <label>
+                  Account Number *
+                </label>
+
+                <input
+                  type="text"
+                  name="accountNumber"
+                  placeholder="Enter Account Number"
+                  value={
+                    customerData.accountNumber
+                  }
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              {/* FULL NAME */}
+
+              <div className="form-group">
+                <label>
+                  Full Name *
+                </label>
+
+                <input
+                  type="text"
+                  name="fullName"
+                  placeholder="Enter Customer Name"
+                  value={
+                    customerData.fullName
+                  }
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              {/* OPENING BALANCE */}
+
+              <div className="form-group">
+                <label>
+                  Opening Balance
+                </label>
+
+                <input
+                  type="number"
+                  name="balance"
+                  placeholder="Enter Opening Balance"
+                  value={
+                    customerData.balance
+                  }
+                  onChange={handleChange}
+                  min="0"
+                />
+              </div>
+
+              {/* SHIFT */}
+
+              <div className="form-group">
+                <label>
+                  Collection Shift *
+                </label>
+
+                <div className="shift-options">
+
+                  <label className="shift-box">
+                    <input
+                      type="checkbox"
+                      checked={customerData.shift.includes(
+                        "Morning"
+                      )}
+                      onChange={() =>
+                        handleShiftChange(
+                          "Morning"
+                        )
+                      }
+                    />
+
+                    Morning
+                  </label>
+
+                  <label className="shift-box">
+                    <input
+                      type="checkbox"
+                      checked={customerData.shift.includes(
+                        "Evening"
+                      )}
+                      onChange={() =>
+                        handleShiftChange(
+                          "Evening"
+                        )
+                      }
+                    />
+
+                    Evening
+                  </label>
+
+                </div>
+              </div>
+
+              {/* SAVE CUSTOMER */}
+
+              <button
+                type="submit"
+                className="save-btn"
+                disabled={customerLoading}
+              >
+                {customerLoading
+                  ? "Saving..."
+                  : "Save Customer"}
+              </button>
+
+            </form>
+          </div>
+        )}
+
+        {/* =================================================
+            COLLECTION BODY
+        ================================================= */}
+
+        <div className="collection-body">
+
+          {/* =================================================
+              MORNING
+          ================================================= */}
+
+          <div className="collection-section">
+
+            <h3 className="section-title">
+              🌅 Morning Customers
             </h3>
 
-          </div>
+            <div className="table-container">
 
-        </div>
-                {/* ================= EVENING ================= */}
+              <table className="collection-table">
 
-        <div className="collection-section">
-
-          <h3 className="section-title">
-            🌇 Evening Customers
-          </h3>
-
-          <div className="table-container">
-
-            <table className="collection-table">
-
-              <thead>
-
-                <tr>
-
-                  <th>Sr No</th>
-
-                  <th>Account Holder Name</th>
-
-                  <th>Deposit Amount</th>
-                  <th>Action</th>
-
-                </tr>
-
-              </thead>
-
-              <tbody>
-
-                {filteredEvening.length === 0 ? (
-
+                <thead>
                   <tr>
-
-                    <td
-                      colSpan="3"
-                      style={{
-                        textAlign: "center",
-                        padding: "25px",
-                      }}
-                    >
-                      No Customers Found
-                    </td>
-
+                    <th>Sr No</th>
+                    <th>Account Holder Name</th>
+                    <th>Deposit Amount</th>
+                    <th>Action</th>
                   </tr>
+                </thead>
 
-                ) : (
+                <tbody>
 
-                  filteredEvening.map((row) => (
-
-                    <tr key={row.customerId}>
-
-                      <td>{row.srNo}</td>
-
-                      <td>{row.fullName}</td>
-
-                      <td>
-
-                        <input
-                          type="number"
-                          min="0"
-                          placeholder="₹"
-                          value={row.amount}
-                          onChange={(e) =>
-                            eveningAmountChange(
-                              row.customerId,
-                              e.target.value
-                            )
-                          }
-                        />
-
+                  {filteredMorning.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="4"
+                        style={{
+                          textAlign: "center",
+                          padding: "25px",
+                        }}
+                      >
+                        No Customers Found
                       </td>
-                            <td>
+                    </tr>
+                  ) : (
+                    filteredMorning.map(
+                      (row) => (
+                        <tr
+                          key={
+                            row.customerId
+                          }
+                        >
 
-                          <button
-                          className="delete-btn"
-                          onClick={()=>handleDeleteCustomer(row.customerId)}
-                          >
-                          Delete
-                          </button>
-
+                          <td>
+                            {row.srNo}
                           </td>
-                    </tr>
 
-                  ))
+                          <td>
+                            {row.fullName}
+                          </td>
 
-                )}
+                          <td>
+                            <input
+                              type="number"
+                              min="0"
+                              placeholder="₹"
+                              value={
+                                row.amount
+                              }
+                              onChange={(e) =>
+                                morningAmountChange(
+                                  row.customerId,
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </td>
 
-              </tbody>
+                          <td>
+                            <button
+                              className="delete-btn"
+                              onClick={() =>
+                                handleDeleteCustomer(
+                                  row.customerId
+                                )
+                              }
+                            >
+                              Delete
+                            </button>
+                          </td>
 
-            </table>
+                        </tr>
+                      )
+                    )
+                  )}
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+            <div className="section-total">
+              <h3>
+                Morning Total :
+                <span>
+                  {" "}
+                  ₹ {morningTotal}
+                </span>
+              </h3>
+            </div>
 
           </div>
 
-          <div className="section-total">
+          {/* =================================================
+              EVENING
+          ================================================= */}
 
-            <h3>
+          <div className="collection-section">
 
-              Evening Total :
-              <span> ₹ {eveningTotal}</span>
-
+            <h3 className="section-title">
+              🌇 Evening Customers
             </h3>
 
+            <div className="table-container">
+
+              <table className="collection-table">
+
+                <thead>
+                  <tr>
+                    <th>Sr No</th>
+                    <th>Account Holder Name</th>
+                    <th>Deposit Amount</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+
+                  {filteredEvening.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="4"
+                        style={{
+                          textAlign: "center",
+                          padding: "25px",
+                        }}
+                      >
+                        No Customers Found
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredEvening.map(
+                      (row) => (
+                        <tr
+                          key={
+                            row.customerId
+                          }
+                        >
+
+                          <td>
+                            {row.srNo}
+                          </td>
+
+                          <td>
+                            {row.fullName}
+                          </td>
+
+                          <td>
+                            <input
+                              type="number"
+                              min="0"
+                              placeholder="₹"
+                              value={
+                                row.amount
+                              }
+                              onChange={(e) =>
+                                eveningAmountChange(
+                                  row.customerId,
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </td>
+
+                          <td>
+                            <button
+                              className="delete-btn"
+                              onClick={() =>
+                                handleDeleteCustomer(
+                                  row.customerId
+                                )
+                              }
+                            >
+                              Delete
+                            </button>
+                          </td>
+
+                        </tr>
+                      )
+                    )
+                  )}
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+            <div className="section-total">
+              <h3>
+                Evening Total :
+                <span>
+                  {" "}
+                  ₹ {eveningTotal}
+                </span>
+              </h3>
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* =================================================
+            FOOTER
+        ================================================= */}
+
+        <div className="collection-footer">
+
+          <div className="collection-total">
+            <h2>
+              Grand Total :
+              <span>
+                {" "}
+                ₹ {grandTotal}
+              </span>
+            </h2>
+          </div>
+
+          <div className="collection-buttons">
+
+            <button
+              type="button"
+              className="save-btn"
+              onClick={
+                saveAllCollections
+              }
+              disabled={loading}
+            >
+              {loading
+                ? "Saving..."
+                : "Save All Collections"}
+            </button>
+
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={closeModal}
+              disabled={loading}
+            >
+              Cancel
+            </button>
+
           </div>
 
         </div>
 
       </div>
-
-      {/* ================= FOOTER ================= */}
-
-      <div className="collection-footer">
-
-        <div className="collection-total">
-
-          <h2>
-
-            Grand Total :
-            <span> ₹ {grandTotal}</span>
-
-          </h2>
-
-        </div>
-                  
-        <div className="collection-buttons">
-
-          <button
-            type="button"
-            className="save-btn"
-            onClick={saveAllCollections}
-            disabled={loading}
-          >
-
-            {loading
-              ? "Saving..."
-              : "Save All Collections"}
-
-          </button>
-
-          <button
-            type="button"
-            className="cancel-btn"
-            onClick={closeModal}
-            disabled={loading}
-          >
-
-            Cancel
-
-          </button>
-
-        </div>
-
-      </div>
-
     </div>
-
-  </div>
-
-);
-
+  );
 };
 
 export default AddCollection;

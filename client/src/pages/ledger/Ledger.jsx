@@ -11,7 +11,6 @@ import DeleteLedger from "./DeleteLedger";
 import "./Ledger.css";
 
 const Ledger = () => {
-
   const [ledger, setLedger] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedLedger, setSelectedLedger] = useState(null);
@@ -20,41 +19,37 @@ const Ledger = () => {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-
-  loadLedger();
-
-  const refreshLedgerPage = () => {
     loadLedger();
-  };
 
-  window.addEventListener(
-    "customerUpdated",
-    refreshLedgerPage
-  );
+    const refreshLedgerPage = () => {
+      loadLedger();
+    };
 
-  window.addEventListener(
-    "collectionUpdated",
-    refreshLedgerPage
-  );
-
-  return () => {
-    window.removeEventListener(
+    window.addEventListener(
       "customerUpdated",
       refreshLedgerPage
     );
 
-    window.removeEventListener(
+    window.addEventListener(
       "collectionUpdated",
       refreshLedgerPage
     );
-  };
 
-}, []);
+    return () => {
+      window.removeEventListener(
+        "customerUpdated",
+        refreshLedgerPage
+      );
+
+      window.removeEventListener(
+        "collectionUpdated",
+        refreshLedgerPage
+      );
+    };
+  }, []);
 
   const loadLedger = async () => {
-
     try {
-
       setLoading(true);
 
       const res = await getLedger();
@@ -65,28 +60,30 @@ const Ledger = () => {
         res.data ||
         [];
 
-      setLedger(Array.isArray(data) ? data : []);
+      // Sort account numbers from LOWEST to HIGHEST
+      const sortedData = Array.isArray(data)
+        ? [...data].sort((a, b) => {
+            const accountA = Number(a.accountNumber);
+            const accountB = Number(b.accountNumber);
+
+            return accountA - accountB;
+          })
+        : [];
+
+      setLedger(sortedData);
 
     } catch (err) {
-
       console.log(err);
-
       setLedger([]);
-
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
   const filteredLedger = ledger.filter((item) => {
-
     const query = search.toLowerCase();
 
     return (
-
       item.customerName
         ?.toLowerCase()
         .includes(query) ||
@@ -94,29 +91,20 @@ const Ledger = () => {
       item.accountNumber
         ?.toString()
         .includes(search)
-
     );
-
   });
 
   const viewLedger = (ledger) => {
-
     setSelectedLedger(ledger);
-
     setViewModal(true);
+  };
 
-};
-
-const removeLedger = (ledger) => {
-
+  const removeLedger = (ledger) => {
     setSelectedLedger(ledger);
-
     setDeleteModal(true);
-
-};
+  };
 
   return (
-
     <Layout>
 
       <div className="ledger-page">
@@ -128,9 +116,7 @@ const removeLedger = (ledger) => {
             <h1>Ledger</h1>
 
             <p>
-
               Customer Collection History
-
             </p>
 
           </div>
@@ -147,9 +133,7 @@ const removeLedger = (ledger) => {
           <div className="loading-box">
 
             <h2>
-
               Loading Ledger...
-
             </h2>
 
           </div>
@@ -164,47 +148,34 @@ const removeLedger = (ledger) => {
         )}
 
       </div>
-        {viewModal && (
 
-<ViewLedger
+      {viewModal && (
 
-    ledger={selectedLedger}
+        <ViewLedger
+          ledger={selectedLedger}
+          closeModal={() => {
+            setViewModal(false);
+            setSelectedLedger(null);
+          }}
+        />
 
-    closeModal={() => {
+      )}
 
-        setViewModal(false);
+      {deleteModal && (
 
-        setSelectedLedger(null);
+        <DeleteLedger
+          ledger={selectedLedger}
+          refreshLedger={loadLedger}
+          closeModal={() => {
+            setDeleteModal(false);
+            setSelectedLedger(null);
+          }}
+        />
 
-    }}
+      )}
 
-/>
-
-)}
-
-{deleteModal && (
-
-<DeleteLedger
-
-    ledger={selectedLedger}
-
-    refreshLedger={loadLedger}
-
-    closeModal={() => {
-
-        setDeleteModal(false);
-
-        setSelectedLedger(null);
-
-    }}
-
-/>
-
-)}
     </Layout>
-
   );
-
 };
 
 export default Ledger;
