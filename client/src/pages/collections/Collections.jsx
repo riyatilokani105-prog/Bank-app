@@ -79,130 +79,116 @@ const Collections = () => {
   // GET COLLECTIONS FROM BACKEND
   // =====================================================
 
-  const loadCollections = async () => {
-    try {
-      setLoading(true);
+ const loadCollections = async () => {
+  try {
+    setLoading(true);
 
-      const res = await getCollections();
+    const res = await getCollections();
 
-      console.log(
-        "COLLECTIONS API RESPONSE:",
-        res
-      );
+    console.log("COLLECTIONS API RESPONSE:", res);
 
-      const collectionList = Array.isArray(
-        res?.collections
-      )
-        ? res.collections
-        : Array.isArray(res)
-        ? res
-        : [];
+    const collectionList = Array.isArray(res?.collections)
+      ? res.collections
+      : Array.isArray(res)
+      ? res
+      : [];
 
-      // =================================================
-      // REMOVE INVALID COLLECTIONS
-      // =================================================
+    // =====================================================
+    // REMOVE INVALID COLLECTIONS
+    // =====================================================
 
-      const validCollections = collectionList.filter(
-        (item) => {
-          if (!item?.createdAt) {
-            return false;
-          }
-
-          const date = new Date(item.createdAt);
-
-          return !Number.isNaN(
-            date.getTime()
-          );
-        }
-      );
-
-      // =================================================
-      // FIND LATEST AVAILABLE COLLECTION DATE
-      // =================================================
-
-      let latestDate = null;
-
-      validCollections.forEach((item) => {
-        const collectionDate =
-          new Date(item.createdAt);
-
-        if (
-          !latestDate ||
-          collectionDate > latestDate
-        ) {
-          latestDate = collectionDate;
-        }
-      });
-
-      // =================================================
-      // FILTER ONLY LATEST DAY COLLECTIONS
-      // =================================================
-
-      let latestCollections = [];
-
-      if (latestDate) {
-        const latestDateKey =
-          getDateKey(latestDate);
-
-        latestCollections =
-          validCollections.filter((item) => {
-            return (
-              getDateKey(item.createdAt) ===
-              latestDateKey
-            );
-          });
-
-        console.log(
-          "LATEST COLLECTION DATE:",
-          latestDateKey
-        );
-
-        console.log(
-          "LATEST DAY COLLECTIONS:",
-          latestCollections
-        );
+    const validCollections = collectionList.filter((item) => {
+      if (!item?.createdAt) {
+        return false;
       }
 
-      // =================================================
-      // DEBUG COLLECTIONS
-      // =================================================
+      const date = new Date(item.createdAt);
 
-      latestCollections.forEach(
-        (item) => {
-          console.log(
-            "Account:",
-            item.accountNumber,
-            "| Customer:",
-            item.customerName,
-            "| Session:",
-            item.session,
-            "| Amount:",
-            item.amount,
-            "| Date:",
-            item.createdAt
-          );
-        }
-      );
+      return !Number.isNaN(date.getTime());
+    });
 
-      setCollections(
-        latestCollections
-      );
-    } catch (err) {
-      console.error(
-        "GET COLLECTIONS ERROR:",
-        err
-      );
+    // =====================================================
+    // NO COLLECTIONS
+    // =====================================================
 
-      toast.error(
-        err?.response?.data?.message ||
-          "Unable to load collections"
-      );
-
+    if (validCollections.length === 0) {
       setCollections([]);
-    } finally {
-      setLoading(false);
+      return;
     }
-  };
+
+    // =====================================================
+    // FIND LATEST CALENDAR DATE
+    // =====================================================
+
+    const dateKeys = validCollections
+      .map((item) => getDateKey(item.createdAt))
+      .filter(Boolean);
+
+    const latestDateKey = dateKeys.sort().reverse()[0];
+
+    console.log(
+      "LATEST COLLECTION DATE:",
+      latestDateKey
+    );
+
+    // =====================================================
+    // GET ONLY LATEST DAY COLLECTIONS
+    // =====================================================
+
+    const latestCollections = validCollections
+      .filter(
+        (item) =>
+          getDateKey(item.createdAt) === latestDateKey
+      )
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt) -
+          new Date(a.createdAt)
+      );
+
+    console.log(
+      "LATEST DAY COLLECTIONS:",
+      latestCollections
+    );
+
+    // =====================================================
+    // DEBUG
+    // =====================================================
+
+    latestCollections.forEach((item) => {
+      console.log(
+        "Account:",
+        item.accountNumber,
+        "| Customer:",
+        item.customerName,
+        "| Session:",
+        item.session,
+        "| Amount:",
+        item.amount,
+        "| Date:",
+        item.createdAt
+      );
+    });
+
+    setCollections(latestCollections);
+
+  } catch (err) {
+    console.error(
+      "GET COLLECTIONS ERROR:",
+      err
+    );
+
+    toast.error(
+      err?.response?.data?.message ||
+        "Unable to load collections"
+    );
+
+    setCollections([]);
+
+  } finally {
+    setLoading(false);
+  }
+};
 
   // =====================================================
   // SEARCH
@@ -260,35 +246,29 @@ const Collections = () => {
   // GET DISPLAY DATE
   // =====================================================
 
-  const displayDate = useMemo(() => {
-    if (!collections.length) {
-      return "";
-    }
+ const displayDate = useMemo(() => {
+  if (!collections.length) {
+    return "";
+  }
 
-    const latestCollection =
-      collections[0];
+  const firstCollection = collections[0];
 
-    if (!latestCollection?.createdAt) {
-      return "";
-    }
+  if (!firstCollection?.createdAt) {
+    return "";
+  }
 
-    const date = new Date(
-      latestCollection.createdAt
-    );
+  const date = new Date(firstCollection.createdAt);
 
-    if (Number.isNaN(date.getTime())) {
-      return "";
-    }
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
 
-    return date.toLocaleDateString(
-      "en-IN",
-      {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      }
-    );
-  }, [collections]);
+  return date.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+}, [collections]);
 
   // =====================================================
   // EDIT COLLECTION

@@ -231,139 +231,104 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
   ===================================================== */
 
   const loadCustomers = async () => {
+  try {
+    const res = await getCustomers();
+
+    const list = Array.isArray(res?.customers)
+      ? res.customers
+      : Array.isArray(res)
+      ? res
+      : [];
+
+    let saved = null;
+
     try {
-      const res = await getCustomers();
-
-      const list = Array.isArray(res.customers)
-        ? res.customers
-        : Array.isArray(res)
-        ? res
-        : [];
-
-      /*
-        Get previously entered collection draft.
-
-        We intentionally DO NOT check the date.
-        This means the draft survives:
-        - midnight
-        - next day
-        - browser refresh
-        - closing/reopening modal
-        - application restart
-      */
-      let saved = null;
-
-      try {
-        saved = JSON.parse(
-          localStorage.getItem(STORAGE_KEY)
-        );
-      } catch (error) {
-        console.log(
-          "Unable to read saved collection draft"
-        );
-
-        saved = null;
-      }
-
-      const oldMorning =
-        saved?.morningRows || [];
-
-      const oldEvening =
-        saved?.eveningRows || [];
-
-      /* =================================================
-         MORNING CUSTOMERS
-      ================================================= */
-
-      const morningList = list.filter(
-        (customer) =>
-          customer.shift?.includes("Morning")
+      saved = JSON.parse(
+        localStorage.getItem(STORAGE_KEY)
       );
-
-      const morning = morningList.map(
-        (customer, index) => {
-          const existing = oldMorning.find(
-            (r) =>
-              r.customerId === customer._id
-          );
-
-          return {
-            customerId: customer._id,
-
-            fullName: customer.fullName,
-
-            srNo: index + 1,
-
-            /*
-              Restore previously entered amount.
-            */
-            amount: existing
-              ? existing.amount
-              : "",
-          };
-        }
-      );
-
-      /* =================================================
-         EVENING CUSTOMERS
-      ================================================= */
-
-      const eveningList = list.filter(
-        (customer) =>
-          customer.shift?.includes("Evening")
-      );
-
-      const evening = eveningList.map(
-        (customer, index) => {
-          const existing = oldEvening.find(
-            (r) =>
-              r.customerId === customer._id
-          );
-
-          return {
-            customerId: customer._id,
-
-            fullName: customer.fullName,
-
-            srNo: index + 1,
-
-            /*
-              Restore previously entered amount.
-            */
-            amount: existing
-              ? existing.amount
-              : "",
-          };
-        }
-      );
-
-      setMorningRows(morning);
-      setEveningRows(evening);
-
-      /*
-        Save the current draft again.
-
-        IMPORTANT:
-        No date is stored anymore.
-
-        The draft remains until the user clicks
-        Save All Collections.
-      */
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({
-          morningRows: morning,
-          eveningRows: evening,
-        })
-      );
-    } catch (err) {
-      console.log(err);
-
-      toast.error(
-        "Unable to load customers"
-      );
+    } catch (error) {
+      saved = null;
     }
-  };
+
+    const oldMorning = saved?.morningRows || [];
+    const oldEvening = saved?.eveningRows || [];
+
+    // ==============================
+    // MORNING
+    // ==============================
+
+    const morningList = list.filter((customer) =>
+      Array.isArray(customer.shift)
+        ? customer.shift.includes("Morning")
+        : customer.shift === "Morning"
+    );
+
+    const morning = morningList.map(
+      (customer, index) => {
+
+        const existing = oldMorning.find(
+          (row) =>
+            row.customerId === customer._id
+        );
+
+        return {
+          customerId: customer._id,
+          fullName: customer.fullName,
+          accountNumber: customer.accountNumber,
+          srNo: index + 1,
+
+          amount: existing
+            ? existing.amount
+            : "",
+        };
+      }
+    );
+
+    // ==============================
+    // EVENING
+    // ==============================
+
+    const eveningList = list.filter((customer) =>
+      Array.isArray(customer.shift)
+        ? customer.shift.includes("Evening")
+        : customer.shift === "Evening"
+    );
+
+    const evening = eveningList.map(
+      (customer, index) => {
+
+        const existing = oldEvening.find(
+          (row) =>
+            row.customerId === customer._id
+        );
+
+        return {
+          customerId: customer._id,
+          fullName: customer.fullName,
+          accountNumber: customer.accountNumber,
+          srNo: index + 1,
+
+          amount: existing
+            ? existing.amount
+            : "",
+        };
+      }
+    );
+
+    setMorningRows(morning);
+    setEveningRows(evening);
+
+  } catch (err) {
+    console.error(
+      "LOAD CUSTOMERS ERROR:",
+      err
+    );
+
+    toast.error(
+      "Unable to load customers"
+    );
+  }
+};
 
   /* =====================================================
      SEARCH FILTER - MORNING
@@ -479,6 +444,7 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
         collections.push({
           customerId: row.customerId,
           amount: Number(row.amount),
+          session: "Morning",
         });
       }
     });
@@ -492,6 +458,7 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
         collections.push({
           customerId: row.customerId,
           amount: Number(row.amount),
+          session: "Evening",
         });
       }
     });
@@ -519,6 +486,7 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
 
     const res = await bulkCollection({
       collections,
+      forceSave: true,
     });
 
     console.log(
@@ -527,18 +495,33 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
     );
 
     // =================================================
-    // ONLY AFTER SUCCESSFUL BACKEND SAVE
+    // SUCCESS
     // =================================================
 
     toast.success(
       res?.message ||
-      "Collections saved successfully"
+        "Collections saved successfully"
     );
 
-    // Remove today's draft only after backend success
-    localStorage.removeItem(
-      STORAGE_KEY
-    );
+    // =================================================
+    // CLEAR DRAFT ONLY AFTER SUCCESS
+    // =================================================
+
+  localStorage.removeItem(STORAGE_KEY);
+
+setMorningRows((prev) =>
+  prev.map((row) => ({
+    ...row,
+    amount: "",
+  }))
+);
+
+setEveningRows((prev) =>
+  prev.map((row) => ({
+    ...row,
+    amount: "",
+  }))
+);
 
     // =================================================
     // REFRESH COLLECTION PAGE
@@ -549,7 +532,7 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
     }
 
     // =================================================
-    // TELL OTHER COMPONENTS TO REFRESH
+    // REFRESH OTHER COMPONENTS
     // =================================================
 
     window.dispatchEvent(
@@ -571,7 +554,7 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
 
     toast.error(
       err?.response?.data?.message ||
-      "Unable to save collections."
+        "Unable to save collections."
     );
 
   } finally {

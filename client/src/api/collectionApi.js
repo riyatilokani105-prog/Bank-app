@@ -19,8 +19,14 @@ export const addCollection = async (formData) => {
 // ==============================
 // Add Bulk Collection
 // ==============================
-export const bulkCollection = async ({ collections, forceSave = false }) => {
-  console.log("Sending:", { collections, forceSave });
+export const bulkCollection = async ({
+  collections,
+  forceSave = true,
+}) => {
+  console.log("Sending Collections:", {
+    collections,
+    forceSave,
+  });
 
   const { data } = await API.post("/collections/bulk", {
     collections,
@@ -34,22 +40,37 @@ export const bulkCollection = async ({ collections, forceSave = false }) => {
 // Delete Collection
 // ==============================
 export const deleteCollection = async (id) => {
-  const { data } = await API.delete(`/collections/${id}`);
+  const { data } = await API.delete(
+    `/collections/${id}`
+  );
+
   return data;
 };
 
 // ==============================
 // Customer Collection History
 // ==============================
-export const getCustomerCollections = async (customerId) => {
-  const { data } = await API.get(`/collections/customer/${customerId}`);
+export const getCustomerCollections = async (
+  customerId
+) => {
+  const { data } = await API.get(
+    `/collections/customer/${customerId}`
+  );
+
   return data;
 };
 
 // ==============================
 // Update Collection
 // ==============================
-export const updateCollection = async (id, collectionData) => {
-  const { data } = await API.put(`/collections/${id}`, collectionData);
+export const updateCollection = async (
+  id,
+  collectionData
+) => {
+  const { data } = await API.put(
+    `/collections/${id}`,
+    collectionData
+  );
+
   return data;
 };
