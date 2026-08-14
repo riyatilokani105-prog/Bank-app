@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
-import { bulkCollection } from "../../api/collectionApi";
+import {
+  bulkCollection,
+  getCollections,
+} from "../../api/collectionApi";
 import {
   getCustomers,
   addCustomer,
@@ -79,122 +82,220 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
   // =====================================================
 
   const loadCustomers = async () => {
-    try {
-      const res = await getCustomers();
+  try {
+    const res = await getCustomers();
 
-      const list = Array.isArray(res?.customers)
-        ? res.customers
-        : Array.isArray(res)
-        ? res
+    const list = Array.isArray(res?.customers)
+      ? res.customers
+      : Array.isArray(res)
+      ? res
+      : [];
+
+    // =====================================================
+    // CHECK SAVED COLLECTIONS FROM BACKEND
+    // =====================================================
+
+    let latestCollectionDate = null;
+
+    try {
+      const collectionRes = await getCollections();
+
+      const savedCollections = Array.isArray(
+        collectionRes?.collections
+      )
+        ? collectionRes.collections
+        : Array.isArray(collectionRes)
+        ? collectionRes
         : [];
 
-      // =================================================
-      // READ EXISTING DRAFT
-      // =================================================
-
-      let saved = null;
-
-      try {
-        const stored =
-          localStorage.getItem(STORAGE_KEY);
-
-        if (stored) {
-          saved = JSON.parse(stored);
+      savedCollections.forEach((collection) => {
+        if (!collection?.createdAt) {
+          return;
         }
-      } catch (error) {
-        console.error(
-          "Unable to read collection draft:",
-          error
+
+        const date = new Date(
+          collection.createdAt
         );
 
-        localStorage.removeItem(STORAGE_KEY);
-      }
-
-      const oldMorning =
-        saved?.morningRows || [];
-
-      const oldEvening =
-        saved?.eveningRows || [];
-
-      // =================================================
-      // MORNING CUSTOMERS
-      // =================================================
-
-      const morningList = list.filter(
-        (customer) =>
-          Array.isArray(customer.shift)
-            ? customer.shift.includes("Morning")
-            : customer.shift === "Morning"
-      );
-
-      const morning = morningList.map(
-        (customer, index) => {
-          const existing = oldMorning.find(
-            (row) =>
-              row.customerId === customer._id
-          );
-
-          return {
-            customerId: customer._id,
-            fullName: customer.fullName,
-            accountNumber:
-              customer.accountNumber,
-            srNo: index + 1,
-            amount: existing
-              ? existing.amount
-              : "",
-          };
+        if (
+          !Number.isNaN(date.getTime()) &&
+          (!latestCollectionDate ||
+            date > latestCollectionDate)
+        ) {
+          latestCollectionDate = date;
         }
-      );
-
-      // =================================================
-      // EVENING CUSTOMERS
-      // =================================================
-
-      const eveningList = list.filter(
-        (customer) =>
-          Array.isArray(customer.shift)
-            ? customer.shift.includes("Evening")
-            : customer.shift === "Evening"
-      );
-
-      const evening = eveningList.map(
-        (customer, index) => {
-          const existing = oldEvening.find(
-            (row) =>
-              row.customerId === customer._id
-          );
-
-          return {
-            customerId: customer._id,
-            fullName: customer.fullName,
-            accountNumber:
-              customer.accountNumber,
-            srNo: index + 1,
-            amount: existing
-              ? existing.amount
-              : "",
-          };
-        }
-      );
-
-      // =================================================
-      // UPDATE STATE
-      // =================================================
-
-      setMorningRows(morning);
-      setEveningRows(evening);
-    } catch (err) {
+      });
+    } catch (collectionError) {
       console.error(
-        "LOAD CUSTOMERS ERROR:",
-        err
-      );
-
-      toast.error(
-        "Unable to load customers"
+        "GET SAVED COLLECTIONS ERROR:",
+        collectionError
       );
     }
-  };
+
+    // =====================================================
+    // READ LOCAL DRAFT
+    // =====================================================
+
+    let saved = null;
+
+    try {
+      const stored =
+        localStorage.getItem(STORAGE_KEY);
+
+      if (stored) {
+        saved = JSON.parse(stored);
+      }
+    } catch (error) {
+      console.error(
+        "Unable to read collection draft:",
+        error
+      );
+
+      localStorage.removeItem(STORAGE_KEY);
+    }
+
+    // =====================================================
+    // CHECK WHETHER LOCAL DRAFT IS OLD
+    // =====================================================
+
+    let draftIsValid = true;
+
+    if (saved) {
+      const draftUpdatedAt = saved.updatedAt
+        ? new Date(saved.updatedAt)
+        : null;
+
+      // ---------------------------------------------------
+      // If this mobile/browser has an old draft without
+      // updatedAt and backend already has collections,
+      // don't restore that old amount.
+      // ---------------------------------------------------
+
+      if (
+        !draftUpdatedAt ||
+        Number.isNaN(
+          draftUpdatedAt.getTime()
+        )
+      ) {
+        if (latestCollectionDate) {
+          draftIsValid = false;
+        }
+      }
+
+      // ---------------------------------------------------
+      // If backend collection is newer than local draft,
+      // the local draft is old.
+      // ---------------------------------------------------
+
+      else if (
+        latestCollectionDate &&
+        latestCollectionDate > draftUpdatedAt
+      ) {
+        draftIsValid = false;
+      }
+    }
+
+    // =====================================================
+    // REMOVE OLD MOBILE DRAFT
+    // =====================================================
+
+    if (!draftIsValid) {
+      localStorage.removeItem(STORAGE_KEY);
+      saved = null;
+    }
+
+    // =====================================================
+    // OLD MORNING / EVENING DATA
+    // =====================================================
+
+    const oldMorning =
+      saved?.morningRows || [];
+
+    const oldEvening =
+      saved?.eveningRows || [];
+
+    // =====================================================
+    // MORNING CUSTOMERS
+    // =====================================================
+
+    const morningList = list.filter(
+      (customer) =>
+        Array.isArray(customer.shift)
+          ? customer.shift.includes("Morning")
+          : customer.shift === "Morning"
+    );
+
+    const morning = morningList.map(
+      (customer, index) => {
+        const existing = oldMorning.find(
+          (row) =>
+            row.customerId === customer._id
+        );
+
+        return {
+          customerId: customer._id,
+          fullName: customer.fullName,
+          accountNumber:
+            customer.accountNumber,
+          srNo: index + 1,
+
+          amount: existing
+            ? existing.amount
+            : "",
+        };
+      }
+    );
+
+    // =====================================================
+    // EVENING CUSTOMERS
+    // =====================================================
+
+    const eveningList = list.filter(
+      (customer) =>
+        Array.isArray(customer.shift)
+          ? customer.shift.includes("Evening")
+          : customer.shift === "Evening"
+    );
+
+    const evening = eveningList.map(
+      (customer, index) => {
+        const existing = oldEvening.find(
+          (row) =>
+            row.customerId === customer._id
+        );
+
+        return {
+          customerId: customer._id,
+          fullName: customer.fullName,
+          accountNumber:
+            customer.accountNumber,
+          srNo: index + 1,
+
+          amount: existing
+            ? existing.amount
+            : "",
+        };
+      }
+    );
+
+    // =====================================================
+    // UPDATE STATE
+    // =====================================================
+
+    setMorningRows(morning);
+    setEveningRows(evening);
+
+  } catch (err) {
+    console.error(
+      "LOAD CUSTOMERS ERROR:",
+      err
+    );
+
+    toast.error(
+      "Unable to load customers"
+    );
+  }
+};
 
   // =====================================================
   // INITIAL LOAD + EVENTS
@@ -423,59 +524,61 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
   // MORNING AMOUNT CHANGE
   // =====================================================
 
-  const morningAmountChange = (
-    customerId,
-    value
-  ) => {
-    const updated = morningRows.map(
-      (row) =>
-        row.customerId === customerId
-          ? {
-              ...row,
-              amount: value,
-            }
-          : row
-    );
+ const morningAmountChange = (
+  customerId,
+  value
+) => {
+  const updated = morningRows.map(
+    (row) =>
+      row.customerId === customerId
+        ? {
+            ...row,
+            amount: value,
+          }
+        : row
+  );
 
-    setMorningRows(updated);
+  setMorningRows(updated);
 
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        morningRows: updated,
-        eveningRows,
-      })
-    );
-  };
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({
+      morningRows: updated,
+      eveningRows,
+      updatedAt: new Date().toISOString(),
+    })
+  );
+};
 
   // =====================================================
   // EVENING AMOUNT CHANGE
   // =====================================================
 
   const eveningAmountChange = (
-    customerId,
-    value
-  ) => {
-    const updated = eveningRows.map(
-      (row) =>
-        row.customerId === customerId
-          ? {
-              ...row,
-              amount: value,
-            }
-          : row
-    );
+  customerId,
+  value
+) => {
+  const updated = eveningRows.map(
+    (row) =>
+      row.customerId === customerId
+        ? {
+            ...row,
+            amount: value,
+          }
+        : row
+  );
 
-    setEveningRows(updated);
+  setEveningRows(updated);
 
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        morningRows,
-        eveningRows: updated,
-      })
-    );
-  };
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({
+      morningRows,
+      eveningRows: updated,
+      updatedAt: new Date().toISOString(),
+    })
+  );
+};
 
   // =====================================================
   // SAVE ALL COLLECTIONS
