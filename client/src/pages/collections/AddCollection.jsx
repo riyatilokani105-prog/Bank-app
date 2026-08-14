@@ -464,92 +464,122 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
      THIS IS THE ONLY PLACE WHERE THE DRAFT IS CLEARED.
   ===================================================== */
 
-  const saveAllCollections = async () => {
-    try {
-      setLoading(true);
+ const saveAllCollections = async () => {
+  try {
+    setLoading(true);
 
-      const collections = [];
+    const collections = [];
 
-      /* =================================================
-         MORNING COLLECTIONS
-      ================================================= */
+    // =================================================
+    // MORNING COLLECTIONS
+    // =================================================
 
-      morningRows.forEach((row) => {
-        if (Number(row.amount) > 0) {
-          collections.push({
-            customerId: row.customerId,
-            amount: Number(row.amount),
-          });
-        }
-      });
-
-      /* =================================================
-         EVENING COLLECTIONS
-      ================================================= */
-
-      eveningRows.forEach((row) => {
-        if (Number(row.amount) > 0) {
-          collections.push({
-            customerId: row.customerId,
-            amount: Number(row.amount),
-          });
-        }
-      });
-
-      /* =================================================
-         VALIDATION
-      ================================================= */
-
-      if (collections.length === 0) {
-        toast.error(
-          "Please enter at least one amount."
-        );
-
-        return;
+    morningRows.forEach((row) => {
+      if (Number(row.amount) > 0) {
+        collections.push({
+          customerId: row.customerId,
+          amount: Number(row.amount),
+        });
       }
+    });
 
-      /* =================================================
-         SAVE TO BACKEND
-      ================================================= */
+    // =================================================
+    // EVENING COLLECTIONS
+    // =================================================
 
-      const res = await bulkCollection({
-        collections,
-      });
+    eveningRows.forEach((row) => {
+      if (Number(row.amount) > 0) {
+        collections.push({
+          customerId: row.customerId,
+          amount: Number(row.amount),
+        });
+      }
+    });
 
-      toast.success(res.message);
+    // =================================================
+    // VALIDATION
+    // =================================================
 
-      /*
-        IMPORTANT:
-
-        Only after successful backend save,
-        remove the local draft.
-
-        Therefore:
-        - Before save = draft remains
-        - After successful save = draft cleared
-      */
-      localStorage.removeItem(
-        STORAGE_KEY
-      );
-
-      await refreshCollections?.();
-
-      window.dispatchEvent(
-        new Event("collectionUpdated")
-      );
-
-      closeModal();
-    } catch (err) {
-      console.log(err);
-
+    if (collections.length === 0) {
       toast.error(
-        err.response?.data?.message ||
-          "Unable to save collections."
+        "Please enter at least one amount."
       );
-    } finally {
-      setLoading(false);
+
+      return;
     }
-  };
+
+    console.log(
+      "Saving collections:",
+      collections
+    );
+
+    // =================================================
+    // SAVE TO BACKEND
+    // =================================================
+
+    const res = await bulkCollection({
+      collections,
+    });
+
+    console.log(
+      "BULK COLLECTION SAVE RESPONSE:",
+      res
+    );
+
+    // =================================================
+    // ONLY AFTER SUCCESSFUL BACKEND SAVE
+    // =================================================
+
+    toast.success(
+      res?.message ||
+      "Collections saved successfully"
+    );
+
+    // Remove today's draft only after backend success
+    localStorage.removeItem(
+      STORAGE_KEY
+    );
+
+    // =================================================
+    // REFRESH COLLECTION PAGE
+    // =================================================
+
+    if (refreshCollections) {
+      await refreshCollections();
+    }
+
+    // =================================================
+    // TELL OTHER COMPONENTS TO REFRESH
+    // =================================================
+
+    window.dispatchEvent(
+      new Event("collectionUpdated")
+    );
+
+    // =================================================
+    // CLOSE MODAL
+    // =================================================
+
+    closeModal();
+
+  } catch (err) {
+
+    console.error(
+      "SAVE COLLECTION ERROR:",
+      err
+    );
+
+    toast.error(
+      err?.response?.data?.message ||
+      "Unable to save collections."
+    );
+
+  } finally {
+
+    setLoading(false);
+
+  }
+};
 
   return (
     <div className="modal-overlay">
