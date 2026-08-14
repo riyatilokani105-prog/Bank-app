@@ -163,15 +163,64 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
   ===================================================== */
 
   useEffect(() => {
+  // ============================================
+  // INITIAL LOAD
+  // ============================================
+
   loadCustomers();
+
+  // ============================================
+  // CUSTOMER UPDATED
+  // ============================================
 
   const handleCustomerUpdated = () => {
     loadCustomers();
   };
 
+  // ============================================
+  // COLLECTION UPDATED
+  // ============================================
+
   const handleCollectionUpdated = () => {
-    loadCustomers();
+    // --------------------------------------------
+    // REMOVE OLD SAVED DRAFT
+    // --------------------------------------------
+
+    localStorage.removeItem(STORAGE_KEY);
+
+    // --------------------------------------------
+    // CLEAR MORNING AMOUNTS
+    // --------------------------------------------
+
+    setMorningRows((rows) =>
+      rows.map((row) => ({
+        ...row,
+        amount: "",
+      }))
+    );
+
+    // --------------------------------------------
+    // CLEAR EVENING AMOUNTS
+    // --------------------------------------------
+
+    setEveningRows((rows) =>
+      rows.map((row) => ({
+        ...row,
+        amount: "",
+      }))
+    );
+
+    // --------------------------------------------
+    // RESET TOTALS
+    // --------------------------------------------
+
+    setMorningTotal(0);
+    setEveningTotal(0);
   };
+
+  // ============================================
+  // ADD EVENT LISTENERS
+  // ============================================
 
   window.addEventListener(
     "customerUpdated",
@@ -182,6 +231,10 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
     "collectionUpdated",
     handleCollectionUpdated
   );
+
+  // ============================================
+  // CLEANUP
+  // ============================================
 
   return () => {
     window.removeEventListener(
@@ -240,22 +293,36 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
       ? res
       : [];
 
+    // ============================================
+    // READ EXISTING DRAFT
+    // ============================================
+
     let saved = null;
 
     try {
-      saved = JSON.parse(
-        localStorage.getItem(STORAGE_KEY)
-      );
+      const stored = localStorage.getItem(STORAGE_KEY);
+
+      if (stored) {
+        saved = JSON.parse(stored);
+      }
     } catch (error) {
-      saved = null;
+      console.error(
+        "Unable to read collection draft:",
+        error
+      );
+
+      localStorage.removeItem(STORAGE_KEY);
     }
 
-    const oldMorning = saved?.morningRows || [];
-    const oldEvening = saved?.eveningRows || [];
+    const oldMorning =
+      saved?.morningRows || [];
 
-    // ==============================
+    const oldEvening =
+      saved?.eveningRows || [];
+
+    // ============================================
     // MORNING
-    // ==============================
+    // ============================================
 
     const morningList = list.filter((customer) =>
       Array.isArray(customer.shift)
@@ -284,9 +351,9 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
       }
     );
 
-    // ==============================
+    // ============================================
     // EVENING
-    // ==============================
+    // ============================================
 
     const eveningList = list.filter((customer) =>
       Array.isArray(customer.shift)
@@ -315,6 +382,10 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
       }
     );
 
+    // ============================================
+    // UPDATE REACT STATE ONLY
+    // ============================================
+
     setMorningRows(morning);
     setEveningRows(evening);
 
@@ -329,99 +400,6 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
     );
   }
 };
-
-  /* =====================================================
-     SEARCH FILTER - MORNING
-  ===================================================== */
-
-  const filteredMorning = useMemo(() => {
-    if (!search.trim()) {
-      return morningRows;
-    }
-
-    return morningRows.filter((row) =>
-      row.fullName
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    );
-  }, [morningRows, search]);
-
-  /* =====================================================
-     SEARCH FILTER - EVENING
-  ===================================================== */
-
-  const filteredEvening = useMemo(() => {
-    if (!search.trim()) {
-      return eveningRows;
-    }
-
-    return eveningRows.filter((row) =>
-      row.fullName
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    );
-  }, [eveningRows, search]);
-
-  /* =====================================================
-     MORNING AMOUNT CHANGE
-     
-     Every entered amount is immediately saved locally.
-     It is NOT sent to backend until Save All Collections.
-  ===================================================== */
-
-  const morningAmountChange = (
-    customerId,
-    value
-  ) => {
-    const updated = morningRows.map(
-      (row) =>
-        row.customerId === customerId
-          ? {
-              ...row,
-              amount: value,
-            }
-          : row
-    );
-
-    setMorningRows(updated);
-
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        morningRows: updated,
-        eveningRows,
-      })
-    );
-  };
-
-  /* =====================================================
-     EVENING AMOUNT CHANGE
-  ===================================================== */
-
-  const eveningAmountChange = (
-    customerId,
-    value
-  ) => {
-    const updated = eveningRows.map(
-      (row) =>
-        row.customerId === customerId
-          ? {
-              ...row,
-              amount: value,
-            }
-          : row
-    );
-
-    setEveningRows(updated);
-
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        morningRows,
-        eveningRows: updated,
-      })
-    );
-  };
 
   /* =====================================================
      SAVE ALL COLLECTIONS
@@ -494,56 +472,66 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
       res
     );
 
-    // =================================================
-    // SUCCESS
-    // =================================================
+   // =================================================
+// SUCCESS
+// =================================================
 
-    toast.success(
-      res?.message ||
-        "Collections saved successfully"
-    );
+toast.success(
+  res?.message || "Collections saved successfully"
+);
 
-    // =================================================
-    // CLEAR DRAFT ONLY AFTER SUCCESS
-    // =================================================
+// =================================================
+// CLEAR LOCAL STORAGE
+// =================================================
 
-  localStorage.removeItem(STORAGE_KEY);
+localStorage.removeItem(STORAGE_KEY);
 
-setMorningRows((prev) =>
-  prev.map((row) => ({
+// =================================================
+// CLEAR CURRENT SHEET IMMEDIATELY
+// =================================================
+
+setMorningRows((rows) =>
+  rows.map((row) => ({
     ...row,
     amount: "",
   }))
 );
 
-setEveningRows((prev) =>
-  prev.map((row) => ({
+setEveningRows((rows) =>
+  rows.map((row) => ({
     ...row,
     amount: "",
   }))
 );
 
-    // =================================================
-    // REFRESH COLLECTION PAGE
-    // =================================================
+// =================================================
+// RESET TOTALS
+// =================================================
 
-    if (refreshCollections) {
-      await refreshCollections();
-    }
+setMorningTotal(0);
+setEveningTotal(0);
 
-    // =================================================
-    // REFRESH OTHER COMPONENTS
-    // =================================================
+// =================================================
+// REFRESH COLLECTION PAGE
+// =================================================
 
-    window.dispatchEvent(
-      new Event("collectionUpdated")
-    );
+if (refreshCollections) {
+  await refreshCollections();
+}
 
-    // =================================================
-    // CLOSE MODAL
-    // =================================================
+// =================================================
+// TELL OTHER COMPONENTS
+// =================================================
 
-    closeModal();
+window.dispatchEvent(
+  new Event("collectionUpdated")
+);
+
+// =================================================
+// CLOSE MODAL
+// =================================================
+
+closeModal();
 
   } catch (err) {
 
