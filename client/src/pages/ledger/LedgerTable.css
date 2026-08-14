@@ -1,122 +1,585 @@
-.table-wrapper{
+/* =====================================================
+   LEDGER TABLE WRAPPER
+===================================================== */
 
-    width:100%;
-    overflow-x:auto;
-    overflow-y:hidden;
-    background:#ffffff;
-    border-radius:18px;
-    border:1px solid #edf2f7;
-    box-shadow:0 10px 30px rgba(15,23,42,.08);
+.table-wrapper {
+  width: 100%;
 
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  background: #ffffff;
+
+  border-radius: 16px;
+
+  border: 1px solid #e5e7eb;
+
+  box-shadow:
+    0 4px 12px rgba(15, 23, 42, 0.05),
+    0 10px 25px rgba(15, 23, 42, 0.04);
+
+  box-sizing: border-box;
+
+  scrollbar-width: thin;
+
+  scrollbar-color: #cbd5e1 transparent;
 }
 
-.table-wrapper::-webkit-scrollbar{
+/* =====================================================
+   SCROLLBAR
+===================================================== */
 
-    height:8px;
-
+.table-wrapper::-webkit-scrollbar {
+  height: 7px;
 }
 
-.table-wrapper::-webkit-scrollbar-thumb{
+.table-wrapper::-webkit-scrollbar-track {
+  background: #f8fafc;
 
-    background:#cbd5e1;
-    border-radius:20px;
-
+  border-radius: 10px;
 }
 
-.table-wrapper table{
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
 
-    width:100%;
-    min-width:900px;
-    border-collapse:collapse;
-
+  border-radius: 10px;
 }
 
-.table-wrapper thead{
-
-    background:#2563eb;
-
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
-.table-wrapper th{
+/* =====================================================
+   TABLE
+===================================================== */
 
-    color:#fff;
-    padding:16px;
-    font-size:14px;
-    font-weight:600;
-    white-space:nowrap;
-    text-align:center;
+.table-wrapper table {
+  width: 100%;
 
+  min-width: 900px;
+
+  border-collapse: separate;
+
+  border-spacing: 0;
+
+  background: #ffffff;
 }
 
-.table-wrapper td{
+/* =====================================================
+   TABLE HEADER
+===================================================== */
 
-    padding:15px;
-    border-bottom:1px solid #edf2f7;
-    text-align:center;
-    color:#374151;
-    white-space:nowrap;
-    font-size:14px;
-
+.table-wrapper thead {
+  background: linear-gradient(
+    135deg,
+    #2563eb 0%,
+    #1d4ed8 100%
+  );
 }
 
-.table-wrapper tbody tr{
+/* Sticky header */
 
-    transition:.25s;
+.table-wrapper thead th {
+  position: sticky;
 
+  top: 0;
+
+  z-index: 20;
 }
 
-.table-wrapper tbody tr:hover{
+/* Header cells */
 
-    background:#f8fbff;
+.table-wrapper th {
+  height: 46px;
 
+  padding: 0 14px;
+
+  background: linear-gradient(
+    135deg,
+    #2563eb 0%,
+    #1d4ed8 100%
+  );
+
+  color: #ffffff;
+
+  border-bottom: 2px solid #1e40af;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.2px;
+
+  white-space: nowrap;
+
+  text-align: center;
+
+  box-shadow:
+    inset 0 -1px 0 rgba(255, 255, 255, 0.15);
 }
 
-.no-data{
+/* =====================================================
+   HEADER CORNERS
+===================================================== */
 
-    text-align:center;
-    padding:45px;
-    color:#6b7280;
-    font-weight:600;
-
+.table-wrapper th:first-child {
+  border-top-left-radius: 10px;
 }
 
-@media(max-width:768px){
-
-.table-wrapper table{
-
-min-width:850px;
-
+.table-wrapper th:last-child {
+  border-top-right-radius: 10px;
 }
 
-.table-wrapper th{
+/* =====================================================
+   NO HEADER HOVER EFFECT
+===================================================== */
 
-padding:14px;
-font-size:13px;
-
+.table-wrapper thead tr:hover th {
+  background: linear-gradient(
+    135deg,
+    #2563eb 0%,
+    #1d4ed8 100%
+  );
 }
 
-.table-wrapper td{
+/* =====================================================
+   TABLE BODY
+===================================================== */
 
-padding:14px;
-font-size:13px;
-
+.table-wrapper tbody {
+  background: #ffffff;
 }
 
+/* =====================================================
+   TABLE ROW
+===================================================== */
+
+.table-wrapper tbody tr {
+  background: #ffffff;
+
+  transition:
+    background-color 0.2s ease;
 }
 
-@media(max-width:480px){
+/* =====================================================
+   ROW HOVER
+===================================================== */
 
-.table-wrapper table{
-
-min-width:800px;
-
+.table-wrapper tbody tr:hover {
+  background: #f8fbff;
 }
 
-.table-wrapper th,
-.table-wrapper td{
-
-padding:12px;
-
+.table-wrapper tbody tr:hover td {
+  background: #f8fbff;
 }
 
+/* =====================================================
+   TABLE CELLS
+===================================================== */
+
+.table-wrapper td {
+  height: 48px;
+
+  padding: 0 14px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  text-align: center;
+
+  color: #475569;
+
+  white-space: nowrap;
+
+  font-size: 13px;
+
+  font-weight: 400;
+
+  background: #ffffff;
+
+  box-sizing: border-box;
+}
+
+/* =====================================================
+   LAST ROW
+===================================================== */
+
+.table-wrapper tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* =====================================================
+   DATE
+===================================================== */
+
+.table-wrapper td:first-child {
+  color: #374151;
+
+  font-weight: 500;
+}
+
+/* =====================================================
+   ACCOUNT NUMBER
+===================================================== */
+
+.table-wrapper td:nth-child(2) {
+  color: #1d4ed8;
+
+  font-weight: 600;
+}
+
+/* =====================================================
+   CUSTOMER NAME
+===================================================== */
+
+.table-wrapper td:nth-child(3) {
+  color: #374151;
+
+  font-weight: 500;
+}
+
+/* =====================================================
+   PREVIOUS BALANCE
+===================================================== */
+
+.table-wrapper td:nth-child(4) {
+  color: #475569;
+
+  font-weight: 500;
+}
+
+/* =====================================================
+   COLLECTION AMOUNT
+===================================================== */
+
+.table-wrapper td:nth-child(5) {
+  color: #2563eb;
+
+  font-weight: 600;
+}
+
+/* =====================================================
+   CURRENT BALANCE
+===================================================== */
+
+.table-wrapper td:nth-child(6) {
+  color: #166534;
+
+  font-weight: 600;
+}
+
+/* =====================================================
+   ACTION COLUMN
+===================================================== */
+
+.table-wrapper td:last-child {
+  text-align: center;
+}
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+.action-buttons {
+  text-align: center;
+}
+
+/* =====================================================
+   DELETE BUTTON
+===================================================== */
+
+.delete-btn {
+  width: 40px;
+
+  height: 34px;
+
+  padding: 0;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #ef4444;
+
+  color: #ffffff;
+
+  font-size: 13px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 4px 10px rgba(239, 68, 68, 0.25);
+}
+
+.delete-btn:active {
+  transform: translateY(0);
+
+  box-shadow: none;
+}
+
+.delete-btn:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+
+  transform: none;
+
+  box-shadow: none;
+}
+
+/* =====================================================
+   NO COLLECTION
+===================================================== */
+
+.no-collection {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 90px;
+
+  padding: 6px 10px;
+
+  border-radius: 20px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e2e8f0;
+
+  color: #64748b;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+/* =====================================================
+   NO DATA
+===================================================== */
+
+.no-data {
+  text-align: center;
+
+  padding: 50px 20px;
+
+  color: #64748b;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  background: #ffffff;
+}
+
+.no-data td {
+  border-bottom: none;
+
+  color: #64748b;
+
+  font-weight: 600;
+
+  height: auto;
+}
+
+/* =====================================================
+   EMPTY TABLE MESSAGE
+===================================================== */
+
+.table-wrapper tbody tr td[colspan] {
+  text-align: center;
+}
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 992px) {
+  .table-wrapper {
+    border-radius: 14px;
+  }
+
+  .table-wrapper table {
+    min-width: 850px;
+  }
+
+  .table-wrapper th {
+    height: 44px;
+
+    padding: 0 12px;
+
+    font-size: 11px;
+  }
+
+  .table-wrapper td {
+    height: 46px;
+
+    padding: 0 12px;
+
+    font-size: 12px;
+  }
+
+  .delete-btn {
+    width: 38px;
+
+    height: 33px;
+  }
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+  .table-wrapper {
+    border-radius: 13px;
+
+    box-shadow:
+      0 3px 10px rgba(15, 23, 42, 0.05);
+  }
+
+  .table-wrapper table {
+    min-width: 800px;
+  }
+
+  .table-wrapper th {
+    height: 43px;
+
+    padding: 0 10px;
+
+    font-size: 11px;
+  }
+
+  .table-wrapper td {
+    height: 45px;
+
+    padding: 0 10px;
+
+    font-size: 12px;
+  }
+
+  .delete-btn {
+    width: 36px;
+
+    height: 32px;
+
+    border-radius: 6px;
+
+    font-size: 12px;
+  }
+
+  .no-collection {
+    min-width: 85px;
+
+    padding: 5px 8px;
+
+    font-size: 10px;
+  }
+
+  .no-data {
+    padding: 45px 15px;
+
+    font-size: 13px;
+  }
+}
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+  .table-wrapper {
+    border-radius: 12px;
+  }
+
+  .table-wrapper table {
+    min-width: 760px;
+  }
+
+  .table-wrapper th {
+    height: 41px;
+
+    padding: 0 8px;
+
+    font-size: 10px;
+
+    letter-spacing: 0;
+  }
+
+  .table-wrapper td {
+    height: 43px;
+
+    padding: 0 8px;
+
+    font-size: 11px;
+  }
+
+  .delete-btn {
+    width: 34px;
+
+    height: 30px;
+
+    border-radius: 6px;
+  }
+
+  .no-collection {
+    min-width: 80px;
+
+    padding: 5px 7px;
+
+    font-size: 10px;
+  }
+
+  .no-data {
+    padding: 40px 10px;
+
+    font-size: 12px;
+  }
+}
+
+/* =====================================================
+   VERY SMALL MOBILE
+===================================================== */
+
+@media (max-width: 360px) {
+  .table-wrapper table {
+    min-width: 720px;
+  }
+
+  .table-wrapper th {
+    padding: 0 7px;
+
+    font-size: 9px;
+  }
+
+  .table-wrapper td {
+    padding: 0 7px;
+
+    font-size: 10px;
+  }
+
+  .delete-btn {
+    width: 32px;
+
+    height: 29px;
+  }
 }

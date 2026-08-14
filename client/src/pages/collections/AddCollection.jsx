@@ -163,24 +163,38 @@ const AddCollection = ({ closeModal, refreshCollections }) => {
   ===================================================== */
 
   useEffect(() => {
+  loadCustomers();
+
+  const handleCustomerUpdated = () => {
     loadCustomers();
+  };
 
-    const refreshCustomerList = () => {
-      loadCustomers();
-    };
+  const handleCollectionUpdated = () => {
+    loadCustomers();
+  };
 
-    window.addEventListener(
+  window.addEventListener(
+    "customerUpdated",
+    handleCustomerUpdated
+  );
+
+  window.addEventListener(
+    "collectionUpdated",
+    handleCollectionUpdated
+  );
+
+  return () => {
+    window.removeEventListener(
       "customerUpdated",
-      refreshCustomerList
+      handleCustomerUpdated
     );
 
-    return () => {
-      window.removeEventListener(
-        "customerUpdated",
-        refreshCustomerList
-      );
-    };
-  }, []);
+    window.removeEventListener(
+      "collectionUpdated",
+      handleCollectionUpdated
+    );
+  };
+}, []);
 
   /* =====================================================
      TOTALS
